@@ -259,6 +259,15 @@ tbody tr:nth-of-type(odd) {
   text-align: center;
 }
 
+tr.hidden {
+  color: #800000;
+  font-style: oblique;
+}
+
+#tymy td[data-size]::after {
+  content: ' (' attr(data-size) ')';
+}
+
 .link {
   font-weight: bold;
 }

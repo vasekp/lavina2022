@@ -3,9 +3,12 @@ import * as http from 'node:http';
 import { randomUUID } from 'node:crypto';
 
 /* TODO
-- admin tým: zaplatit nebo odstranit jiné
 - zrušit účast
 - přejmenovat tým
+- seznam e-mailů
+- detaily týmu pro admina
+- odstranit logy
+- umožnit mazat členy mimo pořadí
 */
 
 const port = 3000;
@@ -125,12 +128,13 @@ function handle(request) {
       const data = request.data;
       if(data.authKey !== teams[0].authKey)
         return error('Neautorizovaný požadavek.');
-      if(data.hidden)
-        team.hidden = data.hidden;
-      if(data.paid)
-        team.datePaid = data.paid ? new Date().toISOString() : null;
-      if(data.reload)
-        loadTeams();
+      if(data.action === 'hidden') {
+        team.hidden = !team.hidden;
+        saveTeams();
+      } else if(data.action === 'paid') {
+        team.datePaid = team.datePaid ? null : new Date().toISOString();
+        saveTeams();
+      }
       return {result: 'ok', data: adminList()};
     }
     default:
@@ -148,7 +152,7 @@ async function loadTeams() {
 
 function saveTeams() {
   fs.writeFile('teams.json', JSON.stringify(teams, null, 2));
-  console.log(teams);
+  //console.log(teams);
 }
 
 function normalizeName(name) {
@@ -165,6 +169,7 @@ function findTeam(name) {
 function adminList() {
   return teams.map(team => ({
     name: team.name,
+    teamSize: team.members.length,
     members: team.members.map(member => `${member.name}/${member.tshirt || '?'}/${member.meal1 || '?'}/${member.meal2 || '?'}`),
     dateReg: team.dateReg,
     hidden: team.hidden,

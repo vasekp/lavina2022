@@ -38,6 +38,7 @@ window.addEventListener('DOMContentLoaded', () => {
     ev.preventDefault();
   });
   document.getElementById('navrh-div').addEventListener('click', ev => ev.currentTarget.hidden = true);
+  document.getElementById('tymy-content').addEventListener('dblclick', ev => doAdmin(ev.target));
   resetForms();
   updateTeams();
   useCachedLogin().then(ok => { if(ok) showTab('auth'); });
@@ -141,7 +142,7 @@ async function serverRequest(type, data) {
   console.log('REQUEST: ', rqParcel);
   const response = await fetch('backend.php', { method: 'POST', body: JSON.stringify(rqParcel) })
     .then(res => res.json())
-    .catch(_ => ({ result: 'error', error: 'Chyba na straně serveru.' }));
+    .catch(_ => { throw { result: 'error', error: 'Chyba na straně serveru.' }; });
   console.log('RESPONSE: ', response);
   if(response.result === 'ok')
     return response.data;
@@ -150,43 +151,50 @@ async function serverRequest(type, data) {
 }
 
 async function updateTeams() {
-  const teams = (await serverRequest('getTeams', {authKey: localStorage['authKey']})).map(team => ({
-    name: team.name,
-    members: team.members,
-    dateReg: Date.parse(team.dateReg),
-    paid: team.paid,
-    datePaid: Date.parse(team.datePaid)
-  }));
-  if(!teams)
-    return;
-  knownNames = teams.map(team => normalizeName(team.name));
-  teams.sort((t1, t2) => {
-    if(t1.paid && !t2.paid)
-      return -1;
-    else if(!t1.paid && t2.paid)
-      return +1;
-    else if(t1.paid && t2.paid)
-      return t1.datePaid - t2.datePaid;
-    else
-      return t1.dateReg - t2.dateReg;
-  });
-  const table = document.getElementById('tymy-content');
-  table.replaceChildren();
-  teams.forEach((team, seq) => {
-    const fields = [
-      seq + 1,
-      team.name,
-      team.members.join(', '),
-      team.paid ? 'ANO' : 'NE'
-    ];
-    const tr = document.createElement('tr');
-    for(const field of fields) {
-      const td = document.createElement('td');
-      td.textContent = field;
-      tr.appendChild(td);
-    }
-    table.appendChild(tr);
-  });
+  try {
+    const teams = (await serverRequest('getTeams', {authKey: localStorage['authKey']})).map(team => ({...team,
+      dateReg: Date.parse(team.dateReg),
+      datePaid: Date.parse(team.datePaid)
+    }));
+    knownNames = teams.map(team => normalizeName(team.name));
+    teams.sort((t1, t2) => {
+      if(!t1.hidden && t2.hidden)
+        return -1;
+      else if(t1.paid && !t2.paid)
+        return -1;
+      else if(!t1.paid && t2.paid)
+        return +1;
+      else if(t1.paid && t2.paid)
+        return t1.datePaid - t2.datePaid;
+      else
+        return t1.dateReg - t2.dateReg;
+    });
+    const table = document.getElementById('tymy-content');
+    table.replaceChildren();
+    teams.forEach((team, seq) => {
+      const fields = [
+        seq + 1,
+        team.name,
+        team.members.join(', '),
+        team.paid ? 'ANO' : 'NE'
+      ];
+      const tr = document.createElement('tr');
+      for(const field of fields) {
+        const td = document.createElement('td');
+        td.textContent = field;
+        tr.appendChild(td);
+      }
+      // admin tools
+      if(team.teamSize)
+        tr.children[1].dataset.size = team.teamSize;
+      if(team.hidden)
+        tr.classList.add('hidden');
+      table.appendChild(tr);
+    });
+  } catch(response) {
+    console.error(response);
+    alert(response.error);
+  }
 }
 
 async function doRegister(form) {
@@ -197,21 +205,26 @@ async function doRegister(form) {
     if(member)
       members.push(member);
   }
-  const data = await serverRequest('register',
-    {
-      name: getField('nazev'),
-      email: getField('email'),
-      password: getField('heslo1'),
-      phone: getField('telefon'),
-      members
-    }
-  );
-  updateTeams();
-  resetForms();
-  localStorage['teamName'] = data.name;
-  localStorage['authKey'] = data.authKey;
-  loadTeamData(data);
-  showTab('auth');
+  try {
+    const data = await serverRequest('register',
+      {
+        name: getField('nazev'),
+        email: getField('email'),
+        password: getField('heslo1'),
+        phone: getField('telefon'),
+        members
+      }
+    );
+    updateTeams();
+    resetForms();
+    localStorage['teamName'] = data.name;
+    localStorage['authKey'] = data.authKey;
+    loadTeamData(data);
+    showTab('auth');
+  } catch(response) {
+    console.error(response);
+    alert(response.error);
+  }
 }
 
 async function doLogin(form) {
@@ -226,6 +239,8 @@ async function doLogin(form) {
     localStorage['teamName'] = data.name;
     localStorage['authKey'] = data.authKey;
     loadTeamData(data);
+    if(data.name === 'admin')
+      updateTeams();
   } catch(response) {
     console.error(response);
     alert(response.error);
@@ -272,6 +287,7 @@ function logout(ev) {
   delete localStorage['teamName'];
   delete localStorage['authKey'];
   delete document.getElementById('tab-auth').dataset.auth;
+  updateTeams();
   ev.preventDefault()
 }
 
@@ -334,4 +350,26 @@ async function doDetails(form) {
   resetForms();
   await updateTeams();
   showTab('tymy');
+}
+
+async function doAdmin(tgt) {
+  if(localStorage['teamName'] !== 'admin')
+    return;
+  const authKey = localStorage['authKey'];
+  try {
+    if(tgt.tagName === 'TD') {
+      const trc = tgt.closest('tr').children;
+      const name = trc[1].textContent;
+      if(tgt === trc[0])
+        await serverRequest('adminUpdate', {authKey, name, action: 'hidden'});
+      else if(tgt === trc[trc.length - 1])
+        await serverRequest('adminUpdate', {authKey, name, action: 'paid'});
+      else
+        return;
+    }
+    updateTeams();
+  } catch(response) {
+    console.error(response);
+    alert(response.error);
+  }
 }
