@@ -1,0 +1,30 @@
+digraph {
+  "Lokalita" -> "Ubytování";
+  "Ubytování" -> "Trasa";
+  "Ubytování" -> "Vybavení";
+  "Ubytování" -> "Parkování";
+  "Ubytování" -> "Jídlo";
+  "Grafika" -> "Trika návrh";
+  "Trika návrh" -> "Trika tisk";
+  "Grafika" -> "Stránky";
+  "Stránky" -> "Přihlašovací formulář";
+  "Téma" -> "Grafika";
+  "Téma" -> "(Artefakt)";
+  "(Artefakt)" -> "Šifry, prolog";
+  "Šifry, prolog" -> "Poherní prezentace";
+  "Šifry, prolog" -> "Vybavení";
+  "Šifry, prolog" -> "Herní systém";
+  "Trasa" -> "Herní systém";
+  "Trasa" -> "Obálky";
+  "Přihlašovací formulář" -> "E-mail účastníkům";
+  "Vybavení" -> "E-mail účastníkům";
+  "E-mail účastníkům" -> "Jídlo";
+  "E-mail účastníkům" -> "Trika tisk";
+  "Šifry, prolog" -> "Finální grafika";
+  "Finální grafika" -> "Tisk šifer";
+  "Tisk šifer" -> "Obálky";
+  "Herní systém" -> "Poherní prezentace";
+  "Ceny pro vítěze" -> "Poherní prezentace";
+  "Pravidla" -> "Herní systém";
+  "Pravidla" -> "Stránky";
+}

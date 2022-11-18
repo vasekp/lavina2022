@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <title>Muhu Game</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0"/>
+    <meta name="theme-color" content="#c1b38c">
+    <link rel="stylesheet" type="text/css" href="main.css"/>
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <input hidden type="radio" name="tab" id="sel-uvod" checked/>
+    <input hidden type="radio" name="tab" id="sel-reg"/>
+    <input hidden type="radio" name="tab" id="sel-tymy"/>
+    <input hidden type="radio" name="tab" id="sel-pravidla"/>
+    <input hidden type="radio" name="tab" id="sel-auth"/>
+    <header><a href="#main" tabindex="-1"><img src="top.jpg"/></a></header>
+    <nav>
+      <input hidden type="checkbox" id="nav-unfold"/>
+      <label for="sel-uvod"><div>Úvod</div></label>
+      <label for="sel-reg"><div>Registrace</div></label>
+      <label for="sel-tymy" data-visible-from="2022-08-12T12:00:00+02:00"><div>Přihlášená společenstva</div></label></alt-within>
+      <label for="sel-pravidla"><div>Pravidla</div></label>
+      <label for="sel-auth" data-visible-from="2022-08-12T12:00:00+02:00"><div>Moje společenstvo</div></label></alt-within>
+      <span id="sipka">▼</span>
+    </nav>
+    <main id="main">
+      <article id="tab-uvod">
+        <h1>MUHU GAME 2022</h1>
+        <blockquote>
+          Jedna sova vládne všem, jedna jim všem káže,<br/>
+          jedna všechny přivede, do temnoty sváže.
+        </blockquote>
+        <p>Muhuzem volá o pomoc! Temnota se pomalu snáší na bájnou zemi elfů, trpaslíků, lidí a hobitů. Těžké časy se blíží a naděje svobodných národů vyhasíná. Přichází čas hrdinů.</p>
+        <p>Nebojíš-li se, sestav společenstvo a vydej se na dobrodružnou výpravu k záchraně Muhuzemě. Potřebovat budeš tři věrné druhy, odvahu, důvtip a svačinu. Tak neváhej, času je málo!</p>
+
+        <h2>O hře:</h2>
+        <p>Muhu Game 2022 je pěší lineární šifrovací hra pro až čtyřčlenná společenstva.</p>
+        <p><b>Kapacita hry:</b> 30 společenstev</p>
+        <p><b>Místo startu:</b> bude upřesněno v prologu</p>
+        <p><b>Cena:</b> 1500 Kč/společenstvo + 1200 Kč/hrdina (ubytování s polopenzí) + 350 Kč/třičko (volitelné)</p>
+        <p><b>Kontaktní e-mail:</b> info<span id="obfs">domof</span></p>
+
+        <h2>Organizační tým:</h2>
+        <p>Hru pro vás připravily Múzy a Něžné květinky.</p>
+      </article>
+      <article id="tab-reg">
+        <date-alt data-open="2022-08-12T12:00:00+02:00" data-close="2023-08-28T23:59:59+02:00">
+          <alt-pre><p>Registrace společenstev bude přístupná od pátku <b>12. 8. 2022, 12:00</b> do neděle 28. 8. 2022.</p></alt-pre>
+          <alt-within>
+            <form id="register">
+              <label>Název společenstva:
+                <input type="text" name="nazev" required/>
+              </label>
+              <label>E-mail:
+                <input type="email" name="email" required type="email"/>
+              </label>
+              <label>Heslo:
+                <input type="password" name="heslo1" required/>
+              </label>
+              <label>Heslo znovu:
+                <input type="password" name="heslo2" required/>
+              </label>
+              <label>Telefon:
+                <input type="tel" name="telefon" required pattern="\+?[0-9 -]{9,}"/>
+              </label>
+              <label>1. hrdina:
+                <input type="text" name="clen1" required/>
+              </label>
+              <label>2. hrdina *:
+                <input type="text" name="clen2"/>
+              </label>
+              <label>3. hrdina *:
+                <input type="text" name="clen3"/>
+              </label>
+              <label>4. hrdina *:
+                <input type="text" name="clen4"/>
+              </label>
+              <button type="submit">Registrovat</button>
+            </form>
+            <small>*) V případě méně než čtyř hrdinů nechte podle potřeby prázdné.</small>
+          </alt-within>
+          <alt-post><p>Registrace na hru byly již uzavřeny.</p></alt-post>
+        </date-alt>
+      </article>
+      <article id="tab-tymy">
+        <table id="tymy">
+          <thead>
+            <tr>
+              <th>Pořadí</th>
+              <th>Název společenstva</th>
+              <th>Hrdinové</th>
+              <th>Zaplaceno</th>
+            </tr>
+          </thead>
+          <tbody id="tymy-content"></tbody>
+          <tbody id="tymy-empty">
+            <tr>
+              <td colspan="4">
+                <p>Žádná přihlášená společenstva.</p>
+                <p><label for="sel-reg" class="link">Zaregistrujete svoje?</label></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+      <article id="tab-pravidla">
+        <h1>Pravidla hry Muhugame</h1>
+        <date-alt data-open="2022-08-28T00:00:00+02:00">
+          <alt-pre><p>Pravidla hry budou vystavena <b>28. 8. 2022</b>.</p></alt-pre>
+          <alt-within>
+        <p><b>TODO:</b> sjednotit tým / společenstvo.</p>
+        <p>Pravidla mohou být měněna až do začátku akce.</p>
+        <p>Každý hrdina zodpovídá za sám za sebe a hry se účastní dobrovolně a na vlastní nebezpečí.</p>
+        <p>Hry se účastní společenstva o kapacitě čtyř hrdinů. V případě nedostatku hrdinů mohou někteří členové zastávat funkci více hrdinů zároveň. Pokud není uvedeno jinak, je zakázáno spolupracovat s jinými společenstvy.</p>
+        <p>Hra se koná za každého počasí.</p>
+        <p>Hry se smí účastnit hrdinové starší 18 let. Mladší hrdinové pouze s dospělým doprovodem. V pátek večer před hrou se bude konat prologová aktivita.</p>
+        <p>Hlavní část hry má hromadný start v sobotu ráno.</p>
+        <p>Hlavní část hry se skládá z blíže neurčeného počtu stanovišť. Cílem hry je lineárně projít všechna stanoviště hry až do cíle.</p>
+        <p>Před startem obdrží společenstva zadání šifer, která se otevírají dle daných instrukcí.</p>
+        <p>Před startem obdrží společenstva skórovací list se svým jménem a číslem, který musí na konci hry odevzdat, a na jehož základě bude provedeno vyhodnocení. Stírací políčka skórovacího listu slouží pro získání nápovědy či řešení šifer a jejich setřením společenstvo ztrácí body (viz níže).</p>
+        <p>Hra končí na blíže neurčeném místě odevzdáním skórovacího listu organizátorům, kteří zapíší do listu čas příchodu společenstva.</p>
+        <p>Každé stanoviště má své číslo a je v terénu označeno cedulí s číslem stanoviště. Na každém stanovišti společenstvo plní jeden nebo více úkolů.</p>
+        <p>Na každém stanovišti je na ceduli uveden symbol k otevření šifry. Řešením šifry je místo následujícího stanoviště (může to být i více slov, věta apod.). Pokud tým šifru nevyluští, může si vzít nápovědu, případně řešení.</p>
+        <p>Splněním úkolu na stanovišti získá tým B kód, který vepíše do skórovacího listu. Dále se do skórovacího listu vepisuje řešení pokladový kód, který tým získá na místě pokladu. Řešením A šifry je místo na mapě s pozicí dalšího stanoviště. Řešení A šifer se do skórovacího listu nevpisuje.</p>
+        <p>Hlavní část hry začíná v sobotu v 7.00, kdy bude v prostoru ubytovacího zařízení pro účastníky vyvěšena cedule se symbolem první A šifry.</p>
+        <p>Mezi obálkami mohou být i obálky diskvalifikační, jejichž odevzdání v neotevřené podobě může vyžadovat organizátor v cíli.</p>
+        <p>Obálky s šiframi obvykle obsahují zadání šifry a příběh. Příběh neobsahuje šifru. Příběh může, ale nemusí, mít vztah k dané šifře nebo úkolu a může, ale nemusí, napomáhat s jeho řešením.</p>
+        <p>Na většině stanovišť je přítomen organizátor, který řídí plnění úkolu. Při příchodu na stanoviště nahlásí tým organizátorovi své číslo.</p>
+        <p>Na stanovištích je pro plnění právě jeden pokus. Týmy plní daný úkol v pořadí, v jakém ke stanovišti dorazily, pokud organizátor neřekne jinak. Pro řešení některých úkolů může být stanoven časový limit.</p>
+        <p>Je slušností prvního týmu snažit se na stanovišti nezdržovat, splnit nebo vzdát úkol co nejrychleji a zároveň slušností druhého týmu trpělivě vyčkat.</p>
+        <p>Otevírací doba stanovišť je následující:</p>
+        <p>Stanoviště 1: od 7:00 do 10:00</p>
+        <p>Stanoviště 2 a 3: od 7:00 do 12:00</p>
+        <p>Stanoviště 4 a 5: od 9:00 do 14:00</p>
+        <p>Stanoviště 6: od 12:00 do 16:00</p>
+        <p>Stanoviště 7 až 9: od 13:00 do 20:30</p>
+        <p>Cedule se symbolem další A šifry zůstane na stanovišti i po skončení otevírací doby. Pokud tým přijde na stanoviště po konci otevírací doby, již mu nemusí být umožněno plnění úkolu.</p>
+        <p>Hra končí odevzdáním skórovacího listu. Pro čas odevzdání platí tato pravidla:</p>
+        <p>do 19:30 – bez penalizace</p>
+        <p>19:30 – 20:30 – penalizace (viz bodování)</p>
+        <p>po 20:30 – DISKVALIFIKACE a veřejné zostuzení</p>
+        <p>V zájmu hry i sebe samotných se zdržujte v okolí stanovišť pouze nezbytně dlouhou dobu. Neupozorníte tak soupeře na polohu stanoviště a nepřilákáte cizí osoby, které mohou stanoviště zlikvidovat. Pro luštění si najděte jiné vhodné místo, alespoň 50 metrů od stanoviště.</p>
+        <p>Je zakázáno následovat jinou skupinu za účelem postupu k dalšímu stanovišti.</p>
+        <p>Záměrné vyhledávání stanoviště v terénu bez vyluštění příslušné šifry (haluzení) je zakázáno.</p>
+        <p>Pro úspěšné vyřešení šifer a bonusových úkolů může být zapotřebí použít informace a materiály, které jste získali v dosavadním průběhu hry, případně materiály, které budou uvedeny v doporučené výbavě.</p>
+        <p>Při pohybu v terénu (pole, louka, les, rybník, řeka, moře atd.) a během plnění úkolů je každý povinen chovat se jako rozumný člověk, který má úctu k přírodě. Za nevhodné je považováno hlučné chování, jakékoliv znečišťování okolí, ničení porostů, rozdělávání ohňů či jiné devastování majetku.</p>
+        <p>Není-li uvedeno jinak, nejsou překlepy, gramatické chyby, chyby v interpunkci, diakritice apod. součástí řešení šifer. Neboly nehledejte vtom nic, jinného něš naší nepozořnost.</p>
+        <p>Pokud není uvedeno jinak, používá se v šifrách anglická abeceda – tedy 26 písmen bez CH. Výjimkou z tohoto pravidla může být použití morseovky a polského kříže, kde se opravdu písmeno CH vyskytuje.</p>
+        <p>Pokud se společenstvo rozhodne odstoupit ze hry, musí o tom informovat organizátory.</p>
+        <p>Účastníci, kteří záměrně poruší tato pravidla, či sabotují principy hry a pravidla fair-play, mohou být penalizováni, nebo dle závažnosti přímo diskvalifikováni.</p>
+        <p>Bodování: Hra není na čas. Čas příchodu do cíle a odevzdání skórovacího listu a neotevřených obálek slouží jen jako pomocné kritérium při rovnosti bodů. Bonifikace a penalizace jsou:</p>
+        <p>Vyluštění A šifry (tj. příchod na další stanoviště):  +20 bodů</p>
+        <p>Správně zapsaný B-kód: +20 bodů</p>
+        <p>Správně zapsaný P-kód pro poklad: +40 bodů</p>
+        <p>Setření nápovědy: -10 bodů</p>
+        <p>Setření řešení: -20 bodů (ruší postih za nápovědu)</p>
+        <p>Penalizace za pozdní příchod: -1 bod za minutu</p>
+        <p>Penalizace za diskvalifikaci: -500 bodů</p>
+        <p>Vítězem se stává společenstvo, jehož bodový zisk je po ukončení hry nejvyšší a které regulérně splnilo všechna ostatní pravidla soutěže.</p>
+        <p>Organizace hry je tzv. putovní. Čestnou povinnost organizovat další ročník získává nejvýše postavené společenstvo v konečném pořadí, které nevyužije Imunitu.</p>
+        <p>Imunita:Společenstvo, které organizovalo letošní ročník některé z šifrovacích her Lhota, Lavina nebo Labyrint, nebo je organizátorem některé z těchto her v roce příštím, může požádat při registraci na místě konání o Imunitu. Získáním imunity se pořadí týmu posune o jedno vzad. Tato informace bude do vyhlášení výsledků neveřejná.</p>
+          </alt-within>
+        </date-alt>
+      </article>
+      <article id="tab-auth">
+        <span hidden id="authKey"></span>
+        <form id="login">
+          <label>Název společenstva:
+            <input type="text" name="nazev" required data-keep="1"/>
+          </label>
+          <label>Heslo:
+            <input type="password" name="heslo" required/>
+          </label>
+          <button type="submit">Přihlásit</button>
+        </form>
+        <div id="auth-section">
+          <h1 id="teamName"></h1>
+          <form id="details">
+            <label>Telefon:
+              <input type="tel" name="telefon" required pattern="\+?[0-9 -]{9,}" data-keep="1"/>
+            </label>
+            <label>1. hrdina:
+              <input type="text" name="clen1" required data-keep="1"/>
+            </label>
+            <select name="jidlo1a" required data-keep="1">
+              <option value="">Jídlo – pátek</option>
+              <option value="pa-vege">Bezmasá varianta</option>
+              <option value="pa-maso">Masová varianta</option>
+            </select>
+            <select name="jidlo1b" required data-keep="1">
+              <option value="">Jídlo – sobota</option>
+              <option value="so-vege">Bezmasá varianta</option>
+              <option value="so-maso">Masová varianta</option>
+            </select>
+            <select name="tricko1" required data-keep="1">
+              <option value="">Velikost trička **</option>
+              <option value="PS">Pánské S</option>
+              <option value="PM">Pánské M</option>
+              <option value="PL">Pánské L</option>
+              <option value="PXL">Pánské XL</option>
+              <option value="PXXL">Pánské XXL</option>
+              <option value="DS">Dámské S</option>
+              <option value="DM">Dámské M</option>
+              <option value="DL">Dámské L</option>
+              <option value="DXL">Dámské XL</option>
+              <option value="DXXL">Dámské XXL</option>
+              <option value="nic">Žádné tričko</option>
+            </select>
+            <label>2. hrdina:
+              <input type="text" name="clen2" data-keep="1"/>
+            </label>
+            <select name="jidlo2a" required data-keep="1">
+              <option value="">Jídlo – pátek</option>
+              <option value="pa-vege">Bezmasá varianta</option>
+              <option value="pa-maso">Masová varianta</option>
+            </select>
+            <select name="jidlo2b" required data-keep="1">
+              <option value="">Jídlo – sobota</option>
+              <option value="so-vege">Bezmasá varianta</option>
+              <option value="so-maso">Masová varianta</option>
+            </select>
+            <select name="tricko2" required data-keep="1">
+              <option value="">Velikost trička **</option>
+              <option value="PS">Pánské S</option>
+              <option value="PM">Pánské M</option>
+              <option value="PL">Pánské L</option>
+              <option value="PXL">Pánské XL</option>
+              <option value="PXXL">Pánské XXL</option>
+              <option value="DS">Dámské S</option>
+              <option value="DM">Dámské M</option>
+              <option value="DL">Dámské L</option>
+              <option value="DXL">Dámské XL</option>
+              <option value="DXXL">Dámské XXL</option>
+              <option value="nic">Žádné tričko</option>
+            </select>
+            <label>3. hrdina:
+              <input type="text" name="clen3" data-keep="1"/>
+            </label>
+            <select name="jidlo3a" required data-keep="1">
+              <option value="">Jídlo – pátek</option>
+              <option value="pa-vege">Bezmasá varianta</option>
+              <option value="pa-maso">Masová varianta</option>
+            </select>
+            <select name="jidlo3b" required data-keep="1">
+              <option value="">Jídlo – sobota</option>
+              <option value="so-vege">Bezmasá varianta</option>
+              <option value="so-maso">Masová varianta</option>
+            </select>
+            <select name="tricko3" required data-keep="1">
+              <option value="">Velikost trička **</option>
+              <option value="PS">Pánské S</option>
+              <option value="PM">Pánské M</option>
+              <option value="PL">Pánské L</option>
+              <option value="PXL">Pánské XL</option>
+              <option value="PXXL">Pánské XXL</option>
+              <option value="DS">Dámské S</option>
+              <option value="DM">Dámské M</option>
+              <option value="DL">Dámské L</option>
+              <option value="DXL">Dámské XL</option>
+              <option value="DXXL">Dámské XXL</option>
+              <option value="nic">Žádné tričko</option>
+            </select>
+            </label>
+            <label>4. hrdina:
+              <input type="text" name="clen4" data-keep="1"/>
+            </label>
+            <select name="jidlo4a" required data-keep="1">
+              <option value="">Jídlo – pátek</option>
+              <option value="pa-vege">Bezmasá varianta</option>
+              <option value="pa-maso">Masová varianta</option>
+            </select>
+            <select name="jidlo4b" required data-keep="1">
+              <option value="">Jídlo – sobota</option>
+              <option value="so-vege">Bezmasá varianta</option>
+              <option value="so-maso">Masová varianta</option>
+            </select>
+            <select name="tricko4" required data-keep="1">
+              <option value="">Velikost trička **</option>
+              <option value="PS">Pánské S</option>
+              <option value="PM">Pánské M</option>
+              <option value="PL">Pánské L</option>
+              <option value="PXL">Pánské XL</option>
+              <option value="PXXL">Pánské XXL</option>
+              <option value="DS">Dámské S</option>
+              <option value="DM">Dámské M</option>
+              <option value="DL">Dámské L</option>
+              <option value="DXL">Dámské XL</option>
+              <option value="DXXL">Dámské XXL</option>
+              <option value="nic">Žádné tričko</option>
+            </select>
+            <label>Změnit heslo *:
+              <input type="password" name="heslo1"/>
+            </label>
+            <label>Heslo znovu *:
+              <input type="password" name="heslo2"/>
+            </label>
+            <button type="submit">Uložit</button>
+          </form>
+          <small>*) Pokud nechcete heslo měnit, obě pole nechte prázdná.</small>
+          <small>**) <a href="#" id="navrh">Návrh trička</a></small>
+          <h2>Platební údaje</h2>
+          <div class="trans" id="platba">
+            <div class="trans" id="udaje">
+              <p>Vaše startovné činí <span id="cena"></span>.</p>
+              <p>Zaplaťte prosím
+                <date-alt data-close="2022-08-22T23:59:59+02:00">
+                  <alt-within>do <b>22. 8. 2022</b></alt-within>
+                  <alt-post>co nejdříve</alt-post>
+                </date-alt>
+                na účet <b>2100255640/2010</b>.</p>
+              <p>Do <b>zprávy pro příjemce</b> nezapomeňte uvést název hry a vašeho společenstva.</p>
+              <p>Poznámka: platby se párují ručně, neobjeví se tedy v seznamu hned.</p>
+            </div>
+            <div class="trans" id="hotovo">
+              <p>Platbu od vašeho společenstva jsme již přijali.</p>
+              <p>Pokud dojde ke změnám, které by cenu ovlivnily, domluvte se s organizátory e-mailem nebo na hře.</p>
+            </div>
+          </div>
+          <a href="#" id="logout">Odhlásit</a>
+        </div>
+      </article>
+    </main>
+    <div id="navrh-div" hidden>
+      <img src="tricko.png"/>
+    </div>
+  </body>
+</html>
