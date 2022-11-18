@@ -40,8 +40,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('navrh-div').addEventListener('click', ev => ev.currentTarget.hidden = true);
   resetForms();
   updateTeams();
-  if(useCachedLogin())
-    showTab('auth');
+  useCachedLogin().then(ok => { if(ok) showTab('auth'); });
 });
 
 function showTab(name) {
@@ -73,7 +72,7 @@ function validateName(form) {
   const name = form.querySelector('[name=nazev]');
   if(!name)
     return;
-  const exists = knownNames.includes(normalizeName(name.value));
+  const exists = knownNames.includes(normalizeName(name.value)) || normalizeName(name.value) === 'admin';
   const newTeam = form.id === 'register';
   if(newTeam && exists)
     name.setCustomValidity('Společenstvo tohoto jména již existuje.');
@@ -108,7 +107,7 @@ function validateSequence(form) {
     if(seq && !elm.value)
       seq = false;
     if(!seq && elm.value)
-      elm.setCustomValidity('Vyplňujte jména hrdinů potupně.');
+      elm.setCustomValidity('Vyplňujte jména hrdinů postupně.');
     else
       elm.setCustomValidity('');
   }
@@ -122,7 +121,7 @@ function validateForm(form) {
   validateSequence(form);
 }
 
-function submitForm(form, ev) {
+async function submitForm(form, ev) {
   ev.preventDefault();
   switch(form.id) {
     case 'register':
@@ -137,150 +136,21 @@ function submitForm(form, ev) {
   }
 }
 
-function serverRequest(type, data) {
+async function serverRequest(type, data) {
   const rqParcel = {type, data};
   console.log('REQUEST: ', rqParcel);
-  const response = mockServer(rqParcel); // TODO real server
+  const response = await fetch('backend.php', { method: 'POST', body: JSON.stringify(rqParcel) })
+    .then(res => res.json())
+    .catch(_ => ({ result: 'error', error: 'Chyba na straně serveru.' }));
   console.log('RESPONSE: ', response);
-  if(response.result === 'ok') // TODO: this, or HTTP status
+  if(response.result === 'ok')
     return response.data;
   else
     throw response;
 }
 
-const exampleTeams = JSON.stringify([ {
-  name: 'Múzy',
-  password: 'muzy',
-  phone: '607659467',
-  members: [
-    {
-      name: 'Pedro',
-      meal1: 1,
-      meal2: 4,
-      tshirt: ''
-    },
-    {
-      name: 'Vašek',
-      meal1: 2,
-      meal2: 4,
-      tshirt: 'S'
-    },
-    {
-      name: 'Honza',
-      meal1: 1,
-      meal2: 3,
-      tshirt: 'M'
-    }
-  ],
-  paid: false,
-  dateReg: new Date().toISOString()
-}, {
-  name: 'Hartl',
-  password: 'hartl',
-  phone: '987654321',
-  members: [
-    { name: 'Prvok' },
-    { name: 'Tečka' },
-    { name: 'Šampon' },
-    { name: 'Karel' }
-  ],
-  paid: true,
-  dateReg: new Date().toISOString(),
-  datePaid: new Date().toISOString()
-}, {
-  name: 'Tři mušketýři',
-  password: '3m',
-  phone: '+421542684275',
-  members: [
-    { name: 'Athos' },
-    { name: 'Porthos' },
-    { name: 'Aramis' },
-    { name: 'd\'Artagnan'}
-  ],
-  paid: false,
-  dateReg: new Date().toISOString()
-} ]);
-
-function mockServer(request) {
-  const teams = JSON.parse(sessionStorage['teams'] || exampleTeams);
-  function findTeam(name) {
-    if(!name)
-      return null;
-    return teams.find(team => normalizeName(team.name) === normalizeName(name));
-  }
-  switch(request.type) {
-    case 'getTeams': {
-      const trans = teams.map(team => ({
-        name: team.name,
-        members: team.members.map(member => member.name),
-        dateReg: team.dateReg,
-        paid: team.paid || false,
-        datePaid: team.datePaid
-      }));
-      return {result: 'ok', data: trans};
-    }
-    case 'register': {
-      // TODO validation
-      const team = request.data;
-      team.members = team.members.map(m => ({name: m}));
-      teams.push(team);
-      sessionStorage['teams'] = JSON.stringify(teams);
-      const authKey = 'key'; // TODO: some form of server-checkable checksum
-      return {result: 'ok', data: {
-        authKey,
-        name: team.name,
-        phone: team.phone,
-        members: team.members
-      }};
-    }
-    case 'login': {
-      const team = findTeam(request.data.name);
-      if(!team)
-        return {result: 'error', error: 'Společenstvo nenalezeno.'};
-      else if(request.data.password !== team.password)
-        return {result: 'error', error: 'Heslo nesouhlasí.'};
-      else {
-        const authKey = 'key'; // TODO: some form of server-checkable checksum
-        return {result: 'ok', data: {
-          authKey,
-          name: team.name,
-          phone: team.phone,
-          members: team.members,
-          paid: team.paid || false
-        }};
-      }
-    }
-    case 'getTeam': { // TODO merge with 'login', that would accept both password and an existing authKey?
-      const team = findTeam(request.data.name);
-      if(!team)
-        return {result: 'error', error: 'Společenstvo nenalezeno.'};
-      // TODO: ověřit authKey
-      else {
-        return {result: 'ok', data: {
-          name: team.name,
-          phone: team.phone,
-          members: team.members,
-          paid: team.paid || false
-        }};
-      }
-    }
-    case 'update': {
-      const team = findTeam(request.data.name);
-      if(!team)
-        return {result: 'error', error: 'Společenstvo nenalezeno.'};
-      // TODO ověřit authKey
-      team.phone = request.data.phone;
-      team.members = request.data.members;
-      if(request.data.password)
-        team.password = request.data.password;
-      sessionStorage['teams'] = JSON.stringify(teams);
-      return {result: 'ok'};
-    }
-  }
-}
-
-function updateTeams() {
-  const teams = serverRequest('getTeams').map(team => ({
+async function updateTeams() {
+  const teams = (await serverRequest('getTeams', {authKey: localStorage['authKey']})).map(team => ({
     name: team.name,
     members: team.members,
     dateReg: Date.parse(team.dateReg),
@@ -319,7 +189,7 @@ function updateTeams() {
   });
 }
 
-function doRegister(form) {
+async function doRegister(form) {
   const getField = field => form.querySelector(`[name="${field}"]`).value;
   const members = [];
   for(const i of [1, 2, 3, 4]) {
@@ -327,35 +197,34 @@ function doRegister(form) {
     if(member)
       members.push(member);
   }
-  const data = serverRequest('register',
+  const data = await serverRequest('register',
     {
       name: getField('nazev'),
       email: getField('email'),
       password: getField('heslo1'),
       phone: getField('telefon'),
-      members,
-      dateReg: new Date().toISOString()
+      members
     }
   );
   updateTeams();
   resetForms();
   localStorage['teamName'] = data.name;
-  localStorage['authKey'] = document.getElementById('authKey').innerText = data.authKey;
+  localStorage['authKey'] = data.authKey;
   loadTeamData(data);
   showTab('auth');
 }
 
-function doLogin(form) {
+async function doLogin(form) {
   const getField = field => form.querySelector(`[name="${field}"]`).value;
   try {
-    const data = serverRequest('login',
+    const data = await serverRequest('login',
       {
         name: getField('nazev'),
         password: getField('heslo')
       }
     );
     localStorage['teamName'] = data.name;
-    localStorage['authKey'] = document.getElementById('authKey').innerText = data.authKey;
+    localStorage['authKey'] = data.authKey;
     loadTeamData(data);
   } catch(response) {
     console.error(response);
@@ -364,14 +233,13 @@ function doLogin(form) {
   resetForms();
 }
 
-function useCachedLogin() {
+async function useCachedLogin() {
   const name = localStorage['teamName'];
   const authKey = localStorage['authKey'];
   if(!name || !authKey)
     return false;
   try {
-    data = serverRequest('getTeam', {name, authKey});
-    document.getElementById('authKey').innerText = data.authKey;
+    data = await serverRequest('login', {name, authKey});
     loadTeamData(data);
     return true;
   } catch(response) {
@@ -388,6 +256,7 @@ function loadTeamData(data) {
   for(const elm of form.querySelectorAll('input, select'))
     elm.value = '';
   getField('telefon').value = data.phone;
+  getField('email').value = data.email;
   data.members.forEach((member, index) => {
     getField(`clen${index + 1}`).value = member.name;
     getField(`jidlo${index + 1}a`).value = member.meal1 || '';
@@ -395,13 +264,14 @@ function loadTeamData(data) {
     getField(`tricko${index + 1}`).value = member.tshirt || '';
   });
   document.getElementById('platba').dataset.paid = +data.paid || 0;
+  document.getElementById('tab-auth').dataset.auth = 1;
   updateDetailForm();
 }
 
 function logout(ev) {
-  document.getElementById('authKey').innerText = '';
   delete localStorage['teamName'];
   delete localStorage['authKey'];
+  delete document.getElementById('tab-auth').dataset.auth;
   ev.preventDefault()
 }
 
@@ -434,13 +304,14 @@ function updateDetailForm() {
   document.getElementById('cena').innerHTML = html;
 }
 
-function doDetails(form) {
+async function doDetails(form) {
   const getField = field => form.querySelector(`[name="${field}"]`).value;
   try {
     const data = {
-      name: document.getElementById('teamName').innerText,
-      authKey: document.getElementById('authKey').innerText,
+      name: localStorage['teamName'],
+      authKey: localStorage['authKey'],
       phone: getField('telefon'),
+      email: getField('email'),
       members: []
     };
     for(const i of [1, 2, 3, 4]) {
@@ -455,12 +326,12 @@ function doDetails(form) {
     }
     if(getField('heslo1'))
       data.password = getField('heslo1');
-    serverRequest('update', data);
+    await serverRequest('update', data);
   } catch(response) {
     console.error(response);
     alert(response.error);
   }
   resetForms();
-  updateTeams();
+  await updateTeams();
   showTab('tymy');
 }

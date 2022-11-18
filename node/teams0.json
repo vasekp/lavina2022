@@ -1,0 +1,20 @@
+[
+  {
+    "name": "admin",
+    "id": 0,
+    "hidden": true,
+    "email": "vasek.potocek@post.cz",
+    "password": "admin0",
+    "authKey": "e66d34ce-354a-4b14-bc95-66ce92a1c01d",
+    "phone": "607659467",
+    "members": [
+      {
+        "name": "Vašek",
+        "meal1": "",
+        "meal2": "",
+        "tshirt": ""
+      }
+    ],
+    "dateReg": "2022-11-18T21:58:43.990Z"
+  }
+]

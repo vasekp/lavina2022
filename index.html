@@ -50,13 +50,13 @@
           <alt-within>
             <form id="register">
               <label>Název společenstva:
-                <input type="text" name="nazev" required/>
+                <input type="text" name="nazev" required maxlength="50"/>
               </label>
               <label>E-mail:
                 <input type="email" name="email" required type="email"/>
               </label>
               <label>Heslo:
-                <input type="password" name="heslo1" required/>
+                <input type="password" name="heslo1" required minlength="6" maxlength="32"/>
               </label>
               <label>Heslo znovu:
                 <input type="password" name="heslo2" required/>
@@ -65,16 +65,16 @@
                 <input type="tel" name="telefon" required pattern="\+?[0-9 -]{9,}"/>
               </label>
               <label>1. hrdina:
-                <input type="text" name="clen1" required/>
+                <input type="text" name="clen1" required maxlength="30"/>
               </label>
               <label>2. hrdina *:
-                <input type="text" name="clen2"/>
+                <input type="text" name="clen2" maxlength="30"/>
               </label>
               <label>3. hrdina *:
-                <input type="text" name="clen3"/>
+                <input type="text" name="clen3" maxlength="30"/>
               </label>
               <label>4. hrdina *:
-                <input type="text" name="clen4"/>
+                <input type="text" name="clen4" maxlength="30"/>
               </label>
               <button type="submit">Registrovat</button>
             </form>
@@ -164,7 +164,6 @@
         </date-alt>
       </article>
       <article id="tab-auth">
-        <span hidden id="authKey"></span>
         <form id="login">
           <label>Název společenstva:
             <input type="text" name="nazev" required data-keep="1"/>
@@ -180,20 +179,23 @@
             <label>Telefon:
               <input type="tel" name="telefon" required pattern="\+?[0-9 -]{9,}" data-keep="1"/>
             </label>
+            <label>E-mail:
+              <input type="email" name="email" required type="email" data-keep="1"/>
+            </label>
             <label>1. hrdina:
               <input type="text" name="clen1" required data-keep="1"/>
             </label>
-            <select name="jidlo1a" required data-keep="1">
+            <select name="jidlo1a" data-keep="1">
               <option value="">Jídlo – pátek</option>
               <option value="pa-vege">Bezmasá varianta</option>
               <option value="pa-maso">Masová varianta</option>
             </select>
-            <select name="jidlo1b" required data-keep="1">
+            <select name="jidlo1b" data-keep="1">
               <option value="">Jídlo – sobota</option>
               <option value="so-vege">Bezmasá varianta</option>
               <option value="so-maso">Masová varianta</option>
             </select>
-            <select name="tricko1" required data-keep="1">
+            <select name="tricko1" data-keep="1">
               <option value="">Velikost trička **</option>
               <option value="PS">Pánské S</option>
               <option value="PM">Pánské M</option>
@@ -210,17 +212,17 @@
             <label>2. hrdina:
               <input type="text" name="clen2" data-keep="1"/>
             </label>
-            <select name="jidlo2a" required data-keep="1">
+            <select name="jidlo2a" data-keep="1">
               <option value="">Jídlo – pátek</option>
               <option value="pa-vege">Bezmasá varianta</option>
               <option value="pa-maso">Masová varianta</option>
             </select>
-            <select name="jidlo2b" required data-keep="1">
+            <select name="jidlo2b" data-keep="1">
               <option value="">Jídlo – sobota</option>
               <option value="so-vege">Bezmasá varianta</option>
               <option value="so-maso">Masová varianta</option>
             </select>
-            <select name="tricko2" required data-keep="1">
+            <select name="tricko2" data-keep="1">
               <option value="">Velikost trička **</option>
               <option value="PS">Pánské S</option>
               <option value="PM">Pánské M</option>
@@ -237,17 +239,17 @@
             <label>3. hrdina:
               <input type="text" name="clen3" data-keep="1"/>
             </label>
-            <select name="jidlo3a" required data-keep="1">
+            <select name="jidlo3a" data-keep="1">
               <option value="">Jídlo – pátek</option>
               <option value="pa-vege">Bezmasá varianta</option>
               <option value="pa-maso">Masová varianta</option>
             </select>
-            <select name="jidlo3b" required data-keep="1">
+            <select name="jidlo3b" data-keep="1">
               <option value="">Jídlo – sobota</option>
               <option value="so-vege">Bezmasá varianta</option>
               <option value="so-maso">Masová varianta</option>
             </select>
-            <select name="tricko3" required data-keep="1">
+            <select name="tricko3" data-keep="1">
               <option value="">Velikost trička **</option>
               <option value="PS">Pánské S</option>
               <option value="PM">Pánské M</option>
@@ -265,17 +267,17 @@
             <label>4. hrdina:
               <input type="text" name="clen4" data-keep="1"/>
             </label>
-            <select name="jidlo4a" required data-keep="1">
+            <select name="jidlo4a" data-keep="1">
               <option value="">Jídlo – pátek</option>
               <option value="pa-vege">Bezmasá varianta</option>
               <option value="pa-maso">Masová varianta</option>
             </select>
-            <select name="jidlo4b" required data-keep="1">
+            <select name="jidlo4b" data-keep="1">
               <option value="">Jídlo – sobota</option>
               <option value="so-vege">Bezmasá varianta</option>
               <option value="so-maso">Masová varianta</option>
             </select>
-            <select name="tricko4" required data-keep="1">
+            <select name="tricko4" data-keep="1">
               <option value="">Velikost trička **</option>
               <option value="PS">Pánské S</option>
               <option value="PM">Pánské M</option>

@@ -291,8 +291,8 @@ small:first-of-type:before {
   margin-bottom: 1ex;
 }
 
-#authKey:empty ~ #auth-section,
-#authKey:not(:empty) ~ #login {
+#tab-auth[data-auth="1"] #login,
+#tab-auth:not([data-auth="1"]) #auth-section {
   display: none;
 }
 
