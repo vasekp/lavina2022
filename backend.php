@@ -2,7 +2,7 @@
   $data = file_get_contents('php://input', false, null, 0, 10000);
   $ch = curl_init('147.32.5.254:3000');
   curl_setopt($ch, CURLOPT_POST, true);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/plain'));
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
   curl_setopt($ch, CURLOPT_HEADER, true);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -12,7 +12,7 @@
     header('Content-type: text/plain');
     echo 'Curl error: ' . curl_error($ch);
   } else {
-    $status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     if($status !== 200)
       http_response_code($status);
