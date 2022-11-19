@@ -1,7 +1,7 @@
 import * as fs from 'node:fs/promises';
 import * as http from 'node:http';
 import { randomUUID } from 'node:crypto';
-import normalizeName from '../normalize.js';
+import normalizeName from './normalize.mjs';
 
 /* TODO: hlídat termíny */
 

@@ -1,7 +1,3 @@
-import normalizeName from './normalize.js';
-
-let knownNames = [];
-
 window.addEventListener('DOMContentLoaded', () => {
   {
     const chkbox = document.getElementById('nav-unfold');
@@ -62,26 +58,10 @@ function validateField(ev) {
   const tgt = ev.currentTarget;
   const form = tgt.form;
   tgt.classList.remove('pristine');
-  if(tgt.name === 'nazev')
-    validateName(form);
   if(tgt.name === 'heslo1' || tgt.name === 'heslo2')
     validatePassword(form);
   if(tgt.name.substring(0, 4) === 'clen')
     validateSequence(form);
-}
-
-function validateName(form) {
-  /*const name = form.querySelector('[name=nazev]');
-  if(!name)
-    return;
-  const exists = knownNames.includes(normalizeName(name.value));
-  const newTeam = form.id === 'register';
-  if(newTeam && exists)
-    name.setCustomValidity('Společenstvo tohoto jména již existuje.');
-  else if(!newTeam && !exists)
-    name.setCustomValidity('Společenstvo nenalezeno.');
-  else
-    name.setCustomValidity('');*/
 }
 
 function validatePassword(form) {
@@ -113,7 +93,6 @@ function validateSequence(form) {
 function validateForm(form) {
   for(const inp of form.querySelectorAll('input, select'))
     inp.classList.remove('pristine');
-  validateName(form);
   validatePassword(form);
   validateSequence(form);
 }
@@ -150,7 +129,6 @@ async function updateTeams() {
       dateReg: Date.parse(team.dateReg),
       datePaid: Date.parse(team.datePaid)
     }));
-    knownNames = teams.map(team => normalizeName(team.name));
     teams.sort((t1, t2) => {
       if(!t1.hidden && t2.hidden)
         return -1;

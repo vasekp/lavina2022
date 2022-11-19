@@ -1,5 +1,3 @@
-import normalizeName from './normalize.js';
-
 window.addEventListener('DOMContentLoaded', () => {
   {
     const chkbox = document.getElementById('nav-unfold');
