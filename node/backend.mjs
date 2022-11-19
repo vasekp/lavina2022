@@ -3,12 +3,10 @@ import * as http from 'node:http';
 import { randomUUID } from 'node:crypto';
 
 /* TODO
-- zrušit účast
 - přejmenovat tým
 - seznam e-mailů
 - detaily týmu pro admina
 - odstranit logy
-- umožnit mazat členy mimo pořadí
 */
 
 const port = 3000;
@@ -106,11 +104,13 @@ function handle(request) {
       if(data.authKey !== team.authKey)
         return error('Neautorizovaný požadavek.');
       if(!(
-        !data.password || (typeof data.password === 'string' && data.password.length >= 6 && data.password.length <= 32)
-        && typeof data.members === 'object' && data.members.length >= 1 && data.members.length <= 4
-        && team0.members.every(member => typeof member.name === 'string' && member.name !== '' && member.name.length <= 30)
+        (!data.password || (typeof data.password === 'string' && data.password.length >= 6 && data.password.length <= 32))
+        && typeof data.members === 'object' && data.members.length <= 4
+        && data.members.every(member => typeof member.name === 'string' && member.name !== '' && member.name.length <= 30)
       ))
         return error('Chybný požadavek.');
+      if(data.members.length === 0)
+        return error('Nelze uložit prázdný tým. Jestli potřebujete zrušit účast, napište organizátorům.');
       if(typeof data.phone === 'string' && data.phone !== '')
         team.phone = data.phone;
       if(typeof data.email === 'string' && data.email !== '')

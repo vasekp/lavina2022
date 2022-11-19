@@ -100,7 +100,7 @@ function validatePassword(form) {
 }
 
 function validateSequence(form) {
-  let seq = true;
+  /*let seq = true;
   for(const i of [1, 2, 3, 4]) {
     const elm = form.querySelector(`[name=clen${i}]`);
     if(!elm)
@@ -111,7 +111,7 @@ function validateSequence(form) {
       elm.setCustomValidity('Vyplňujte jména hrdinů postupně.');
     else
       elm.setCustomValidity('');
-  }
+  }*/
 }
 
 function validateForm(form) {
