@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <title>Muhu Game</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0"/>
+    <meta name="theme-color" content="#c1b38c">
+    <link rel="stylesheet" type="text/css" href="main.css"/>
+    <link rel="stylesheet" type="text/css" href="admin.css"/>
+    <script src="admin.js"></script>
+  </head>
+  <body>
+    <input hidden type="radio" name="tab" id="sel-auth" checked/>
+    <input hidden type="radio" name="tab" id="sel-tymy"/>
+    <header><a href="#main" tabindex="-1"><img src="top.jpg"/></a></header>
+    <nav>
+      <input hidden type="checkbox" id="nav-unfold"/>
+      <label for="sel-auth"><div>Přehled</div></label>
+      <label for="sel-tymy"><div>Týmy</div></label>
+      <span id="sipka">▼</span>
+    </nav>
+    <main id="main">
+      <article id="tab-auth">
+        <form id="login">
+          <label>Heslo:
+            <input type="password" name="heslo" required/>
+          </label>
+          <button type="submit">Přihlásit</button>
+        </form>
+        <div id="auth-section">
+          <h1>Přehled</h1>
+          <div id="prehled">
+            <span>Přihlášených týmů / lidí:</span><span id="lidi"></span>
+            <span>Z toho potvrzených:</span><span id="lidi-paid"></span>
+            <span>Jídla:</span><span id="jidla"></span>
+            <span>Trička:</span><span id="tricka"></span>
+          </div>
+          <h1>E-mail seznam</h1>
+          <h2>Přihlášené týmy</h2>
+          <p id="eml-list"></p>
+          <h2>Zaplacené týmy</h2>
+          <p id="eml-list-paid"></p>
+          <h1>Resty</h1>
+          <ul id="resty"></ul>
+          <button id="reloadFile">Načíst z disku</button>
+        </div>
+      </article>
+      <article id="tab-tymy">
+        <input type="checkbox" id="expand-all"/> Rozbalit všechny
+        <template id="tmp-record">
+          <div class="team-record">
+            <label class="name"></label>
+            <input type="checkbox" class="expand">
+            <div class="details">
+              <span>Telefon:</span><span data-id="phone"></span>
+              <span>E-mail:</span><span data-id="email"></span>
+              <span>Počet členů:</span><span data-id="size"></span>
+              <span>Trička:</span><span data-id="tshirts"></span>
+              <span>Registrace:</span><span data-id="date-reg"></span>
+              <span>Cena:</span><span data-id="to-pay"></span>
+              <span>Zaplaceno:</span><span data-id="paid"></span>
+              <span>Akce:</span>
+              <div>
+                <div>
+                  <button data-id="update-pay">Potvrdit</button>
+                  <input type="number" data-id="pay-amount"/>
+                </div>
+                <div>
+                  <label><input type="checkbox" data-id="set-hidden"> Skrýt</label>
+                </div>
+                <div>
+                  <label><input type="checkbox" data-id="set-countin"> Započítat i skrytý</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+        <div id="team-list">
+        </div>
+      </article>
+    </main>
+  </body>
+</html>

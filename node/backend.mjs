@@ -3,15 +3,13 @@ import * as http from 'node:http';
 import { randomUUID } from 'node:crypto';
 
 /* TODO
-- přejmenovat tým
-- seznam e-mailů
-- detaily týmu pro admina
 - odstranit logy
 */
 
 const port = 3000;
 
-let teams = await loadTeams();
+let teams;
+await loadTeams();
 
 http.createServer((req, res) => {
   res.statusCode = 200;
@@ -32,14 +30,12 @@ function handle(request) {
   console.log(request);
   switch(request.type) {
     case 'getTeams': {
-      const trans = request.data.authKey === teams[0].authKey
-        ? adminList()
-        : teams.filter(team => !team.hidden).map(team => ({
+      const trans = teams.filter(team => !team.hidden).map(team => ({
           name: team.name,
           members: team.members.map(member => member.name),
           dateReg: team.dateReg,
-          paid: !!team.datePaid,
-          datePaid: team.datePaid
+          datePaid: team.datePaid,
+          paid: !!team.amountPaid
         }));
       return {result: 'ok', data: trans};
     }
@@ -47,11 +43,7 @@ function handle(request) {
       const team = findTeam(request.data.name);
       if(!team)
         return error('Společenstvo nenalezeno.');
-      else if(!request.data.password && !request.data.authKey)
-        return error('Chybné přihlašovací údaje.');
-      else if(request.data.password && request.data.password !== team.password)
-        return error('Chybné přihlašovací údaje.');
-      else if(request.data.authKey && request.data.authKey != team.authKey)
+      else if(!(request.data.password === team.password || request.data.authKey === team.authKey || request.data.authKey === teams[0].authKey))
         return error('Chybné přihlašovací údaje.');
       else {
         return {result: 'ok', data: {
@@ -60,7 +52,8 @@ function handle(request) {
           phone: team.phone,
           email: team.email,
           members: team.members,
-          paid: !!team.datePaid
+          amountPaid: team.amountPaid,
+          datePaid: team.datePaid
         }};
       }
     }
@@ -78,7 +71,6 @@ function handle(request) {
         return error('Toto jméno týmu není dostupné.');
       const team = {
         name: team0.name,
-        id: teams.length,
         email: team0.email,
         password: team0.password,
         authKey: randomUUID(),
@@ -121,21 +113,29 @@ function handle(request) {
       saveTeams();
       return {result: 'ok'};
     }
-    case 'adminUpdate': {
-      const team = findTeam(request.data.name);
-      if(!team)
-        return error('Společenstvo nenalezeno.');
+    case 'a:getTeams': {
+      if(request.data.authKey !== teams[0].authKey)
+        return error('Neautorizovaný požadavek.');
+      return {result: 'ok', data: teams};
+    }
+    case 'a:update': {
       const data = request.data;
       if(data.authKey !== teams[0].authKey)
         return error('Neautorizovaný požadavek.');
-      if(data.action === 'hidden') {
-        team.hidden = !team.hidden;
-        saveTeams();
-      } else if(data.action === 'paid') {
-        team.datePaid = team.datePaid ? null : new Date().toISOString();
-        saveTeams();
-      }
-      return {result: 'ok', data: adminList()};
+      const team = findTeam(request.data.name);
+      if(!team)
+        return error('Společenstvo nenalezeno.');
+      team[data.field] = data.value;
+      if(data.field === 'amountPaid' && !team.datePaid)
+        team.datePaid = new Date().toISOString();
+      saveTeams();
+      return {result: 'ok'};
+    }
+    case 'a:reload': {
+      if(request.data.authKey !== teams[0].authKey)
+        return error('Neautorizovaný požadavek.');
+      loadTeams();
+      return {result: 'ok'};
     }
     default:
       return error('Neznámý požadavek.');
@@ -143,11 +143,10 @@ function handle(request) {
 }
 
 async function loadTeams() {
-  const teams = await fs.readFile('teams.json')
+  teams = await fs.readFile('teams.json')
     .then(data => JSON.parse(data))
     .catch(e => { console.log(e); return []; });
   console.log(teams);
-  return teams;
 }
 
 function saveTeams() {
@@ -164,16 +163,4 @@ function findTeam(name) {
   if(typeof name !== 'string' || !name)
     return null;
   return teams.find(team => normalizeName(team.name) === normalizeName(name));
-}
-
-function adminList() {
-  return teams.map(team => ({
-    name: team.name,
-    teamSize: team.members.length,
-    members: team.members.map(member => `${member.name}/${member.tshirt || '?'}/${member.meal1 || '?'}/${member.meal2 || '?'}`),
-    dateReg: team.dateReg,
-    hidden: team.hidden,
-    paid: !!team.datePaid,
-    datePaid: team.datePaid
-  }));
 }

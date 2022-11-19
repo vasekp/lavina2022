@@ -131,7 +131,11 @@ main {
 h1 {
   font-weight: bold;
   font-size: 160%;
-  margin: 0 0 1.5rem 0;
+  margin: 1rem 0 1.5rem 0;
+}
+
+h1:first-child {
+  margin-top: 0;
 }
 
 h2 {
@@ -257,15 +261,6 @@ tbody tr:nth-of-type(odd) {
 
 #tymy-empty td {
   text-align: center;
-}
-
-tr.hidden {
-  color: #800000;
-  font-style: oblique;
-}
-
-#tymy td[data-size]::after {
-  content: ' (' attr(data-size) ')';
 }
 
 .link {

@@ -1,7 +1,6 @@
 [
   {
     "name": "admin",
-    "id": 0,
     "hidden": true,
     "email": "vasek.potocek@post.cz",
     "password": "admin0",
@@ -15,6 +14,9 @@
         "tshirt": ""
       }
     ],
-    "dateReg": "2022-11-18T21:58:43.990Z"
+    "dateReg": "2022-11-18T21:58:43.990Z",
+    "countIn": false,
+    "amountPaid": "-1",
+    "datePaid": "2022-11-19T12:16:03.833Z"
   }
 ]

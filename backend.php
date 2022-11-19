@@ -8,6 +8,7 @@
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
   list($header, $contents) = preg_split('/([\r\n][\r\n])\\1/', curl_exec($ch), 2);
   if(curl_errno($ch)) {
+    http_response_code(500);
     header('Content-type: text/plain');
     echo 'Curl error: ' . curl_error($ch);
   } else {

@@ -38,7 +38,6 @@ window.addEventListener('DOMContentLoaded', () => {
     ev.preventDefault();
   });
   document.getElementById('navrh-div').addEventListener('click', ev => ev.currentTarget.hidden = true);
-  document.getElementById('tymy-content').addEventListener('dblclick', ev => doAdmin(ev.target));
   resetForms();
   updateTeams();
   useCachedLogin().then(ok => { if(ok) showTab('auth'); });
@@ -73,7 +72,7 @@ function validateName(form) {
   const name = form.querySelector('[name=nazev]');
   if(!name)
     return;
-  const exists = knownNames.includes(normalizeName(name.value)) || normalizeName(name.value) === 'admin';
+  const exists = knownNames.includes(normalizeName(name.value));
   const newTeam = form.id === 'register';
   if(newTeam && exists)
     name.setCustomValidity('Společenstvo tohoto jména již existuje.');
@@ -152,7 +151,7 @@ async function serverRequest(type, data) {
 
 async function updateTeams() {
   try {
-    const teams = (await serverRequest('getTeams', {authKey: localStorage['authKey']})).map(team => ({...team,
+    const teams = (await serverRequest('getTeams')).map(team => ({...team,
       dateReg: Date.parse(team.dateReg),
       datePaid: Date.parse(team.datePaid)
     }));
@@ -184,16 +183,11 @@ async function updateTeams() {
         td.textContent = field;
         tr.appendChild(td);
       }
-      // admin tools
-      if(team.teamSize)
-        tr.children[1].dataset.size = team.teamSize;
-      if(team.hidden)
-        tr.classList.add('hidden');
       table.appendChild(tr);
     });
   } catch(response) {
     console.error(response);
-    alert(response.error);
+    alert(response.error || 'Neznámá chyba');
   }
 }
 
@@ -223,7 +217,7 @@ async function doRegister(form) {
     showTab('auth');
   } catch(response) {
     console.error(response);
-    alert(response.error);
+    alert(response.error || 'Neznámá chyba');
   }
 }
 
@@ -233,17 +227,16 @@ async function doLogin(form) {
     const data = await serverRequest('login',
       {
         name: getField('nazev'),
-        password: getField('heslo')
+        password: getField('heslo'),
+        authKey: localStorage['adminKey']
       }
     );
     localStorage['teamName'] = data.name;
     localStorage['authKey'] = data.authKey;
     loadTeamData(data);
-    if(data.name === 'admin')
-      updateTeams();
   } catch(response) {
     console.error(response);
-    alert(response.error);
+    alert(response.error || 'Neznámá chyba');
   }
   resetForms();
 }
@@ -256,6 +249,7 @@ async function useCachedLogin() {
   try {
     data = await serverRequest('login', {name, authKey});
     loadTeamData(data);
+    document.getElementById('tab-auth').dataset.auth = 1;
     return true;
   } catch(response) {
     console.error(response);
@@ -345,31 +339,9 @@ async function doDetails(form) {
     await serverRequest('update', data);
   } catch(response) {
     console.error(response);
-    alert(response.error);
+    alert(response.error || 'Neznámá chyba');
   }
   resetForms();
   await updateTeams();
   showTab('tymy');
-}
-
-async function doAdmin(tgt) {
-  if(localStorage['teamName'] !== 'admin')
-    return;
-  const authKey = localStorage['authKey'];
-  try {
-    if(tgt.tagName === 'TD') {
-      const trc = tgt.closest('tr').children;
-      const name = trc[1].textContent;
-      if(tgt === trc[0])
-        await serverRequest('adminUpdate', {authKey, name, action: 'hidden'});
-      else if(tgt === trc[trc.length - 1])
-        await serverRequest('adminUpdate', {authKey, name, action: 'paid'});
-      else
-        return;
-    }
-    updateTeams();
-  } catch(response) {
-    console.error(response);
-    alert(response.error);
-  }
 }

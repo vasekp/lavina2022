@@ -1,0 +1,43 @@
+#prehled {
+  display: grid;
+}
+
+#tab-tymy input[type="radio"] {
+  display: none;
+}
+
+.name {
+  font-size: 150%;
+}
+
+.details, #prehled {
+  grid-template-columns: max-content auto;
+  grid-gap: .5em 1em;
+  margin: .5em;
+}
+
+.expand {
+  display: none;
+}
+
+.details {
+  display: none;
+}
+
+#expand-all:checked ~ #team-list .details,
+.expand:checked + .details {
+  display: grid;
+}
+
+.team-record {
+  margin-top: .5em;
+}
+
+.team-record[data-hidden] .name {
+  text-decoration: line-through;
+  color: #808080;
+}
+
+[data-id="phone"], [data-id="email"] {
+  user-select: all;
+}
