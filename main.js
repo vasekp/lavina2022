@@ -215,10 +215,10 @@ async function doRegister(form) {
         members
       }
     );
-    updateTeams();
     resetForms();
     localStorage['teamName'] = data.name;
     localStorage['authKey'] = data.authKey;
+    updateTeams();
     loadTeamData(data);
     showTab('auth');
   } catch(response) {

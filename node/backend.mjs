@@ -68,7 +68,7 @@ function handle(request) {
       const team0 = request.data;
       if(!(typeof team0.name === 'string' && team0.name !== '' && team0.name.length <= 50
         && typeof team0.email === 'string' && team0.email !== ''
-        && typeof team0.password === 'string' && team0.password.length >= 6 && team0.password.length <= 32
+        && typeof team0.password === 'string' && team0.password.length <= 32
         && typeof team0.phone === 'string' && team0.phone !== ''
         && typeof team0.members === 'object' && team0.members.length >= 1 && team0.members.length <= 4
         && team0.members.every(member => typeof member === 'string' && member !== '' && member.length <= 30)
@@ -104,7 +104,7 @@ function handle(request) {
       if(data.authKey !== team.authKey)
         return error('Neautorizovaný požadavek.');
       if(!(
-        (!data.password || (typeof data.password === 'string' && data.password.length >= 6 && data.password.length <= 32))
+        (!data.password || (typeof data.password === 'string' && data.password.length <= 32))
         && typeof data.members === 'object' && data.members.length <= 4
         && data.members.every(member => typeof member.name === 'string' && member.name !== '' && member.name.length <= 30)
       ))
