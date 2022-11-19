@@ -1,6 +1,6 @@
 <?php
   $data = file_get_contents('php://input', false, null, 0, 10000);
-  $ch = curl_init('localhost:3000');
+  $ch = curl_init('147.32.5.254:3000');
   curl_setopt($ch, CURLOPT_POST, true);
   curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/plain'));
   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);

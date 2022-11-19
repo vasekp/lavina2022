@@ -138,11 +138,9 @@ async function submitForm(form, ev) {
 
 async function serverRequest(type, data) {
   const rqParcel = {type, data};
-  console.log('REQUEST: ', rqParcel);
   const response = await fetch('backend.php', { method: 'POST', body: JSON.stringify(rqParcel) })
     .then(res => res.json())
     .catch(_ => { throw { result: 'error', error: 'Chyba na straně serveru.' }; });
-  console.log('RESPONSE: ', response);
   if(response.result === 'ok')
     return response.data;
   else
@@ -272,7 +270,7 @@ function loadTeamData(data) {
     getField(`jidlo${index + 1}b`).value = member.meal2 || '';
     getField(`tricko${index + 1}`).value = member.tshirt || '';
   });
-  document.getElementById('platba').dataset.paid = +data.paid || 0;
+  document.getElementById('platba').dataset.paid = data.amountPaid || 0;
   document.getElementById('tab-auth').dataset.auth = 1;
   updateDetailForm();
 }

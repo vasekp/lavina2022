@@ -29,11 +29,9 @@ async function submitForm(form, ev) {
 
 async function serverRequest(type, data) {
   const rqParcel = {type, data};
-  console.log('REQUEST: ', rqParcel);
   const response = await fetch('backend.php', { method: 'POST', body: JSON.stringify(rqParcel) })
     .then(res => res.json())
     .catch(_ => { throw { result: 'error', error: 'Chyba na straně serveru.' }; });
-  console.log('RESPONSE: ', response);
   if(response.result === 'ok')
     return response.data;
   else
@@ -109,7 +107,6 @@ async function loadTeams() {
           a[e] = (a[e] || 0) + 1;
         return a;
       }, {})).map(e => `${e[1]}× ${e[0]}`).join(', ');
-    console.log(tally('tshirt'));
     document.getElementById('tricka').textContent = tally('tshirt');
     document.getElementById('jidla').textContent = `${tally('meal1')}, ${tally('meal2')}`;
     document.getElementById('eml-list').textContent = visibleTeams.map(team => team.email).join(', ');
@@ -123,7 +120,9 @@ async function loadTeams() {
       return li;
     };
     for(const team of visibleTeams) {
-      const paid = +team.amountPaid || 0;
+      if(team.hidden)
+        continue;
+      const paid = team.amountPaid || 0;
       if(paid !== amountDue(team))
         resty.append(newLI(`Tým ${team.name}: má dáti ${amountDue(team)}, dal ${paid}, rozdíl ${amountDue(team) - paid}`));
       if(team.members.some(member => !member.tshirt))
@@ -148,7 +147,7 @@ async function doAdmin(tgt) {
     const [field, value] =
       tgt.dataset.id === 'set-hidden' ? ['hidden', record.querySelector('[data-id="set-hidden"]').checked] :
       tgt.dataset.id === 'set-countin' ? ['countIn', record.querySelector('[data-id="set-countin"]').checked] :
-      tgt.dataset.id === 'update-pay' ? ['amountPaid', record.querySelector('[data-id="pay-amount"]').value] : null;
+      tgt.dataset.id === 'update-pay' ? ['amountPaid', +record.querySelector('[data-id="pay-amount"]').value] : null;
     try {
       await serverRequest('a:update', {authKey, name, field, value});
       loadTeams();

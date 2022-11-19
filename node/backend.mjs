@@ -2,10 +2,6 @@ import * as fs from 'node:fs/promises';
 import * as http from 'node:http';
 import { randomUUID } from 'node:crypto';
 
-/* TODO
-- odstranit logy
-*/
-
 const port = 3000;
 
 let teams;
@@ -126,8 +122,12 @@ function handle(request) {
       if(!team)
         return error('Společenstvo nenalezeno.');
       team[data.field] = data.value;
-      if(data.field === 'amountPaid' && !team.datePaid)
-        team.datePaid = new Date().toISOString();
+      if(data.field === 'amountPaid') {
+        if(data.value && !team.datePaid)
+          team.datePaid = new Date().toISOString();
+        else if(!data.value)
+          delete team.datePaid;
+      }
       saveTeams();
       return {result: 'ok'};
     }

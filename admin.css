@@ -41,3 +41,8 @@
 [data-id="phone"], [data-id="email"] {
   user-select: all;
 }
+
+#resty {
+  margin-top: -.5em;
+  margin-bottom: 1.5em;
+}
