@@ -267,7 +267,7 @@ function loadTeamData(data) {
     getField(`jidlo${index + 1}b`).value = member.meal2 || '';
     getField(`tricko${index + 1}`).value = member.tshirt || '';
   });
-  document.getElementById('platba').dataset.paid = data.amountPaid || 0;
+  document.getElementById('platba').dataset.paid = data.amountPaid ? 1 : 0;
   document.getElementById('tab-auth').dataset.auth = 1;
   updateDetailForm();
 }
