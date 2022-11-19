@@ -1,4 +1,4 @@
-let knownNames = [];
+import normalizeName from './normalize.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -12,11 +12,6 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', ev => doAdmin(ev.target));
   useCachedLogin();
 });
-
-function normalizeName(name) {
-  // TODO more normalization?
-  return name.trim().toLowerCase();
-}
 
 async function submitForm(form, ev) {
   ev.preventDefault();

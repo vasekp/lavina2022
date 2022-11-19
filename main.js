@@ -1,3 +1,5 @@
+import normalizeName from './normalize.js';
+
 let knownNames = [];
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -80,11 +82,6 @@ function validateName(form) {
     name.setCustomValidity('Společenstvo nenalezeno.');
   else
     name.setCustomValidity('');
-}
-
-function normalizeName(name) {
-  // TODO more normalization?
-  return name.trim().toLowerCase();
 }
 
 function validatePassword(form) {
@@ -245,7 +242,7 @@ async function useCachedLogin() {
   if(!name || !authKey)
     return false;
   try {
-    data = await serverRequest('login', {name, authKey});
+    const data = await serverRequest('login', {name, authKey});
     loadTeamData(data);
     document.getElementById('tab-auth').dataset.auth = 1;
     return true;

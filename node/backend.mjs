@@ -1,6 +1,9 @@
 import * as fs from 'node:fs/promises';
 import * as http from 'node:http';
 import { randomUUID } from 'node:crypto';
+import normalizeName from '../normalize.js';
+
+/* TODO: hlídat termíny */
 
 const port = 3000;
 
@@ -152,11 +155,6 @@ async function loadTeams() {
 function saveTeams() {
   fs.writeFile('teams.json', JSON.stringify(teams, null, 2));
   //console.log(teams);
-}
-
-function normalizeName(name) {
-  // TODO more normalization?
-  return name.trim().toLowerCase();
 }
 
 function findTeam(name) {
