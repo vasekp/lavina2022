@@ -71,7 +71,7 @@ function validateField(ev) {
 }
 
 function validateName(form) {
-  const name = form.querySelector('[name=nazev]');
+  /*const name = form.querySelector('[name=nazev]');
   if(!name)
     return;
   const exists = knownNames.includes(normalizeName(name.value));
@@ -81,7 +81,7 @@ function validateName(form) {
   else if(!newTeam && !exists)
     name.setCustomValidity('Společenstvo nenalezeno.');
   else
-    name.setCustomValidity('');
+    name.setCustomValidity('');*/
 }
 
 function validatePassword(form) {
