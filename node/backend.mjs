@@ -6,6 +6,8 @@ import normalizeName from './normalize.mjs';
 /* TODO: hlídat termíny */
 
 const port = 3000;
+const regOpen = new Date('2022-12-24T00:00:00.000+01:00');
+const regClose = new Date('2022-12-24T23:59:59.999+01:00');
 
 let teams;
 await loadTeams();
@@ -66,6 +68,11 @@ function handle(request) {
         && team0.members.every(member => typeof member === 'string' && member !== '' && member.length <= 30)
       ))
         return error('Chybný požadavek.');
+      const now = new Date();
+      if(now < regOpen)
+        return error('Registrace ještě nejsou otevřeny.');
+      if(now > regClose)
+        return error('Registrace již nejsou otevřeny.');
       if(findTeam(team0.name))
         return error('Toto jméno týmu není dostupné.');
       const team = {
