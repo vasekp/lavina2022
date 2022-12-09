@@ -27,6 +27,7 @@ body {
   min-height: 100%;
   margin: 0 auto;
   background: url('images/lavina-bg.jpg');
+  background-size: contain;
 }
 
 [hidden] {
