@@ -9,8 +9,9 @@
   --c-bg: #081333;
   --c-fg: #ffd932;
   --c-inv: var(--c-bg);
-  --c-alt-odd: #c9bd9c;
-  --c-alt-even: #b8a77a;
+  --c-thead: none;
+  --c-alt-odd: #00000020;
+  --c-alt-even: #cccccc20;
   --b-thick: .25em solid var(--c-fg);
   --b-table: 2px solid var(--c-fg);
 }
@@ -205,7 +206,7 @@ table {
 }
 
 thead {
-  background: #bec0bf;
+  background: var(--c-thead);
   font-weight: bold;
   text-align: left;
 }
