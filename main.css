@@ -2,28 +2,30 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13pt;
   line-height: 1.2;
-  color: var(--c-dark);
-  background: var(--c-base);
+  color: var(--c-fg);
+  background: var(--c-bg);
+  height: 100%;
   scroll-behavior: smooth;
-  --c-base: #c1b38c;
-  --c-dark: #081333;
-  --c-light: white;
+  --c-bg: #081333;
+  --c-fg: #ffd932;
+  --c-inv: var(--c-bg);
   --c-alt-odd: #c9bd9c;
   --c-alt-even: #b8a77a;
-  --b-thick: .25em solid var(--c-dark);
-  --b-table: 2px solid var(--c-dark);
+  --b-thick: .25em solid var(--c-fg);
+  --b-table: 2px solid var(--c-fg);
 }
 
 html, body {
   width: 100%;
-  height: 100%;
   margin: 0;
   padding: 0;
 }
 
 body {
-  max-width: 1246px;
+  max-width: 1292px;
+  min-height: 100%;
   margin: 0 auto;
+  background: url('images/lavina-bg.jpg');
 }
 
 [hidden] {
@@ -45,6 +47,7 @@ nav {
   padding: 0;
   display: flex;
   justify-content: center;
+  border-top: var(--b-thick);
   border-bottom: var(--b-thick);
   user-select: none;
 }
@@ -65,12 +68,12 @@ nav label div, button {
 #sel-auth:checked ~ nav label[for="sel-auth"],
 nav label:hover,
 button {
-  background: var(--c-dark);
-  color: var(--c-light);
+  background: var(--c-fg);
+  color: var(--c-inv);
 }
 
 #sipka {
-  color: var(--c-light);
+  color: var(--c-inv);
   display: block;
   position: absolute;
   right: 1em;
@@ -88,13 +91,13 @@ button {
     flex-direction: column;
     overflow: hidden;
     position: relative;
-    background: var(--c-dark);
+    background: var(--c-fg);
   }
 
   nav label {
     height: 0;
     transition: height 300ms;
-    background: var(--c-base);
+    background: var(--c-bg);
   }
 
   #sel-uvod:checked ~ nav label[for="sel-uvod"],
@@ -103,7 +106,7 @@ button {
   #sel-pravidla:checked ~ nav label[for="sel-pravidla"],
   #sel-auth:checked ~ nav label[for="sel-auth"] {
     height: 3.2em;
-    background: revert /*var(--c-dark) -- solves a weird sub-pixel misalignment on Chrome */;
+    background: revert /*var(--c-fg) -- solves a weird sub-pixel misalignment on Chrome */;
   }
 
   #nav-unfold:checked ~ label {
@@ -117,7 +120,8 @@ button {
 
 main {
   margin: 2em;
-  min-height: 32em;
+  margin-bottom: 0;
+  padding-bottom: 2em;
 }
 
 #sel-uvod:not(:checked) ~ main #tab-uvod,
@@ -291,7 +295,7 @@ small:first-of-type:before {
   display: block;
   width: 8rem;
   height: 1px;
-  background: var(--c-dark);
+  background: var(--c-fg);
   margin-bottom: 1ex;
 }
 
@@ -314,7 +318,7 @@ small:first-of-type:before {
 }
 
 a {
-  color: var(--c-dark);
+  color: var(--c-fg);
   text-decoration: underline;
 }
 
