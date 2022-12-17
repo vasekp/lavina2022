@@ -146,7 +146,7 @@ h1:first-child {
 
 h2 {
   font-weight: bold;
-  font-size: inherit;
+  font-size: 120%;
   margin: 1.5em 0 1em 0;
 }
 
