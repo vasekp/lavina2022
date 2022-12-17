@@ -1,4 +1,4 @@
-import { teamSize } from './config.js';
+import { teamSize, fees } from './config.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -267,10 +267,10 @@ function updateDetailForm() {
     }
   }
   // recalculate
-  const total = 1500 + 1200 * numPlayers + 350 * numTShirts;
-  let html = `<b>${total} Kč</b> (1500 / společenstvo + ${numPlayers} × 1200 / hrdina`;
+  const total = fees.base + fees.member * numPlayers + fees.tshirt * numTShirts;
+  let html = `<b>${total} Kč</b> (${fees.base} / společenstvo + ${numPlayers} × ${fees.member} / hrdina`;
   if(numTShirts > 0)
-    html += ` + ${numTShirts} × 350 / tričko`;
+    html += ` + ${numTShirts} × ${fees.tshirt} / tričko`;
   html += ')';
   if(moreTShirts)
     html += ` + případně${numTShirts > 0 ? ' další ' : ' '}trička`;

@@ -1,3 +1,5 @@
+import { fees } from './config.js';
+
 window.addEventListener('DOMContentLoaded', () => {
   {
     const chkbox = document.getElementById('nav-unfold');
@@ -160,5 +162,5 @@ async function doAdmin(tgt) {
 }
 
 function amountDue(team) {
-  return 1500 + 1200 * team.members.length + 350 * team.members.map(member => member.tshirt).filter(val => val && val !== 'nic').length;
+  return fees.base + fees.member * team.members.length + fees.tshirt * team.members.map(member => member.tshirt).filter(val => val && val !== 'nic').length;
 }
