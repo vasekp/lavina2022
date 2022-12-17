@@ -1,3 +1,5 @@
+import { teamSize } from './config.js';
+
 window.addEventListener('DOMContentLoaded', () => {
   {
     const chkbox = document.getElementById('nav-unfold');
@@ -21,21 +23,27 @@ window.addEventListener('DOMContentLoaded', () => {
       close && close < now ? true :
         false;
   }
-  for(const elm of document.querySelectorAll('form input, form select')) {
+  for(const elm of document.querySelectorAll('form')) {
     elm.addEventListener('input', validateField);
-    elm.addEventListener('blur', validateField);
+    elm.addEventListener('focusout', validateField);
   }
   document.addEventListener('submit', ev => submitForm(ev.submitter.form, ev));
   for(const button of document.querySelectorAll('button[type="submit"]'))
     button.addEventListener('click', () => validateForm(button.form));
   document.getElementById('logout').addEventListener('click', logout);
-  for(const elm of document.querySelectorAll('#details input[name^="clen"], #details select[name^="tricko"]'))
-    elm.addEventListener('input', updateDetailForm);
+  document.getElementById('details').addEventListener('input', updateDetailForm);
   document.getElementById('navrh').addEventListener('click', ev => {
     document.getElementById('navrh-div').hidden = false;
     ev.preventDefault();
   });
   document.getElementById('navrh-div').addEventListener('click', ev => ev.currentTarget.hidden = true);
+  for(const tmp of document.querySelectorAll('template')) {
+    for(let i = 1; i <= teamSize; i++) {
+      const clone = tmp.content.cloneNode(true);
+      clone.querySelectorAll('[name]').forEach(elm => elm.name += i);
+      tmp.before(clone);
+    }
+  }
   resetForms();
   updateTeams();
   useCachedLogin().then(ok => { if(ok) showTab('auth'); });
@@ -55,13 +63,11 @@ function resetForms() {
 }
 
 function validateField(ev) {
-  const tgt = ev.currentTarget;
+  const tgt = ev.target;
   const form = tgt.form;
   tgt.classList.remove('pristine');
   if(tgt.name === 'heslo1' || tgt.name === 'heslo2')
     validatePassword(form);
-  if(tgt.name.substring(0, 4) === 'clen')
-    validateSequence(form);
 }
 
 function validatePassword(form) {
@@ -75,26 +81,10 @@ function validatePassword(form) {
   }
 }
 
-function validateSequence(form) {
-  /*let seq = true;
-  for(const i of [1, 2, 3, 4]) {
-    const elm = form.querySelector(`[name=clen${i}]`);
-    if(!elm)
-      return;
-    if(seq && !elm.value)
-      seq = false;
-    if(!seq && elm.value)
-      elm.setCustomValidity('Vyplňujte jména hrdinů postupně.');
-    else
-      elm.setCustomValidity('');
-  }*/
-}
-
 function validateForm(form) {
   for(const inp of form.querySelectorAll('input, select'))
     inp.classList.remove('pristine');
   validatePassword(form);
-  validateSequence(form);
 }
 
 async function submitForm(form, ev) {
@@ -167,7 +157,7 @@ async function updateTeams() {
 async function doRegister(form) {
   const getField = field => form.querySelector(`[name="${field}"]`).value;
   const members = [];
-  for(const i of [1, 2, 3, 4]) {
+  for(let i = 1; i <= teamSize; i++) {
     const member = getField(`clen${i}`);
     if(member)
       members.push(member);
@@ -241,8 +231,8 @@ function loadTeamData(data) {
   getField('email').value = data.email;
   data.members.forEach((member, index) => {
     getField(`clen${index + 1}`).value = member.name;
-    getField(`jidlo${index + 1}a`).value = member.meal1 || '';
-    getField(`jidlo${index + 1}b`).value = member.meal2 || '';
+    getField(`jidloPa${index + 1}`).value = member.meal1 || '';
+    getField(`jidloSo${index + 1}`).value = member.meal2 || '';
     getField(`tricko${index + 1}`).value = member.tshirt || '';
   });
   document.getElementById('platba').dataset.paid = data.amountPaid ? 1 : 0;
@@ -262,7 +252,7 @@ function updateDetailForm() {
   let numPlayers = 0;
   let numTShirts = 0;
   let moreTShirts = false;
-  for(const i of [1, 2, 3, 4]) {
+  for(let i = 1; i <= teamSize; i++) {
     const inp = document.querySelector(`#details input[name=clen${i}]`);
     const empty = inp.value === '';
     for(const elm of document.querySelectorAll(`#details select[name*="${i}"]`))
@@ -297,13 +287,13 @@ async function doDetails(form) {
       email: getField('email'),
       members: []
     };
-    for(const i of [1, 2, 3, 4]) {
+    for(let i = 1; i <= teamSize; i++) {
       const name = getField(`clen${i}`);
       if(name)
         data.members.push({
           name,
-          meal1: getField(`jidlo${i}a`),
-          meal2: getField(`jidlo${i}b`),
+          meal1: getField(`jidloPa${i}`),
+          meal2: getField(`jidloSo${i}`),
           tshirt: getField(`tricko${i}`)
         });
     }

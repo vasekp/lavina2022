@@ -177,6 +177,7 @@ form {
   display: grid;
   grid-template-columns: min-content minmax(min-content, 35ch);
   gap: 1ex;
+  counter-reset: clen;
 }
 
 form label {
@@ -198,7 +199,16 @@ form button {
 }
 
 form :invalid:not(.pristine) {
-  box-shadow: 0 0 3px red;
+  /*box-shadow: 0 0 3px red;*/
+  background: #fdd;
+}
+
+.clen-ctr {
+  counter-increment: clen;
+}
+
+.clen-ctr::before {
+  content: counter(clen) ". ";
 }
 
 table {

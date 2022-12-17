@@ -49,36 +49,35 @@
           <alt-pre><p>Registrace společenstev bude přístupná od pátku <b>12. 8. 2022, 12:00</b> do neděle 28. 8. 2022.</p></alt-pre>
           <alt-within>
             <form id="register">
-              <label>Název společenstva:
+              <label>
+                <span>Název společenstva:</span>
                 <input type="text" name="nazev" required maxlength="50"/>
               </label>
-              <label>E-mail:
+              <label>
+                <span>E-mail:</span>
                 <input type="email" name="email" required type="email"/>
               </label>
-              <label>Heslo:
+              <label>
+                <span>Heslo:</span>
                 <input type="password" name="heslo1" required maxlength="32"/>
               </label>
-              <label>Heslo znovu:
+              <label>
+                <span>Heslo znovu:</span>
                 <input type="password" name="heslo2" required/>
               </label>
-              <label>Telefon:
+              <label>
+                <span>Telefon:</span>
                 <input type="tel" name="telefon" required pattern="\+?[0-9 -]{9,}"/>
               </label>
-              <label>1. hrdina:
-                <input type="text" name="clen1" required maxlength="30"/>
-              </label>
-              <label>2. hrdina *:
-                <input type="text" name="clen2" maxlength="30"/>
-              </label>
-              <label>3. hrdina *:
-                <input type="text" name="clen3" maxlength="30"/>
-              </label>
-              <label>4. hrdina *:
-                <input type="text" name="clen4" maxlength="30"/>
-              </label>
+              <template>
+                <label>
+                  <span class="clen-ctr">člen:</span>
+                  <input type="text" name="clen" required maxlength="30"/>
+                </label>
+              </template>
               <button type="submit">Registrovat</button>
             </form>
-            <small>*) V případě méně než čtyř hrdinů nechte podle potřeby prázdné.</small>
+            <!--small>*) V případě méně než čtyř hrdinů nechte podle potřeby prázdné.</small-->
           </alt-within>
           <alt-post><p>Registrace na hru byly již uzavřeny.</p></alt-post>
         </date-alt>
@@ -182,115 +181,36 @@
             <label>E-mail:
               <input type="email" name="email" required type="email" data-keep="1"/>
             </label>
-            <label>1. hrdina:
-              <input type="text" name="clen1" data-keep="1"/>
-            </label>
-            <select name="jidlo1a" data-keep="1">
-              <option value="">Jídlo – pátek</option>
-              <option value="pa-vege">Bezmasá varianta</option>
-              <option value="pa-maso">Masová varianta</option>
-            </select>
-            <select name="jidlo1b" data-keep="1">
-              <option value="">Jídlo – sobota</option>
-              <option value="so-vege">Bezmasá varianta</option>
-              <option value="so-maso">Masová varianta</option>
-            </select>
-            <select name="tricko1" data-keep="1">
-              <option value="">Velikost trička **</option>
-              <option value="PS">Pánské S</option>
-              <option value="PM">Pánské M</option>
-              <option value="PL">Pánské L</option>
-              <option value="PXL">Pánské XL</option>
-              <option value="PXXL">Pánské XXL</option>
-              <option value="DS">Dámské S</option>
-              <option value="DM">Dámské M</option>
-              <option value="DL">Dámské L</option>
-              <option value="DXL">Dámské XL</option>
-              <option value="DXXL">Dámské XXL</option>
-              <option value="nic">Žádné tričko</option>
-            </select>
-            <label>2. hrdina:
-              <input type="text" name="clen2" data-keep="1"/>
-            </label>
-            <select name="jidlo2a" data-keep="1">
-              <option value="">Jídlo – pátek</option>
-              <option value="pa-vege">Bezmasá varianta</option>
-              <option value="pa-maso">Masová varianta</option>
-            </select>
-            <select name="jidlo2b" data-keep="1">
-              <option value="">Jídlo – sobota</option>
-              <option value="so-vege">Bezmasá varianta</option>
-              <option value="so-maso">Masová varianta</option>
-            </select>
-            <select name="tricko2" data-keep="1">
-              <option value="">Velikost trička **</option>
-              <option value="PS">Pánské S</option>
-              <option value="PM">Pánské M</option>
-              <option value="PL">Pánské L</option>
-              <option value="PXL">Pánské XL</option>
-              <option value="PXXL">Pánské XXL</option>
-              <option value="DS">Dámské S</option>
-              <option value="DM">Dámské M</option>
-              <option value="DL">Dámské L</option>
-              <option value="DXL">Dámské XL</option>
-              <option value="DXXL">Dámské XXL</option>
-              <option value="nic">Žádné tričko</option>
-            </select>
-            <label>3. hrdina:
-              <input type="text" name="clen3" data-keep="1"/>
-            </label>
-            <select name="jidlo3a" data-keep="1">
-              <option value="">Jídlo – pátek</option>
-              <option value="pa-vege">Bezmasá varianta</option>
-              <option value="pa-maso">Masová varianta</option>
-            </select>
-            <select name="jidlo3b" data-keep="1">
-              <option value="">Jídlo – sobota</option>
-              <option value="so-vege">Bezmasá varianta</option>
-              <option value="so-maso">Masová varianta</option>
-            </select>
-            <select name="tricko3" data-keep="1">
-              <option value="">Velikost trička **</option>
-              <option value="PS">Pánské S</option>
-              <option value="PM">Pánské M</option>
-              <option value="PL">Pánské L</option>
-              <option value="PXL">Pánské XL</option>
-              <option value="PXXL">Pánské XXL</option>
-              <option value="DS">Dámské S</option>
-              <option value="DM">Dámské M</option>
-              <option value="DL">Dámské L</option>
-              <option value="DXL">Dámské XL</option>
-              <option value="DXXL">Dámské XXL</option>
-              <option value="nic">Žádné tričko</option>
-            </select>
-            </label>
-            <label>4. hrdina:
-              <input type="text" name="clen4" data-keep="1"/>
-            </label>
-            <select name="jidlo4a" data-keep="1">
-              <option value="">Jídlo – pátek</option>
-              <option value="pa-vege">Bezmasá varianta</option>
-              <option value="pa-maso">Masová varianta</option>
-            </select>
-            <select name="jidlo4b" data-keep="1">
-              <option value="">Jídlo – sobota</option>
-              <option value="so-vege">Bezmasá varianta</option>
-              <option value="so-maso">Masová varianta</option>
-            </select>
-            <select name="tricko4" data-keep="1">
-              <option value="">Velikost trička **</option>
-              <option value="PS">Pánské S</option>
-              <option value="PM">Pánské M</option>
-              <option value="PL">Pánské L</option>
-              <option value="PXL">Pánské XL</option>
-              <option value="PXXL">Pánské XXL</option>
-              <option value="DS">Dámské S</option>
-              <option value="DM">Dámské M</option>
-              <option value="DL">Dámské L</option>
-              <option value="DXL">Dámské XL</option>
-              <option value="DXXL">Dámské XXL</option>
-              <option value="nic">Žádné tričko</option>
-            </select>
+            <template>
+              <label>
+                <span class="clen-ctr">hrdina:</span>
+                <input type="text" name="clen" data-keep="1"/>
+              </label>
+              <select name="jidloPa" data-keep="1">
+                <option value="">Jídlo – pátek</option>
+                <option value="pa-vege">Bezmasá varianta</option>
+                <option value="pa-maso">Masová varianta</option>
+              </select>
+              <select name="jidloSo" data-keep="1">
+                <option value="">Jídlo – sobota</option>
+                <option value="so-vege">Bezmasá varianta</option>
+                <option value="so-maso">Masová varianta</option>
+              </select>
+              <select name="tricko" data-keep="1">
+                <option value="">Velikost trička **</option>
+                <option value="PS">Pánské S</option>
+                <option value="PM">Pánské M</option>
+                <option value="PL">Pánské L</option>
+                <option value="PXL">Pánské XL</option>
+                <option value="PXXL">Pánské XXL</option>
+                <option value="DS">Dámské S</option>
+                <option value="DM">Dámské M</option>
+                <option value="DL">Dámské L</option>
+                <option value="DXL">Dámské XL</option>
+                <option value="DXXL">Dámské XXL</option>
+                <option value="nic">Žádné tričko</option>
+              </select>
+            </template>
             <label>Změnit heslo *:
               <input type="password" name="heslo1"/>
             </label>

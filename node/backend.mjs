@@ -2,8 +2,9 @@ import * as fs from 'node:fs/promises';
 import * as http from 'node:http';
 import { randomUUID } from 'node:crypto';
 import normalizeName from './normalize.mjs';
+import { teamSize } from '../config.js';
 
-/* TODO: hlídat termíny */
+/* TODO: termín změn */
 
 const port = 3000;
 const regOpen = new Date('2022-12-24T00:00:00.000+01:00');
@@ -64,7 +65,7 @@ function handle(request) {
         && typeof team0.email === 'string' && team0.email.trim() !== ''
         && typeof team0.password === 'string' && team0.password.length <= 32
         && typeof team0.phone === 'string' && team0.phone.trim() !== ''
-        && typeof team0.members === 'object' && team0.members.length >= 1 && team0.members.length <= 4
+        && typeof team0.members === 'object' && team0.members.length >= 1 && team0.members.length <= teamSize
         && team0.members.every(member => typeof member === 'string' && member.trim() !== '' && member.length <= 30)
       ))
         return error('Chybný požadavek.');
@@ -103,7 +104,7 @@ function handle(request) {
         return error('Neautorizovaný požadavek.');
       if(!(
         (!data.password || (typeof data.password === 'string' && data.password.length <= 32))
-        && typeof data.members === 'object' && data.members.length <= 4
+        && typeof data.members === 'object' && data.members.length <= teamSize
         && data.members.every(member => typeof member.name === 'string' && member.name.trim() !== '' && member.name.length <= 30)
       ))
         return error('Chybný požadavek.');
