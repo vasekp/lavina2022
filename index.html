@@ -19,26 +19,26 @@
       <input hidden type="checkbox" id="nav-unfold"/>
       <label for="sel-uvod"><div>Úvod</div></label>
       <label for="sel-reg"><div>Registrace</div></label>
-      <label for="sel-tymy" data-visible-from="2022-08-12T12:00:00+02:00"><div>Přihlášená společenstva</div></label>
+      <label for="sel-tymy" data-visible-from="2022-08-12T12:00:00+02:00"><div>Přihlášené týmy</div></label>
       <label for="sel-pravidla"><div>Pravidla</div></label>
-      <label for="sel-auth" data-visible-from="2022-08-12T12:00:00+02:00"><div>Moje společenstvo</div></label>
+      <label for="sel-auth" data-visible-from="2022-08-12T12:00:00+02:00"><div>Můj tým</div></label>
       <span id="sipka">▼</span>
     </nav>
     <main id="main">
       <article id="tab-uvod">
-        <h1>MUHU GAME 2022</h1>
+        <h1>Lavina XVII</h1>
         <blockquote>
           Jedna sova vládne všem, jedna jim všem káže,<br/>
           jedna všechny přivede, do temnoty sváže.
         </blockquote>
         <p>Muhuzem volá o pomoc! Temnota se pomalu snáší na bájnou zemi elfů, trpaslíků, lidí a hobitů. Těžké časy se blíží a naděje svobodných národů vyhasíná. Přichází čas hrdinů.</p>
-        <p>Nebojíš-li se, sestav společenstvo a vydej se na dobrodružnou výpravu k záchraně Muhuzemě. Potřebovat budeš tři věrné druhy, odvahu, důvtip a svačinu. Tak neváhej, času je málo!</p>
+        <p>Nebojíš-li se, sestav tým a vydej se na dobrodružnou výpravu k záchraně Muhuzemě. Potřebovat budeš tři věrné druhy, odvahu, důvtip a svačinu. Tak neváhej, času je málo!</p>
 
         <h2>O hře:</h2>
-        <p>Muhu Game 2022 je pěší lineární šifrovací hra pro až čtyřčlenná společenstva.</p>
-        <p><b>Kapacita hry:</b> 30 společenstev</p>
+        <p>Lavina XVII je lineární šifrovací hra na běžkách pro pětičlenné týmy.</p>
+        <p><b>Kapacita hry:</b> 18 týmů</p>
         <p><b>Místo startu:</b> bude upřesněno v prologu</p>
-        <p><b>Cena:</b> 1500 Kč/společenstvo + 1200 Kč/hrdina (ubytování s polopenzí) + 350 Kč/třičko (volitelné)</p>
+        <p><b>Cena:</b> 1500 Kč/tým + 1500 Kč/člen (ubytování s polopenzí) + 250 Kč/třičko (volitelné)</p>
         <p><b>Kontaktní e-mail:</b> info<span id="obfs">domof</span></p>
 
         <h2>Organizační tým:</h2>
@@ -46,11 +46,11 @@
       </article>
       <article id="tab-reg">
         <date-alt data-open="2022-08-12T12:00:00+02:00" data-close="2023-08-28T23:59:59+02:00">
-          <alt-pre><p>Registrace společenstev bude přístupná od pátku <b>12. 8. 2022, 12:00</b> do neděle 28. 8. 2022.</p></alt-pre>
+          <alt-pre><p>Registrace týmů bude přístupná od pátku <b>12. 8. 2022, 12:00</b> do neděle 28. 8. 2022.</p></alt-pre>
           <alt-within>
             <form id="register">
               <label>
-                <span>Název společenstva:</span>
+                <span>Název týmu:</span>
                 <input type="text" name="nazev" required maxlength="50"/>
               </label>
               <label>
@@ -77,7 +77,7 @@
               </template>
               <button type="submit">Registrovat</button>
             </form>
-            <!--small>*) V případě méně než čtyř hrdinů nechte podle potřeby prázdné.</small-->
+            <!--small>*) V případě méně než čtyř členů nechte podle potřeby prázdné.</small-->
           </alt-within>
           <alt-post><p>Registrace na hru byly již uzavřeny.</p></alt-post>
         </date-alt>
@@ -87,8 +87,8 @@
           <thead>
             <tr>
               <th>Pořadí</th>
-              <th>Název společenstva</th>
-              <th>Hrdinové</th>
+              <th>Název týmu</th>
+              <th>Členové</th>
               <th>Zaplaceno</th>
             </tr>
           </thead>
@@ -96,8 +96,8 @@
           <tbody id="tymy-empty">
             <tr>
               <td colspan="4">
-                <p>Žádná přihlášená společenstva.</p>
-                <p><label for="sel-reg" class="link">Zaregistrujete svoje?</label></p>
+                <p>Žádné přihlášené týmy.</p>
+                <p><label for="sel-reg" class="link">Zaregistrujete svůj?</label></p>
               </td>
             </tr>
           </tbody>
@@ -108,7 +108,6 @@
         <date-alt data-open="2022-08-28T00:00:00+02:00">
           <alt-pre><p>Pravidla hry budou vystavena <b>28. 8. 2022</b>.</p></alt-pre>
           <alt-within>
-        <p><b>TODO:</b> sjednotit tým / společenstvo.</p>
         <p>Pravidla mohou být měněna až do začátku akce.</p>
         <p>Každý hrdina zodpovídá za sám za sebe a hry se účastní dobrovolně a na vlastní nebezpečí.</p>
         <p>Hry se účastní společenstva o kapacitě čtyř hrdinů. V případě nedostatku hrdinů mohou někteří členové zastávat funkci více hrdinů zároveň. Pokud není uvedeno jinak, je zakázáno spolupracovat s jinými společenstvy.</p>
@@ -164,7 +163,7 @@
       </article>
       <article id="tab-auth">
         <form id="login">
-          <label>Název společenstva:
+          <label>Název týmu:
             <input type="text" name="nazev" required data-keep="1"/>
           </label>
           <label>Heslo:
@@ -183,7 +182,7 @@
             </label>
             <template>
               <label>
-                <span class="clen-ctr">hrdina:</span>
+                <span class="clen-ctr">člen:</span>
                 <input type="text" name="clen" data-keep="1"/>
               </label>
               <select name="jidloPa" data-keep="1">
@@ -231,11 +230,11 @@
                   <alt-post>co nejdříve</alt-post>
                 </date-alt>
                 na účet <b>2100255640/2010</b>.</p>
-              <p>Do <b>zprávy pro příjemce</b> nezapomeňte uvést název hry a vašeho společenstva.</p>
+              <p>Do <b>zprávy pro příjemce</b> nezapomeňte uvést název hry a vašeho týmu.</p>
               <p>Poznámka: platby se párují ručně, neobjeví se tedy v seznamu hned.</p>
             </div>
             <div class="trans" id="hotovo">
-              <p>Platbu od vašeho společenstva jsme již přijali.</p>
+              <p>Platbu od vašeho týmu jsme již přijali.</p>
               <p>Pokud dojde ke změnám, které by cenu ovlivnily, domluvte se s organizátory e-mailem nebo na hře.</p>
             </div>
           </div>

@@ -44,7 +44,7 @@ function handle(request) {
     case 'login': {
       const team = findTeam(request.data.name);
       if(!team)
-        return error('Společenstvo nenalezeno.');
+        return error('Tým nenalezen.');
       else if(!(request.data.password === team.password || request.data.authKey === team.authKey || request.data.authKey === teams[0].authKey))
         return error('Chybné přihlašovací údaje.');
       else {
@@ -98,7 +98,7 @@ function handle(request) {
     case 'update': {
       const team = findTeam(request.data.name);
       if(!team)
-        return error('Společenstvo nenalezeno.');
+        return error('Tým nenalezen.');
       const data = request.data;
       if(data.authKey !== team.authKey)
         return error('Neautorizovaný požadavek.');
@@ -132,7 +132,7 @@ function handle(request) {
         return error('Neautorizovaný požadavek.');
       const team = findTeam(request.data.name);
       if(!team)
-        return error('Společenstvo nenalezeno.');
+        return error('Tým nenalezen.');
       team[data.field] = data.value;
       if(data.field === 'amountPaid') {
         if(data.value && !team.datePaid)

@@ -268,7 +268,7 @@ function updateDetailForm() {
   }
   // recalculate
   const total = fees.base + fees.member * numPlayers + fees.tshirt * numTShirts;
-  let html = `<b>${total} Kč</b> (${fees.base} / společenstvo + ${numPlayers} × ${fees.member} / hrdina`;
+  let html = `<b>${total} Kč</b> (${fees.base} / tým + ${numPlayers} × ${fees.member} / člen`;
   if(numTShirts > 0)
     html += ` + ${numTShirts} × ${fees.tshirt} / tričko`;
   html += ')';

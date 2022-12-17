@@ -317,7 +317,7 @@ small:first-of-type:before {
 }
 
 #teamName::before {
-  content: "Společenstvo ";
+  content: "Tým ";
 }
 
 #platba[data-paid="1"] #udaje,
