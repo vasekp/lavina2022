@@ -60,12 +60,12 @@ function handle(request) {
     }
     case 'register': {
       const team0 = request.data;
-      if(!(typeof team0.name === 'string' && team0.name !== '' && team0.name.length <= 50
-        && typeof team0.email === 'string' && team0.email !== ''
+      if(!(typeof team0.name === 'string' && team0.name.trim() !== '' && team0.name.length <= 50
+        && typeof team0.email === 'string' && team0.email.trim() !== ''
         && typeof team0.password === 'string' && team0.password.length <= 32
-        && typeof team0.phone === 'string' && team0.phone !== ''
+        && typeof team0.phone === 'string' && team0.phone.trim() !== ''
         && typeof team0.members === 'object' && team0.members.length >= 1 && team0.members.length <= 4
-        && team0.members.every(member => typeof member === 'string' && member !== '' && member.length <= 30)
+        && team0.members.every(member => typeof member === 'string' && member.trim() !== '' && member.length <= 30)
       ))
         return error('Chybný požadavek.');
       const now = new Date();
@@ -76,12 +76,12 @@ function handle(request) {
       if(findTeam(team0.name))
         return error('Toto jméno týmu není dostupné.');
       const team = {
-        name: team0.name,
-        email: team0.email,
+        name: team0.name.trim(),
+        email: team0.email.trim(),
         password: team0.password,
         authKey: randomUUID(),
-        phone: team0.phone,
-        members: team0.members.map(m => ({name: m})),
+        phone: team0.phone.trim(),
+        members: team0.members.map(m => ({name: m.trim()})),
         dateReg: new Date().toISOString()
       };
       teams.push(team);
@@ -104,17 +104,18 @@ function handle(request) {
       if(!(
         (!data.password || (typeof data.password === 'string' && data.password.length <= 32))
         && typeof data.members === 'object' && data.members.length <= 4
-        && data.members.every(member => typeof member.name === 'string' && member.name !== '' && member.name.length <= 30)
+        && data.members.every(member => typeof member.name === 'string' && member.name.trim() !== '' && member.name.length <= 30)
       ))
         return error('Chybný požadavek.');
       if(data.members.length === 0)
         return error('Nelze uložit prázdný tým. Jestli potřebujete zrušit účast, napište organizátorům.');
-      if(typeof data.phone === 'string' && data.phone !== '')
-        team.phone = data.phone;
-      if(typeof data.email === 'string' && data.email !== '')
-        team.email = data.email;
+      if(typeof data.phone === 'string' && data.phone.trim() !== '')
+        team.phone = data.phone.trim();
+      if(typeof data.email === 'string' && data.email.trim() !== '')
+        team.email = data.email.trim();
       if(typeof data.password === 'string' && data.password !== '')
         team.password = data.password;
+      data.members.forEach(m => m.name = m.name.trim());
       team.members = data.members;
       saveTeams();
       return {result: 'ok'};
