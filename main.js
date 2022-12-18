@@ -74,7 +74,7 @@ function validatePassword(form) {
   const heslo1 = form.querySelector('[name=heslo1]');
   const heslo2 = form.querySelector('[name=heslo2]');
   if(heslo1 && heslo2) {
-    if(heslo2.value && heslo1.value !== heslo2.value)
+    if(heslo1.value !== heslo2.value)
       heslo2.setCustomValidity('Hesla se neshodují.');
     else
       heslo2.setCustomValidity('');
