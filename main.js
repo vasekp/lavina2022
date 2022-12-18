@@ -104,9 +104,10 @@ async function submitForm(form, ev) {
 
 async function serverRequest(type, data) {
   const rqParcel = {type, data};
-  const response = await fetch('backend.php', { method: 'POST', body: JSON.stringify(rqParcel) })
-    .then(res => res.json())
-    .catch(_ => { throw { result: 'error', error: 'Chyba na straně serveru.' }; });
+  const resObj = await fetch('backend.php', { method: 'POST', body: JSON.stringify(rqParcel) });
+  if(resObj.status !== 200)
+    throw { result: 'error', error: 'Nelze se připojit k databázi.' };
+  const response = await resObj.json();
   if(response.result === 'ok')
     return response.data;
   else
