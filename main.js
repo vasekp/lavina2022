@@ -44,6 +44,7 @@ window.addEventListener('DOMContentLoaded', () => {
       tmp.before(clone);
     }
   }
+  document.querySelector('#register input[name="clen1"]').required = true;
   resetForms();
   updateTeams();
   useCachedLogin().then(ok => { if(ok) showTab('auth'); });
