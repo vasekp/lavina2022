@@ -1,13 +1,9 @@
 import * as fs from 'node:fs/promises';
 import * as http from 'node:http';
 import normalizeName from './normalize.mjs';
-import { teamSize } from '../config.js';
-
-/* TODO: termín změn */
+import { dates, teamSize } from '../config.js';
 
 const port = 3000;
-const regOpen = new Date('2022-12-24T00:00:00.000+01:00');
-const regClose = new Date('2022-12-24T23:59:59.999+01:00');
 
 let teams;
 await loadTeams();
@@ -68,9 +64,9 @@ function handle(request) {
       ))
         return error('Chybný požadavek.');
       const now = new Date();
-      if(now < regOpen)
+      if(now < dates.regOpen)
         return error('Registrace ještě nejsou otevřeny.');
-      if(now > regClose)
+      if(now > dates.regClose)
         return error('Registrace již nejsou otevřeny.');
       if(findTeam(team0.name))
         return error('Toto jméno týmu není dostupné.');
@@ -92,6 +88,9 @@ function handle(request) {
       }};
     }
     case 'update': {
+      const now = new Date();
+      if(now > dates.changesClose)
+        return error('Změny již nejsou povoleny.');
       const team = findTeam(request.data.name);
       if(!team)
         return error('Tým nenalezen.');

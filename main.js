@@ -1,4 +1,4 @@
-import { teamSize, fees, hash } from './config.js';
+import { teamSize, fees, dates, hash } from './config.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -8,16 +8,16 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
   for(const elm of document.querySelectorAll('date-alt')) {
-    const open = Date.parse(elm.dataset.open);
-    const close = Date.parse(elm.dataset.close);
+    const open = dates[elm.dataset.open];
+    const close = dates[elm.dataset.close];
     const now = Date.now();
     elm.dataset.alt = open && open > now ? 'pre' :
       close && close < now ? 'post' :
         'within';
   }
   for(const elm of document.querySelectorAll('[data-visible-from], [data-visible-until]')) {
-    const open = Date.parse(elm.dataset.visibleFrom);
-    const close = Date.parse(elm.dataset.visibleUntil);
+    const open = dates[elm.dataset.visibleFrom];
+    const close = dates[elm.dataset.visibleUntil];
     const now = Date.now();
     elm.hidden = open && open > now ? true :
       close && close < now ? true :

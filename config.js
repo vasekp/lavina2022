@@ -6,6 +6,12 @@ export const fees = {
   tshirt: 250
 };
 
+export const dates = {
+  regOpen: new Date('2022-12-27T12:00:00.000+01:00'),
+  regClose: new Date('2023-01-08T23:59:59.999+01:00'),
+  changesClose: new Date('2023-01-20T23:59:59.999+01:00')
+};
+
 export async function hash(str) {
   const salt = '<"U9>b9B';
   const hex = ta => [...ta].map(b => b.toString(16).padStart(2, '0')).join('');

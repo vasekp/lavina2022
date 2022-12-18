@@ -19,24 +19,19 @@
       <input hidden type="checkbox" id="nav-unfold"/>
       <label for="sel-uvod"><div>Úvod</div></label>
       <label for="sel-reg"><div>Registrace</div></label>
-      <label for="sel-tymy" data-visible-from="2022-08-12T12:00:00+02:00"><div>Přihlášené týmy</div></label>
+      <label for="sel-tymy" data-visible-from="regOpen"><div>Přihlášené týmy</div></label>
       <label for="sel-pravidla"><div>Pravidla</div></label>
-      <label for="sel-auth" data-visible-from="2022-08-12T12:00:00+02:00"><div>Můj tým</div></label>
+      <label for="sel-auth" data-visible-from="regOpen"><div>Můj tým</div></label>
       <span id="sipka">▼</span>
     </nav>
     <main id="main">
       <article id="tab-uvod">
         <h1>Lavina XVII</h1>
-        <blockquote>
-          Jedna sova vládne všem, jedna jim všem káže,<br/>
-          jedna všechny přivede, do temnoty sváže.
-        </blockquote>
-        <p>Muhuzem volá o pomoc! Temnota se pomalu snáší na bájnou zemi elfů, trpaslíků, lidí a hobitů. Těžké časy se blíží a naděje svobodných národů vyhasíná. Přichází čas hrdinů.</p>
-        <p>Nebojíš-li se, sestav tým a vydej se na dobrodružnou výpravu k záchraně Muhuzemě. Potřebovat budeš tři věrné druhy, odvahu, důvtip a svačinu. Tak neváhej, času je málo!</p>
+        <p>Již sedmnáctý ročník putovní šifrovací hry s přesuny mezi stanovišti na běžkách.</p>
 
         <h2>O hře:</h2>
-        <p>Lavina XVII je lineární šifrovací hra na běžkách pro pětičlenné týmy.</p>
-        <p><b>Kapacita hry:</b> 18 týmů</p>
+        <p><b>Termín konání:</b> 27.1. – 29.1. 2023</p>
+        <p><b>Kapacita hry:</b> 18 pětičlenných týmů</p>
         <p><b>Místo startu:</b> bude upřesněno v prologu</p>
         <p><b>Cena:</b> 1500 Kč/tým + 1500 Kč/člen (ubytování s polopenzí) + 250 Kč/třičko (volitelné)</p>
         <p><b>Kontaktní e-mail:</b> info<span id="obfs">domof</span></p>
@@ -45,8 +40,8 @@
         <p>Hru pro vás připravil tým Múzy.</p>
       </article>
       <article id="tab-reg">
-        <date-alt data-open="2022-08-12T12:00:00+02:00" data-close="2023-08-28T23:59:59+02:00">
-          <alt-pre><p>Registrace týmů bude přístupná od pátku <b>12. 8. 2022, 12:00</b> do neděle 28. 8. 2022.</p></alt-pre>
+        <date-alt data-open="regOpen" data-close="regClose">
+          <alt-pre><p>Registrace týmů bude přístupná od úterý <b>27.12.2022, 12:00</b> do neděle 8.1.2023.</p></alt-pre>
           <alt-within>
             <form id="register">
               <label>
@@ -182,6 +177,7 @@
         </form>
         <div id="auth-section">
           <h1 id="teamName"></h1>
+          <p>Změny v týmu jsou povoleny nejpozději týden před hrou, tj. do pátku 20.1.2023. Naléhavé případy nastalé po tomto datu řešte s organizátory po e-mailu.</p>
           <form id="details">
             <label>Telefon:
               <input type="tel" name="telefon" required pattern="\+?[0-9 -]{9,}" data-keep="1"/>
@@ -219,14 +215,15 @@
                 <option value="nic">Žádné tričko</option>
               </select>
             </template>
-            <label>Změnit heslo *:
+            <label data-visible-until="changesClose">Změnit heslo *:
               <input type="password" name="heslo1"/>
             </label>
-            <label>Heslo znovu *:
+            <label data-visible-until="changesClose">Heslo znovu *:
               <input type="password" name="heslo2"/>
             </label>
-            <button type="submit">Uložit</button>
+            <button data-visible-until="changesClose" type="submit">Uložit</button>
           </form>
+          <div class="sep" data-visible-from="changesClose"></div>
           <small>*) Pokud nechcete heslo měnit, obě pole nechte prázdná.</small>
           <small>**) <a href="#" id="navrh">Návrh trička</a></small>
           <h2>Platební údaje</h2>
