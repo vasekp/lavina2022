@@ -117,14 +117,13 @@ async function serverRequest(type, data) {
 
 async function updateTeams() {
   try {
-    const teams = (await serverRequest('getTeams')).map(team => ({...team,
-      dateReg: Date.parse(team.dateReg),
-      datePaid: Date.parse(team.datePaid)
-    }));
+    const { capacity, teams } = await serverRequest('getTeams');
+    teams.forEach(team => {
+      team.dateReg = Date.parse(team.dateReg);
+      team.datePaid = Date.parse(team.datePaid);
+    });
     teams.sort((t1, t2) => {
-      if(!t1.hidden && t2.hidden)
-        return -1;
-      else if(t1.paid && !t2.paid)
+      if(t1.paid && !t2.paid)
         return -1;
       else if(!t1.paid && t2.paid)
         return +1;
@@ -148,6 +147,8 @@ async function updateTeams() {
         td.textContent = field;
         tr.appendChild(td);
       }
+      if(seq + 1 === capacity)
+        tr.classList.add('last');
       table.appendChild(tr);
     });
   } catch(response) {

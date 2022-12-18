@@ -34,7 +34,10 @@ function handle(request) {
           datePaid: team.datePaid,
           paid: !!team.amountPaid
         }));
-      return {result: 'ok', data: trans};
+      return {result: 'ok', data: {
+        capacity: 18,
+        teams: trans
+      }};
     }
     case 'login': {
       const team = findTeam(request.data.name);

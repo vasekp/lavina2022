@@ -267,11 +267,11 @@ tbody tr:nth-of-type(odd) {
   display: none;
 }
 
-#tymy-content tr:nth-of-type(30) {
+#tymy-content tr.last {
   border-bottom: var(--b-table);
 }
 
-#tymy-content tr:nth-of-type(n+31) {
+#tymy-content tr.last ~ tr {
   color: grey
 }
 
