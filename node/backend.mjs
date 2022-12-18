@@ -5,8 +5,7 @@ import { dates, teamSize } from '../config.js';
 
 const port = 3000;
 
-let teams;
-await loadTeams();
+let {capacity, teams} = await loadTeams();
 
 http.createServer((req, res) => {
   res.statusCode = 200;
@@ -35,7 +34,7 @@ function handle(request) {
           paid: !!team.amountPaid
         }));
       return {result: 'ok', data: {
-        capacity: 18,
+        capacity,
         teams: trans
       }};
     }
@@ -144,7 +143,7 @@ function handle(request) {
     case 'a:reload': {
       if(request.data.passwordHash !== teams[0].passwordHash)
         return error('Neautorizovaný požadavek.');
-      loadTeams();
+      loadTeams().then(data => ({capacity, teams} = data));
       return {result: 'ok'};
     }
     default:
@@ -152,15 +151,14 @@ function handle(request) {
   }
 }
 
-async function loadTeams() {
-  teams = await fs.readFile('teams.json')
+function loadTeams() {
+  return fs.readFile('teams.json')
     .then(data => JSON.parse(data))
-    .catch(e => { console.log(e); return []; });
-  console.log(teams);
+    .catch(e => { console.log(e); return { capacity: 0, teams: [] }; });
 }
 
 function saveTeams() {
-  fs.writeFile('teams.json', JSON.stringify(teams, null, 2));
+  fs.writeFile('teams.json', JSON.stringify({capacity, teams}, null, 2));
   //console.log(teams);
 }
 
