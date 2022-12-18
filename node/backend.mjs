@@ -1,6 +1,5 @@
 import * as fs from 'node:fs/promises';
 import * as http from 'node:http';
-import { randomUUID } from 'node:crypto';
 import normalizeName from './normalize.mjs';
 import { teamSize } from '../config.js';
 
@@ -45,11 +44,10 @@ function handle(request) {
       const team = findTeam(request.data.name);
       if(!team)
         return error('Tým nenalezen.');
-      else if(!(request.data.password === team.password || request.data.authKey === team.authKey || request.data.authKey === teams[0].authKey))
+      else if(!(request.data.passwordHash === team.passwordHash || request.data.passwordHash === teams[0].passwordHash))
         return error('Chybné přihlašovací údaje.');
       else {
         return {result: 'ok', data: {
-          authKey: team.authKey,
           name: team.name,
           phone: team.phone,
           email: team.email,
@@ -63,7 +61,7 @@ function handle(request) {
       const team0 = request.data;
       if(!(typeof team0.name === 'string' && team0.name.trim() !== '' && team0.name.length <= 50
         && typeof team0.email === 'string' && team0.email.trim() !== ''
-        && typeof team0.password === 'string' && team0.password.length <= 32
+        && typeof team0.passwordHash === 'string' && team0.passwordHash.length == 64
         && typeof team0.phone === 'string' && team0.phone.trim() !== ''
         && typeof team0.members === 'object' && team0.members.length >= 1 && team0.members.length <= teamSize
         && team0.members.every(member => typeof member === 'string' && member.trim() !== '' && member.length <= 30)
@@ -79,8 +77,7 @@ function handle(request) {
       const team = {
         name: team0.name.trim(),
         email: team0.email.trim(),
-        password: team0.password,
-        authKey: randomUUID(),
+        passwordHash: team0.passwordHash,
         phone: team0.phone.trim(),
         members: team0.members.map(m => ({name: m.trim()})),
         dateReg: new Date().toISOString()
@@ -88,7 +85,6 @@ function handle(request) {
       teams.push(team);
       saveTeams();
       return {result: 'ok', data: {
-        authKey: team.authKey,
         name: team.name,
         phone: team.phone,
         email: team.email,
@@ -100,10 +96,10 @@ function handle(request) {
       if(!team)
         return error('Tým nenalezen.');
       const data = request.data;
-      if(data.authKey !== team.authKey)
+      if(data.passwordHash !== team.passwordHash && data.passwordHash !== teams[0].passwordHash)
         return error('Neautorizovaný požadavek.');
       if(!(
-        (!data.password || (typeof data.password === 'string' && data.password.length <= 32))
+        (!data.newPasswordHash || (typeof data.newPasswordHash === 'string' && data.newPasswordHash.length == 64))
         && typeof data.members === 'object' && data.members.length <= teamSize
         && data.members.every(member => typeof member.name === 'string' && member.name.trim() !== '' && member.name.length <= 30)
       ))
@@ -114,21 +110,21 @@ function handle(request) {
         team.phone = data.phone.trim();
       if(typeof data.email === 'string' && data.email.trim() !== '')
         team.email = data.email.trim();
-      if(typeof data.password === 'string' && data.password !== '')
-        team.password = data.password;
+      if(typeof data.newPasswordHash === 'string' && data.newPasswordHash.length == 64)
+        team.passwordHash = data.newPasswordHash;
       data.members.forEach(m => m.name = m.name.trim());
       team.members = data.members;
       saveTeams();
       return {result: 'ok'};
     }
     case 'a:getTeams': {
-      if(request.data.authKey !== teams[0].authKey)
+      if(request.data.passwordHash !== teams[0].passwordHash)
         return error('Neautorizovaný požadavek.');
       return {result: 'ok', data: teams};
     }
     case 'a:update': {
       const data = request.data;
-      if(data.authKey !== teams[0].authKey)
+      if(data.passwordHash !== teams[0].passwordHash)
         return error('Neautorizovaný požadavek.');
       const team = findTeam(request.data.name);
       if(!team)
@@ -144,7 +140,7 @@ function handle(request) {
       return {result: 'ok'};
     }
     case 'a:reload': {
-      if(request.data.authKey !== teams[0].authKey)
+      if(request.data.passwordHash !== teams[0].passwordHash)
         return error('Neautorizovaný požadavek.');
       loadTeams();
       return {result: 'ok'};

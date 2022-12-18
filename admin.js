@@ -1,4 +1,4 @@
-import { fees } from './config.js';
+import { fees, hash } from './config.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -34,10 +34,10 @@ async function serverRequest(type, data) {
 }
 
 async function doLogin(form) {
-  const password = form.querySelector('[name="heslo"]').value;
+  const passwordHash = await hash(form.querySelector('[name="heslo"]').value);
   try {
-    const data = await serverRequest('login', {name: 'admin', password});
-    localStorage['adminKey'] = data.authKey;
+    const data = await serverRequest('login', {name: 'admin', passwordHash});
+    localStorage['adminHash'] = passwordHash;
     document.getElementById('tab-auth').dataset.auth = 1;
     loadTeams();
   } catch(response) {
@@ -47,11 +47,11 @@ async function doLogin(form) {
 }
 
 async function useCachedLogin() {
-  const authKey = localStorage['adminKey'];
-  if(!authKey)
+  const passwordHash = localStorage['adminHash'];
+  if(!passwordHash)
     return;
   try {
-    await serverRequest('login', {name: 'admin', authKey});
+    await serverRequest('login', {name: 'admin', passwordHash});
     document.getElementById('tab-auth').dataset.auth = 1;
     loadTeams();
   } catch(response) {
@@ -60,11 +60,11 @@ async function useCachedLogin() {
 }
 
 async function loadTeams() {
-  const authKey = localStorage['adminKey'];
-  if(!authKey)
+  const passwordHash = localStorage['adminHash'];
+  if(!passwordHash)
     return;
   try {
-    const teams = await serverRequest('a:getTeams', {authKey});
+    const teams = await serverRequest('a:getTeams', {passwordHash});
     const list = document.getElementById('team-list');
     list.replaceChildren();
     const tmp = document.getElementById('tmp-record').content;
@@ -133,8 +133,8 @@ async function loadTeams() {
 }
 
 async function doAdmin(tgt) {
-  const authKey = localStorage['adminKey'];
-  if(!authKey)
+  const passwordHash = localStorage['adminHash'];
+  if(!passwordHash)
     return;
   if(tgt.dataset.id === 'set-hidden' || tgt.dataset.id === 'set-countin' || tgt.dataset.id === 'update-pay') {
     const record = tgt.closest('.team-record');
@@ -144,7 +144,7 @@ async function doAdmin(tgt) {
       tgt.dataset.id === 'set-countin' ? ['countIn', record.querySelector('[data-id="set-countin"]').checked] :
       tgt.dataset.id === 'update-pay' ? ['amountPaid', +record.querySelector('[data-id="pay-amount"]').value] : null;
     try {
-      await serverRequest('a:update', {authKey, name, field, value});
+      await serverRequest('a:update', {passwordHash, name, field, value});
       loadTeams();
     } catch(response) {
       console.error(response);
@@ -152,7 +152,7 @@ async function doAdmin(tgt) {
     }
   } else if(tgt.id === 'reloadFile') {
     try {
-      await serverRequest('a:reload', {authKey});
+      await serverRequest('a:reload', {passwordHash});
       loadTeams();
     } catch(response) {
       console.error(response);

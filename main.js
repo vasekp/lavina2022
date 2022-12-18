@@ -1,4 +1,4 @@
-import { teamSize, fees } from './config.js';
+import { teamSize, fees, hash } from './config.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -164,18 +164,19 @@ async function doRegister(form) {
       members.push(member);
   }
   try {
+    const passwordHash = await hash(getField('heslo1'));
     const data = await serverRequest('register',
       {
         name: getField('nazev'),
         email: getField('email'),
-        password: getField('heslo1'),
+        passwordHash,
         phone: getField('telefon'),
         members
       }
     );
     resetForms();
     localStorage['teamName'] = data.name;
-    localStorage['authKey'] = data.authKey;
+    localStorage['passwordHash'] = passwordHash;
     updateTeams();
     loadTeamData(data);
     showTab('auth');
@@ -188,15 +189,15 @@ async function doRegister(form) {
 async function doLogin(form) {
   const getField = field => form.querySelector(`[name="${field}"]`).value;
   try {
+    const passwordHash = await hash(getField('heslo'));
     const data = await serverRequest('login',
       {
         name: getField('nazev'),
-        password: getField('heslo'),
-        authKey: localStorage['adminKey']
+        passwordHash
       }
     );
     localStorage['teamName'] = data.name;
-    localStorage['authKey'] = data.authKey;
+    localStorage['passwordHash'] = passwordHash;
     loadTeamData(data);
   } catch(response) {
     console.error(response);
@@ -207,11 +208,11 @@ async function doLogin(form) {
 
 async function useCachedLogin() {
   const name = localStorage['teamName'];
-  const authKey = localStorage['authKey'];
-  if(!name || !authKey)
+  const passwordHash = localStorage['passwordHash'];
+  if(!name || !passwordHash)
     return false;
   try {
-    const data = await serverRequest('login', {name, authKey});
+    const data = await serverRequest('login', {name, passwordHash});
     loadTeamData(data);
     document.getElementById('tab-auth').dataset.auth = 1;
     return true;
@@ -243,7 +244,7 @@ function loadTeamData(data) {
 
 function logout(ev) {
   delete localStorage['teamName'];
-  delete localStorage['authKey'];
+  delete localStorage['passwordHash'];
   delete document.getElementById('tab-auth').dataset.auth;
   updateTeams();
   ev.preventDefault()
@@ -283,7 +284,7 @@ async function doDetails(form) {
   try {
     const data = {
       name: localStorage['teamName'],
-      authKey: localStorage['authKey'],
+      passwordHash: localStorage['passwordHash'],
       phone: getField('telefon'),
       email: getField('email'),
       members: []
@@ -299,8 +300,10 @@ async function doDetails(form) {
         });
     }
     if(getField('heslo1'))
-      data.password = getField('heslo1');
+      data.newPasswordHash = await hash(getField('heslo1'));
     await serverRequest('update', data);
+    if(data.newPasswordHash)
+      localStorage['passwordHash'] = data.newPasswordHash;
   } catch(response) {
     console.error(response);
     alert(response.error || 'Neznámá chyba');
