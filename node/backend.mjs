@@ -78,7 +78,7 @@ function handle(request) {
         passwordHash: team0.passwordHash,
         phone: team0.phone.trim(),
         members: team0.members.map(m => ({name: m.trim()})),
-        dateReg: new Date().toISOString()
+        dateReg: new Date()
       };
       teams.push(team);
       saveTeams();
@@ -133,7 +133,7 @@ function handle(request) {
       team[data.field] = data.value;
       if(data.field === 'amountPaid') {
         if(data.value && !team.datePaid)
-          team.datePaid = new Date().toISOString();
+          team.datePaid = new Date();
         else if(!data.value)
           delete team.datePaid;
       }
@@ -151,10 +151,17 @@ function handle(request) {
   }
 }
 
-function loadTeams() {
-  return fs.readFile('teams.json')
+async function loadTeams() {
+  const { capacity, teams } = await fs.readFile('teams.json')
     .then(data => JSON.parse(data))
     .catch(e => { console.log(e); return { capacity: 0, teams: [] }; });
+  teams.forEach(team => {
+    if(team.dateReg) team.dateReg = new Date(team.dateReg);
+    if(team.datePaid) team.dateReg = new Date(team.datePaid);
+    if(team.dateDue) team.dateReg = new Date(team.dateDue);
+  });
+  console.log(teams);
+  return { capacity, teams };
 }
 
 function saveTeams() {
