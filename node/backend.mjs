@@ -23,12 +23,12 @@ async function handle(body) {
   try {
     return { status: 200, reply: await handleObj(JSON.parse(body)) };
   } catch(e) { // catches throws from handleObj as well as JSON parse errors
-    console.log(e);
+    console.error(e);
     return { status: 400, reply: typeof e === 'string' ? e : 'Chybný požadavek.' };
   }
 }
 
-function handleObj(request) {
+async function handleObj(request) {
   console.log(request);
   switch(request.type) {
     case 'getTeams': {
@@ -146,7 +146,7 @@ function handleObj(request) {
     case 'a:reload': {
       if(request.data.passwordHash !== teams[0].passwordHash)
         throw 'Neautorizovaný požadavek.';
-      loadTeams().then(data => ({capacity, teams} = data));
+      ({ capacity, teams } = await loadTeams());
       return;
     }
     default:
