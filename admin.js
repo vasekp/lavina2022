@@ -1,4 +1,5 @@
-import { fees, hash } from './config.js';
+import { fees } from './config.js';
+import { hash, serverRequest } from './shared.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -22,17 +23,6 @@ async function submitForm(form, ev) {
   }
 }
 
-async function serverRequest(type, data) {
-  const rqParcel = {type, data};
-  const response = await fetch('backend.php', { method: 'POST', body: JSON.stringify(rqParcel) })
-    .then(res => res.json())
-    .catch(_ => { throw { result: 'error', error: 'Chyba na straně serveru.' }; });
-  if(response.result === 'ok')
-    return response.data;
-  else
-    throw response;
-}
-
 async function doLogin(form) {
   const passwordHash = await hash(form.querySelector('[name="heslo"]').value);
   try {
@@ -40,9 +30,9 @@ async function doLogin(form) {
     localStorage['adminHash'] = passwordHash;
     document.getElementById('tab-auth').dataset.auth = 1;
     loadTeams();
-  } catch(response) {
-    console.error(response);
-    alert(response.error || 'Neznámá chyba');
+  } catch(error) {
+    console.error(error);
+    alert(typeof error === 'string' ? error : 'Neznámá chyba');
   }
 }
 
@@ -54,8 +44,8 @@ async function useCachedLogin() {
     await serverRequest('login', {name: 'admin', passwordHash});
     document.getElementById('tab-auth').dataset.auth = 1;
     loadTeams();
-  } catch(response) {
-    console.error(response);
+  } catch(error) {
+    console.error(error);
   }
 }
 
@@ -126,9 +116,9 @@ async function loadTeams() {
         resty.append(newLI(`Tým ${team.name}: vybrat jídlo`));
     }
 
-  } catch(response) {
-    console.error(response);
-    alert(response.error || 'Neznámá chyba');
+  } catch(error) {
+    console.error(error);
+    alert(typeof error === 'string' ? error : 'Neznámá chyba');
   }
 }
 
@@ -146,17 +136,17 @@ async function doAdmin(tgt) {
     try {
       await serverRequest('a:update', {passwordHash, name, field, value});
       loadTeams();
-    } catch(response) {
-      console.error(response);
-      alert(response.error || 'Neznámá chyba');
+    } catch(error) {
+      console.error(error);
+      alert(typeof error === 'string' ? error : 'Neznámá chyba');
     }
   } else if(tgt.id === 'reloadFile') {
     try {
       await serverRequest('a:reload', {passwordHash});
       loadTeams();
-    } catch(response) {
-      console.error(response);
-      alert(response.error || 'Neznámá chyba');
+    } catch(error) {
+      console.error(error);
+      alert(typeof error === 'string' ? error : 'Neznámá chyba');
     }
   }
 }

@@ -1,4 +1,5 @@
-import { teamSize, fees, dates, hash } from './config.js';
+import { teamSize, fees, dates } from './config.js';
+import { hash, serverRequest } from './shared.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -112,18 +113,6 @@ async function submitForm(form, ev) {
   }
 }
 
-async function serverRequest(type, data) {
-  const rqParcel = {type, data};
-  const resObj = await fetch('backend.php', { method: 'POST', body: JSON.stringify(rqParcel) });
-  if(resObj.status !== 200)
-    throw { result: 'error', error: 'Nelze se připojit k databázi.' };
-  const response = await resObj.json();
-  if(response.result === 'ok')
-    return response.data;
-  else
-    throw response;
-}
-
 async function updateTeams() {
   try {
     const { capacity, teams } = await serverRequest('getTeams');
@@ -160,9 +149,9 @@ async function updateTeams() {
         tr.classList.add('last');
       table.appendChild(tr);
     });
-  } catch(response) {
-    console.error(response);
-    alert(response.error || 'Neznámá chyba');
+  } catch(error) {
+    console.error(error);
+    alert(typeof error === 'string' ? error : 'Neznámá chyba');
   }
 }
 
@@ -191,9 +180,9 @@ async function doRegister(form) {
     updateTeams();
     loadTeamData(data);
     showTab('auth');
-  } catch(response) {
-    console.error(response);
-    alert(response.error || 'Neznámá chyba');
+  } catch(error) {
+    console.error(error);
+    alert(typeof error === 'string' ? error : 'Neznámá chyba');
   }
 }
 
@@ -210,9 +199,9 @@ async function doLogin(form) {
     localStorage['teamName'] = data.name;
     localStorage['passwordHash'] = passwordHash;
     loadTeamData(data);
-  } catch(response) {
-    console.error(response);
-    alert(response.error || 'Neznámá chyba');
+  } catch(error) {
+    console.error(error);
+    alert(typeof error === 'string' ? error : 'Neznámá chyba');
   }
   resetForms();
 }
@@ -227,8 +216,8 @@ async function useCachedLogin() {
     loadTeamData(data);
     document.getElementById('tab-auth').dataset.auth = 1;
     return true;
-  } catch(response) {
-    console.error(response);
+  } catch(error) {
+    console.error(error);
     // Fail silently, login will be prompted.
     return false;
   }
@@ -315,9 +304,9 @@ async function doDetails(form) {
     await serverRequest('update', data);
     if(data.newPasswordHash)
       localStorage['passwordHash'] = data.newPasswordHash;
-  } catch(response) {
-    console.error(response);
-    alert(response.error || 'Neznámá chyba');
+  } catch(error) {
+    console.error(error);
+    alert(typeof error === 'string' ? error : 'Neznámá chyba');
   }
   resetForms();
   await updateTeams();

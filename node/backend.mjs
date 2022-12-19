@@ -24,7 +24,7 @@ async function handle(body) {
     return { status: 200, reply: await handleObj(JSON.parse(body)) };
   } catch(e) { // catches throws from handleObj as well as JSON parse errors
     console.log(e);
-    return { status: 500, reply: { result: 'error', error: typeof e === 'string' ? e : 'Chybný požadavek.' } };
+    return { status: 400, reply: typeof e === 'string' ? e : 'Chybný požadavek.' };
   }
 }
 
@@ -39,10 +39,7 @@ function handleObj(request) {
           datePaid: team.datePaid,
           paid: !!team.amountPaid
         }));
-      return {result: 'ok', data: {
-        capacity,
-        teams: trans
-      }};
+      return { capacity, teams: trans };
     }
     case 'login': {
       const team = findTeam(request.data.name);
@@ -51,14 +48,14 @@ function handleObj(request) {
       else if(!(request.data.passwordHash === team.passwordHash || request.data.passwordHash === teams[0].passwordHash))
         throw 'Chybné přihlašovací údaje.';
       else {
-        return {result: 'ok', data: {
+        return {
           name: team.name,
           phone: team.phone,
           email: team.email,
           members: team.members,
           amountPaid: team.amountPaid,
           datePaid: team.datePaid
-        }};
+        };
       }
     }
     case 'register': {
@@ -88,12 +85,12 @@ function handleObj(request) {
       };
       teams.push(team);
       saveTeams();
-      return {result: 'ok', data: {
+      return {
         name: team.name,
         phone: team.phone,
         email: team.email,
         members: team.members
-      }};
+      };
     }
     case 'update': {
       const now = new Date();
@@ -122,12 +119,12 @@ function handleObj(request) {
       data.members.forEach(m => m.name = m.name.trim());
       team.members = data.members;
       saveTeams();
-      return {result: 'ok'};
+      return;
     }
     case 'a:getTeams': {
       if(request.data.passwordHash !== teams[0].passwordHash)
         throw 'Neautorizovaný požadavek.';
-      return {result: 'ok', data: teams};
+      return teams;
     }
     case 'a:update': {
       const data = request.data;
@@ -144,13 +141,13 @@ function handleObj(request) {
           delete team.datePaid;
       }
       saveTeams();
-      return {result: 'ok'};
+      return;
     }
     case 'a:reload': {
       if(request.data.passwordHash !== teams[0].passwordHash)
         throw 'Neautorizovaný požadavek.';
       loadTeams().then(data => ({capacity, teams} = data));
-      return {result: 'ok'};
+      return;
     }
     default:
       throw 'Neznámý požadavek.';

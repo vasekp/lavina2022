@@ -8,17 +8,13 @@
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
   list($header, $contents) = preg_split('/([\r\n][\r\n])\\1/', curl_exec($ch), 2);
   if(curl_errno($ch)) {
-    http_response_code(500);
+    http_response_code(503);
     header('Content-type: text/plain');
     echo 'Curl error: ' . curl_error($ch);
   } else {
-    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    http_response_code(curl_getinfo($ch, CURLINFO_HTTP_CODE));
     curl_close($ch);
-    if($status !== 200)
-      http_response_code($status);
-    else {
-      header('Content-type: application/json');
-      print $contents;
-    }
+    header('Content-type: application/json');
+    print $contents;
   }
 ?>
