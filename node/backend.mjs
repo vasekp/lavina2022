@@ -155,16 +155,19 @@ async function handleObj(request) {
 }
 
 async function loadTeams() {
-  const { capacity, teams } = await fs.readFile('teams.json')
-    .then(data => JSON.parse(data))
-    .catch(e => { console.log(e); return { capacity: 0, teams: [] }; });
-  teams.forEach(team => {
-    if(team.dateReg) team.dateReg = new Date(team.dateReg);
-    if(team.datePaid) team.dateReg = new Date(team.datePaid);
-    if(team.dateDue) team.dateReg = new Date(team.dateDue);
-  });
-  console.log(teams);
-  return { capacity, teams };
+  try {
+    const { capacity, teams } = await fs.readFile('teams.json').then(data => JSON.parse(data));
+    teams.forEach(team => {
+      if(team.dateReg) team.dateReg = new Date(team.dateReg);
+      if(team.datePaid) team.dateReg = new Date(team.datePaid);
+      if(team.dateDue) team.dateReg = new Date(team.dateDue);
+    });
+    console.log(teams);
+    return { capacity, teams };
+  } catch(e) {
+    console.error(e);
+    throw 'Chyba při načítání týmů!';
+  }
 }
 
 function saveTeams() {
