@@ -7,6 +7,10 @@ window.addEventListener('DOMContentLoaded', () => {
       chkbox.checked = !chkbox.checked;
     });
   }
+  document.body.addEventListener('input', ev => {
+    if(ev.target.id.substring(0, 4) === 'sel-')
+      localStorage['lastTab'] = ev.target.id.substring(4);
+  });
   for(const elm of document.querySelectorAll('date-alt')) {
     const open = dates[elm.dataset.open];
     const close = dates[elm.dataset.close];
@@ -47,12 +51,17 @@ window.addEventListener('DOMContentLoaded', () => {
   document.querySelector('#register input[name="clen1"]').required = true;
   resetForms();
   updateTeams();
-  useCachedLogin().then(ok => { if(ok) showTab('auth'); });
+  useCachedLogin();
+  showTab(localStorage['lastTab']);
 });
 
 function showTab(name) {
-  document.getElementById(`sel-${name}`).checked = true;
+  const ckbox = document.getElementById(`sel-${name}`);
+  if(!ckbox)
+    return;
+  ckbox.checked = true;
   document.getElementById('nav-unfold').checked = false;
+  localStorage['lastTab'] = name;
 }
 
 function resetForms() {
