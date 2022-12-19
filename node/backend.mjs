@@ -8,20 +8,27 @@ const port = 3000;
 let {capacity, teams} = await loadTeams();
 
 http.createServer((req, res) => {
-  res.statusCode = 200;
   res.setHeader('Content-type', 'application/json');
   let body = '';
   req.on('data', data => body += data);
-  req.on('end', () => {
-    const reply = (() => {
-      try { return handle(JSON.parse(body)); }
-      catch(e) { console.log(e); return {result: 'error', error: 'Chybný požadavek.'} };
-    })();
+  req.on('end', () => handle(body).then(({status, reply}) => {
+    res.statusCode = status;
     res.end(JSON.stringify(reply));
-  });
+  }));
 }).listen(port, () => console.log(`Server open at ${port}`));
 
-function handle(request) {
+async function handle(body) {
+  if(!body)
+    return { status: 400 };
+  try {
+    return { status: 200, reply: await handleObj(JSON.parse(body)) };
+  } catch(e) { // catches throws from handleObj as well as JSON parse errors
+    console.log(e);
+    return { status: 500, reply: { result: 'error', error: 'Chybný požadavek.' } };
+  }
+}
+
+function handleObj(request) {
   const error = text => ({result: 'error', error: text});
   console.log(request);
   switch(request.type) {
