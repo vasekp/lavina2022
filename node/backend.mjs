@@ -24,12 +24,11 @@ async function handle(body) {
     return { status: 200, reply: await handleObj(JSON.parse(body)) };
   } catch(e) { // catches throws from handleObj as well as JSON parse errors
     console.log(e);
-    return { status: 500, reply: { result: 'error', error: 'Chybný požadavek.' } };
+    return { status: 500, reply: { result: 'error', error: typeof e === 'string' ? e : 'Chybný požadavek.' } };
   }
 }
 
 function handleObj(request) {
-  const error = text => ({result: 'error', error: text});
   console.log(request);
   switch(request.type) {
     case 'getTeams': {
@@ -48,9 +47,9 @@ function handleObj(request) {
     case 'login': {
       const team = findTeam(request.data.name);
       if(!team)
-        return error('Tým nenalezen.');
+        throw 'Tým nenalezen.';
       else if(!(request.data.passwordHash === team.passwordHash || request.data.passwordHash === teams[0].passwordHash))
-        return error('Chybné přihlašovací údaje.');
+        throw 'Chybné přihlašovací údaje.';
       else {
         return {result: 'ok', data: {
           name: team.name,
@@ -71,14 +70,14 @@ function handleObj(request) {
         && typeof team0.members === 'object' && team0.members.length >= 1 && team0.members.length <= teamSize
         && team0.members.every(member => typeof member === 'string' && member.trim() !== '' && member.length <= 30)
       ))
-        return error('Chybný požadavek.');
+        throw 'Chybný požadavek.';
       const now = new Date();
       if(now < dates.regOpen)
-        return error('Registrace ještě nejsou otevřeny.');
+        throw 'Registrace ještě nejsou otevřeny.';
       if(now > dates.regClose)
-        return error('Registrace již nejsou otevřeny.');
+        throw 'Registrace již nejsou otevřeny.';
       if(findTeam(team0.name))
-        return error('Toto jméno týmu není dostupné.');
+        throw 'Toto jméno týmu není dostupné.';
       const team = {
         name: team0.name.trim(),
         email: team0.email.trim(),
@@ -99,21 +98,21 @@ function handleObj(request) {
     case 'update': {
       const now = new Date();
       if(now > dates.changesClose)
-        return error('Změny již nejsou povoleny.');
+        throw 'Změny již nejsou povoleny.';
       const team = findTeam(request.data.name);
       if(!team)
-        return error('Tým nenalezen.');
+        throw 'Tým nenalezen.';
       const data = request.data;
       if(data.passwordHash !== team.passwordHash && data.passwordHash !== teams[0].passwordHash)
-        return error('Neautorizovaný požadavek.');
+        throw 'Neautorizovaný požadavek.';
       if(!(
         (!data.newPasswordHash || (typeof data.newPasswordHash === 'string' && data.newPasswordHash.length == 64))
         && typeof data.members === 'object' && data.members.length <= teamSize
         && data.members.every(member => typeof member.name === 'string' && member.name.trim() !== '' && member.name.length <= 30)
       ))
-        return error('Chybný požadavek.');
+        throw 'Chybný požadavek.';
       if(data.members.length === 0)
-        return error('Nelze uložit prázdný tým. Jestli potřebujete zrušit účast, napište organizátorům.');
+        throw 'Nelze uložit prázdný tým. Jestli potřebujete zrušit účast, napište organizátorům.';
       if(typeof data.phone === 'string' && data.phone.trim() !== '')
         team.phone = data.phone.trim();
       if(typeof data.email === 'string' && data.email.trim() !== '')
@@ -127,16 +126,16 @@ function handleObj(request) {
     }
     case 'a:getTeams': {
       if(request.data.passwordHash !== teams[0].passwordHash)
-        return error('Neautorizovaný požadavek.');
+        throw 'Neautorizovaný požadavek.';
       return {result: 'ok', data: teams};
     }
     case 'a:update': {
       const data = request.data;
       if(data.passwordHash !== teams[0].passwordHash)
-        return error('Neautorizovaný požadavek.');
+        throw 'Neautorizovaný požadavek.';
       const team = findTeam(request.data.name);
       if(!team)
-        return error('Tým nenalezen.');
+        throw 'Tým nenalezen.';
       team[data.field] = data.value;
       if(data.field === 'amountPaid') {
         if(data.value && !team.datePaid)
@@ -149,12 +148,12 @@ function handleObj(request) {
     }
     case 'a:reload': {
       if(request.data.passwordHash !== teams[0].passwordHash)
-        return error('Neautorizovaný požadavek.');
+        throw 'Neautorizovaný požadavek.';
       loadTeams().then(data => ({capacity, teams} = data));
       return {result: 'ok'};
     }
     default:
-      return error('Neznámý požadavek.');
+      throw 'Neznámý požadavek.';
   }
 }
 
@@ -173,7 +172,6 @@ async function loadTeams() {
 
 function saveTeams() {
   fs.writeFile('teams.json', JSON.stringify({capacity, teams}, null, 2));
-  //console.log(teams);
 }
 
 function findTeam(name) {
