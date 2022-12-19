@@ -32,6 +32,8 @@ async function handleObj(request) {
   console.log(request);
   switch(request.type) {
     case 'getTeams': {
+      if(updateDueDates())
+        saveTeams();
       const trans = teams.filter(team => !team.hidden).map(team => ({
           name: team.name,
           members: team.members.map(member => member.name),
@@ -166,8 +168,8 @@ async function loadTeams() {
     const { capacity, teams } = await fs.readFile('teams.json').then(data => JSON.parse(data));
     for(const team of teams) {
       if(team.dateReg) team.dateReg = new Date(team.dateReg);
-      if(team.datePaid) team.dateReg = new Date(team.datePaid);
-      if(team.dateDue) team.dateReg = new Date(team.dateDue);
+      if(team.datePaid) team.datePaid = new Date(team.datePaid);
+      if(team.dateDue) team.dateDue = new Date(team.dateDue);
     }
     const numTeams = teams.filter(team => !team.hidden).length;
     return { capacity, teams, numTeams };
@@ -188,14 +190,22 @@ function findTeam(name) {
   return teams.find(team => normalizeName(team.name) === normalizeName(name));
 }
 
+let updateThrottle = null;
+
 function updateDueDates() {
+  if(updateThrottle)
+    return false;
   const now = new Date();
-  for(const team in teams) {
-    if(team.dateDue < now) {
+  let changes = false;
+  for(const team of teams) {
+    if(!team.datePaid && team.dateDue && team.dateDue < now) {
       team.dateReg = team.dateDue;
       team.dateDue = numTeams <= capacity ? dueDate(team.dateReg) : null;
+      changes = true;
     }
   }
+  updateThrottle = setTimeout(() => updateThrottle = null, 1000);
+  return changes;
 }
 
 function dueDate(date) {
