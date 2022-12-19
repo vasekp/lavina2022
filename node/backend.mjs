@@ -5,7 +5,7 @@ import { dates, teamSize } from '../config.js';
 
 const port = 3000;
 
-let {capacity, teams} = await loadTeams();
+let {capacity, teams, numTeams} = await loadTeams();
 
 http.createServer((req, res) => {
   res.setHeader('Content-type', 'application/json');
@@ -36,6 +36,7 @@ async function handleObj(request) {
           name: team.name,
           members: team.members.map(member => member.name),
           dateReg: team.dateReg,
+          dateDue: team.dateDue,
           datePaid: team.datePaid,
           paid: !!team.amountPaid
         }));
@@ -54,6 +55,7 @@ async function handleObj(request) {
           email: team.email,
           members: team.members,
           amountPaid: team.amountPaid,
+          dateDue: team.dateDue,
           datePaid: team.datePaid
         };
       }
@@ -81,7 +83,8 @@ async function handleObj(request) {
         passwordHash: team0.passwordHash,
         phone: team0.phone.trim(),
         members: team0.members.map(m => ({name: m.trim()})),
-        dateReg: new Date()
+        dateReg: now,
+        dateDue: numTeams + 1 <= capacity ? dueDate(now) : null
       };
       teams.push(team);
       saveTeams();
@@ -89,7 +92,10 @@ async function handleObj(request) {
         name: team.name,
         phone: team.phone,
         email: team.email,
-        members: team.members
+        members: team.members,
+        amountPaid: team.amountPaid,
+        dateDue: team.dateDue,
+        datePaid: team.datePaid
       };
     }
     case 'update': {
@@ -116,7 +122,8 @@ async function handleObj(request) {
         team.email = data.email.trim();
       if(typeof data.newPasswordHash === 'string' && data.newPasswordHash.length == 64)
         team.passwordHash = data.newPasswordHash;
-      data.members.forEach(m => m.name = m.name.trim());
+      for(const m of data.members)
+        m.name = m.name.trim();
       team.members = data.members;
       saveTeams();
       return;
@@ -146,7 +153,7 @@ async function handleObj(request) {
     case 'a:reload': {
       if(request.data.passwordHash !== teams[0].passwordHash)
         throw 'Neautorizovaný požadavek.';
-      ({ capacity, teams } = await loadTeams());
+      ({ capacity, teams, numTeams } = await loadTeams());
       return;
     }
     default:
@@ -157,13 +164,13 @@ async function handleObj(request) {
 async function loadTeams() {
   try {
     const { capacity, teams } = await fs.readFile('teams.json').then(data => JSON.parse(data));
-    teams.forEach(team => {
+    for(const team of teams) {
       if(team.dateReg) team.dateReg = new Date(team.dateReg);
       if(team.datePaid) team.dateReg = new Date(team.datePaid);
       if(team.dateDue) team.dateReg = new Date(team.dateDue);
-    });
-    console.log(teams);
-    return { capacity, teams };
+    }
+    const numTeams = teams.filter(team => !team.hidden).length;
+    return { capacity, teams, numTeams };
   } catch(e) {
     console.error(e);
     throw 'Chyba při načítání týmů!';
@@ -172,10 +179,28 @@ async function loadTeams() {
 
 function saveTeams() {
   fs.writeFile('teams.json', JSON.stringify({capacity, teams}, null, 2));
+  numTeams = teams.filter(team => !team.hidden).length;
 }
 
 function findTeam(name) {
   if(typeof name !== 'string' || !name)
     return null;
   return teams.find(team => normalizeName(team.name) === normalizeName(name));
+}
+
+function updateDueDates() {
+  const now = new Date();
+  for(const team in teams) {
+    if(team.dateDue < now) {
+      team.dateReg = team.dateDue;
+      team.dateDue = numTeams <= capacity ? dueDate(team.dateReg) : null;
+    }
+  }
+}
+
+function dueDate(date) {
+  const due = new Date(date);
+  due.setDate(due.getDate() + 5);
+  due.setHours(23, 59, 59, 999);
+  return due;
 }
