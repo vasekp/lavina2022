@@ -25,7 +25,8 @@ async function submitForm(form, ev) {
 }
 
 async function doLogin(form) {
-  const passwordHash = await hash(form.querySelector('[name="heslo"]').value);
+  const adminSalt = '3c2255393e623942';
+  const passwordHash = await hash(form.querySelector('[name="heslo"]').value, adminSalt);
   try {
     const data = await serverRequest('login', {name: 'admin', passwordHash});
     localStorage['adminHash'] = passwordHash;
