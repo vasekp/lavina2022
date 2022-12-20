@@ -237,7 +237,9 @@ function loadTeamData(data) {
     getField(`jidloSo${index + 1}`).value = member.meal2 || '';
     getField(`tricko${index + 1}`).value = member.tshirt || '';
   });
-  document.getElementById('platba').dataset.paid = data.amountPaid ? 1 : 0;
+  document.getElementById('platba').dataset.paid = data.amountPaid ? 1
+    : data.dateDue ? 0 : -1;
+  document.getElementById('termin').textContent = new Date(data.dateDue).toLocaleDateString('cs-CZ', { dateStyle: 'medium' });
   document.getElementById('tab-auth').dataset.auth = 1;
   updateDetailForm();
 }

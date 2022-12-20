@@ -228,20 +228,19 @@
           <small>**) <a href="#" id="navrh">Návrh trička</a></small>
           <h2>Platební údaje</h2>
           <div class="trans" id="platba">
+            <p id="cena-p">Vaše startovné činí <span id="cena"></span>.</p>
             <div class="trans" id="udaje">
-              <p>Vaše startovné činí <span id="cena"></span>.</p>
-              <p>Zaplaťte prosím
-                <date-alt data-close="2022-08-22T23:59:59+02:00">
-                  <alt-within>do <b>22. 8. 2022</b></alt-within>
-                  <alt-post>co nejdříve</alt-post>
-                </date-alt>
-                na účet <b>2100255640/2010</b>.</p>
-              <p>Do <b>zprávy pro příjemce</b> nezapomeňte uvést název hry a vašeho týmu.</p>
+              <p>Zaplaťte prosím do <b id="termin"></b> (včetně), jinak účast může být nabídnuta náhradníkům.</p>
+              <p>Startovné pošlete na účet <b>2100255640/2010</b> (Technická přestávka, z.s.). Do <b>zprávy pro příjemce</b> nezapomeňte uvést název hry a vašeho týmu.</p>
               <p>Poznámka: platby se párují ručně, neobjeví se tedy v seznamu hned.</p>
             </div>
             <div class="trans" id="hotovo">
               <p>Platbu od vašeho týmu jsme již přijali.</p>
               <p>Pokud dojde ke změnám, které by cenu ovlivnily, domluvte se s organizátory e-mailem nebo na hře.</p>
+            </div>
+            <div class="trans" id="nahradnici">
+              <p>Váš tým je nyní veden jako náhradníci, zatím, prosíme, neplaťte.</p>
+              <p>Jestli vás budeme moci na hru přijmout, platební údaje zašleme na váš e-mail.</p>
             </div>
           </div>
           <a href="#" id="logout">Odhlásit</a>

@@ -324,8 +324,10 @@ small:first-of-type:before {
   content: "Tým ";
 }
 
-#platba[data-paid="1"] #udaje,
-#platba:not([data-paid="1"]) #hotovo {
+#platba:not([data-paid="0"]) #udaje,
+#platba:not([data-paid="1"]) #hotovo,
+#platba[data-paid="1"] #cena-p,
+#platba:not([data-paid="-1"]) #nahradnici {
   display: none;
 }
 
