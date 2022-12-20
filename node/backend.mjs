@@ -44,6 +44,12 @@ async function handleObj(request) {
         }));
       return { capacity, teams: trans };
     }
+    case 'getSalt': {
+      const team = findTeam(request.data.name);
+      if(!team)
+        throw 'Tým nenalezen.';
+      return team.salt;
+    }
     case 'login': {
       const team = findTeam(request.data.name);
       if(!team)
@@ -55,6 +61,7 @@ async function handleObj(request) {
           name: team.name,
           phone: team.phone,
           email: team.email,
+          salt: team.salt,
           members: team.members,
           sharingPreferences: team.sharingPreferences,
           amountPaid: team.amountPaid,
@@ -67,6 +74,7 @@ async function handleObj(request) {
       const team0 = request.data;
       if(!(typeof team0.name === 'string' && team0.name.trim() !== '' && team0.name.length <= 50
         && typeof team0.email === 'string' && team0.email.trim() !== ''
+        && typeof team0.salt === 'string' && team0.salt.length == 16
         && typeof team0.passwordHash === 'string' && team0.passwordHash.length == 64
         && typeof team0.phone === 'string' && team0.phone.trim() !== ''
         && typeof team0.members === 'object' && team0.members.length >= teamSize.min && team0.members.length <= teamSize.max
@@ -83,6 +91,7 @@ async function handleObj(request) {
       const team = {
         name: team0.name.trim(),
         email: team0.email.trim(),
+        salt: team0.salt,
         passwordHash: team0.passwordHash,
         phone: team0.phone.trim(),
         members: team0.members.map(m => ({name: m.trim()})),
@@ -96,6 +105,7 @@ async function handleObj(request) {
         name: team.name,
         phone: team.phone,
         email: team.email,
+        salt: team.salt,
         members: team.members,
         amountPaid: team.amountPaid,
         dateDue: team.dateDue,

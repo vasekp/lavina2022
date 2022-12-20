@@ -1,5 +1,5 @@
 import { teamSize, fees, dates } from './config.js';
-import { hash, serverRequest } from './shared.js';
+import { hash, hex, serverRequest } from './shared.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -172,11 +172,15 @@ async function doRegister(form) {
       members.push(member);
   }
   try {
-    const passwordHash = await hash(getField('heslo1'));
+    const saltBytes = new Uint8Array(8);
+    crypto.getRandomValues(saltBytes);
+    const salt = hex(saltBytes);
+    const passwordHash = await hash(getField('heslo1'), salt);
     const data = await serverRequest('register',
       {
         name: getField('nazev'),
         email: getField('email'),
+        salt,
         passwordHash,
         phone: getField('telefon'),
         members
@@ -197,10 +201,12 @@ async function doRegister(form) {
 async function doLogin(form) {
   const getField = field => form.querySelector(`[name="${field}"]`).value;
   try {
-    const passwordHash = await hash(getField('heslo'));
+    const name = getField('nazev');
+    const salt = await serverRequest('getSalt', {name});
+    const passwordHash = await hash(getField('heslo'), salt);
     const data = await serverRequest('login',
       {
-        name: getField('nazev'),
+        name,
         passwordHash
       }
     );
@@ -239,6 +245,7 @@ function loadTeamData(data) {
     elm.value = '';
   getField('telefon').value = data.phone;
   getField('email').value = data.email;
+  getField('teamSalt').value = data.salt;
   data.members.forEach((member, index) => {
     getField(`clen${index + 1}`).value = member.name;
     getField(`jidloPa${index + 1}`).value = member.meal1 || '';
@@ -312,7 +319,7 @@ async function doDetails(form) {
         });
     }
     if(getField('heslo1'))
-      data.newPasswordHash = await hash(getField('heslo1'));
+      data.newPasswordHash = await hash(getField('heslo1'), getField('teamSalt'));
     await serverRequest('update', data);
     if(data.newPasswordHash)
       localStorage['passwordHash'] = data.newPasswordHash;
