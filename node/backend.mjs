@@ -3,7 +3,7 @@ import * as http from 'node:http';
 import normalizeName from './normalize.mjs';
 import { dates, teamSize } from '../config.js';
 
-const port = 3000;
+const port = 3001;
 
 let {capacity, teams, numTeams} = await loadTeams();
 
