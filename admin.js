@@ -11,6 +11,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('submit', ev => submitForm(ev.submitter.form, ev));
   document.addEventListener('input', ev => doAdmin(ev.target));
   document.addEventListener('click', ev => doAdmin(ev.target));
+  document.getElementById('reloadFile').addEventListener('click', _ => doReload());
   useCachedLogin();
 });
 
@@ -71,7 +72,9 @@ async function loadTeams() {
         .map(member => member.tshirt)
         .filter(type => type && type !== 'nic')
         .join(', ') || 'žádná';
-      frag.querySelector('[data-id="date-reg"]').textContent = new Date(team.dateReg).toLocaleString();
+      frag.querySelector('[data-id="date-reg"]').textContent = new Date(team.dateRegOrig).toLocaleString();
+      frag.querySelector('[data-id="date-due"]').textContent = team.amountPaid ? "zaplaceno" :
+        team.dateDue ? new Date(team.dateDue).toLocaleString() : "náhradník";
       frag.querySelector('[data-id="to-pay"]').textContent = amountDue(team);
       frag.querySelector('[data-id="paid"]').textContent = team.amountPaid ? `${team.amountPaid} (${new Date(team.datePaid).toLocaleString()})` : '—';
       if(team.hidden)
@@ -126,29 +129,41 @@ async function doAdmin(tgt) {
   const passwordHash = localStorage['adminHash'];
   if(!passwordHash)
     return;
-  if(tgt.dataset.id === 'set-hidden' || tgt.dataset.id === 'set-countin' || tgt.dataset.id === 'update-pay') {
-    const record = tgt.closest('.team-record');
-    const name = record.querySelector('.name').textContent;
-    const [field, value] =
-      tgt.dataset.id === 'set-hidden' ? ['hidden', record.querySelector('[data-id="set-hidden"]').checked] :
-      tgt.dataset.id === 'set-countin' ? ['countIn', record.querySelector('[data-id="set-countin"]').checked] :
-      tgt.dataset.id === 'update-pay' ? ['amountPaid', +record.querySelector('[data-id="pay-amount"]').value] : null;
-    try {
-      await serverRequest('a:update', {passwordHash, name, field, value});
-      loadTeams();
-    } catch(error) {
-      console.error(error);
-      alert(typeof error === 'string' ? error : 'Neznámá chyba');
-    }
-  } else if(tgt.id === 'reloadFile') {
-    try {
-      await serverRequest('a:reload', {passwordHash});
-      loadTeams();
-    } catch(error) {
-      console.error(error);
-      alert(typeof error === 'string' ? error : 'Neznámá chyba');
-    }
+  const record = tgt.closest('.team-record');
+  const name = record?.querySelector('.name')?.textContent;
+  const setField = (field, value) =>
+    serverRequest('a:update', {passwordHash, name, field, value})
+      .then(loadTeams)
+      .catch(e => {
+        console.error(e);
+        alert(typeof e === 'string' ? e : 'Neznámá chyba');
+      });
+  switch(tgt.dataset.id) {
+    case 'set-hidden':
+      setField('hidden', record.querySelector('[data-id="set-hidden"]').checked);
+      break;
+    case 'set-countin':
+      setField('countIn', record.querySelector('[data-id="set-countin"]').checked);
+      break;
+    case 'update-pay':
+      setField('amountPaid', +record.querySelector('[data-id="pay-amount"]').value);
+      break;
+    case 'reopen-pay':
+      setField('dateReg', new Date());
+      break;
   }
+}
+
+function doReload() {
+  const passwordHash = localStorage['adminHash'];
+  if(!passwordHash)
+    return;
+  serverRequest('a:reload', {passwordHash})
+    .then(loadTeams)
+    .catch(e => {
+      console.error(e);
+      alert(typeof e === 'string' ? e : 'Neznámá chyba');
+    });
 }
 
 function amountDue(team) {

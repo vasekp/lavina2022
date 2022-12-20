@@ -86,6 +86,7 @@ async function handleObj(request) {
         phone: team0.phone.trim(),
         members: team0.members.map(m => ({name: m.trim()})),
         dateReg: now,
+        dateRegOrig: now,
         dateDue: numTeams + 1 <= capacity ? dueDate(now) : null
       };
       teams.push(team);
@@ -148,6 +149,10 @@ async function handleObj(request) {
           team.datePaid = new Date();
         else if(!data.value)
           delete team.datePaid;
+      }
+      if(data.field === 'dateReg') {
+        team.dateReg = new Date(team.dateReg);
+        team.dateDue = dueDate(team.dateReg);
       }
       saveTeams();
       return;
