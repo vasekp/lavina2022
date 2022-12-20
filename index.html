@@ -178,6 +178,7 @@
         <div id="auth-section">
           <h1 id="teamName"></h1>
           <p>Změny v týmu jsou povoleny nejpozději týden před hrou, tj. do pátku 20.1.2023. Naléhavé případy nastalé po tomto datu řešte s organizátory po e-mailu.</p>
+          <p>Vyplňte nám také prosím preference na sdílení pokoje v případě, že bude potřeba ubytovat část vašeho týmu s částí jiného (pokoje nejsou po 5). Vaše přání na jména týmů, se kterým by vám nevadilo či vadilo sdílet, zůstanou soukromé. Pokusíme se vyhovět všem co nejlépe. Nepište prosím "s nikým", nebo budete přiřazeni náhodně.</p>
           <form id="details">
             <label>Telefon:
               <input type="tel" name="telefon" required pattern="\+?[0-9 -]{9,}" data-keep="1"/>
@@ -215,6 +216,9 @@
                 <option value="nic">Žádné tričko</option>
               </select>
             </template>
+            <label><span class="break">Poznámky ke sdílení pokoje:</span>
+              <textarea name="sdileni" data-keep="1"></textarea>
+            </label>
             <label data-visible-until="changesClose">Změnit heslo *:
               <input type="password" name="heslo1"/>
             </label>

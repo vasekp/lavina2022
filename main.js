@@ -66,7 +66,7 @@ function showTab(name) {
 }
 
 function resetForms() {
-  for(const elm of document.querySelectorAll('form input, form select')) {
+  for(const elm of document.querySelectorAll('form input, form select, form textarea')) {
     elm.classList.add('pristine');
     if(!elm.dataset.keep)
       elm.value = '';
@@ -244,6 +244,7 @@ function loadTeamData(data) {
     getField(`jidloSo${index + 1}`).value = member.meal2 || '';
     getField(`tricko${index + 1}`).value = member.tshirt || '';
   });
+  getField('sdileni').value = data.sharingPreferences || '';
   document.getElementById('platba').dataset.paid = data.amountPaid ? 1
     : data.dateDue ? 0 : -1;
   document.getElementById('termin').textContent = new Date(data.dateDue).toLocaleDateString('cs-CZ', { dateStyle: 'medium' });
@@ -296,6 +297,7 @@ async function doDetails(form) {
       passwordHash: localStorage['passwordHash'],
       phone: getField('telefon'),
       email: getField('email'),
+      sharing: getField('sdileni'),
       members: []
     };
     for(let i = 1; i <= teamSize; i++) {

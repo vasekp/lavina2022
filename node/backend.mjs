@@ -56,6 +56,7 @@ async function handleObj(request) {
           phone: team.phone,
           email: team.email,
           members: team.members,
+          sharingPreferences: team.sharingPreferences,
           amountPaid: team.amountPaid,
           dateDue: team.dateDue,
           datePaid: team.datePaid
@@ -125,6 +126,8 @@ async function handleObj(request) {
         team.email = data.email.trim();
       if(typeof data.newPasswordHash === 'string' && data.newPasswordHash.length == 64)
         team.passwordHash = data.newPasswordHash;
+      if(typeof data.sharing === 'string')
+        team.sharingPreferences = data.sharing;
       for(const m of data.members)
         m.name = m.name.trim();
       team.members = data.members;

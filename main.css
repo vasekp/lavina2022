@@ -63,6 +63,10 @@ nav label div, button {
   white-space: nowrap;
 }
 
+.break {
+  white-space: normal;
+}
+
 #sel-uvod:checked ~ nav label[for="sel-uvod"],
 #sel-reg:checked ~ nav label[for="sel-reg"],
 #sel-tymy:checked ~ nav label[for="sel-tymy"],
