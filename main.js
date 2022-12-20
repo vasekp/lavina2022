@@ -119,6 +119,7 @@ async function updateTeams() {
     teams.forEach(team => {
       team.dateReg = Date.parse(team.dateReg);
       team.datePaid = Date.parse(team.datePaid);
+      team.dateDue = Date.parse(team.dateDue);
     });
     teams.sort((t1, t2) => {
       if(t1.paid && !t2.paid)
@@ -127,6 +128,12 @@ async function updateTeams() {
         return +1;
       else if(t1.paid && t2.paid)
         return t1.datePaid - t2.datePaid;
+      else if(t1.dateDue && !t2.dateDue)
+        return -1;
+      else if(!t1.dateDue && t2.dateDue)
+        return +1;
+      else if(t1.dateDue && t2.dateDue)
+        return t1.dateDue - t2.dateDue;
       else
         return t1.dateReg - t2.dateReg;
     });
