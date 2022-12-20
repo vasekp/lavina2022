@@ -43,13 +43,14 @@ window.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('navrh-div').addEventListener('click', ev => ev.currentTarget.hidden = true);
   for(const tmp of document.querySelectorAll('template')) {
-    for(let i = 1; i <= teamSize; i++) {
+    for(let i = 1; i <= teamSize.max; i++) {
       const clone = tmp.content.cloneNode(true);
       clone.querySelectorAll('[name]').forEach(elm => elm.name += i);
       tmp.before(clone);
     }
   }
-  document.querySelector('#register input[name="clen1"]').required = true;
+  for(let i = 1; i <= teamSize.min; i++)
+    document.querySelector(`#register input[name="clen${i}"]`).required = true;
   resetForms();
   updateTeams();
   useCachedLogin();
@@ -165,7 +166,7 @@ async function updateTeams() {
 async function doRegister(form) {
   const getField = field => form.querySelector(`[name="${field}"]`).value;
   const members = [];
-  for(let i = 1; i <= teamSize; i++) {
+  for(let i = 1; i <= teamSize.max; i++) {
     const member = getField(`clen${i}`);
     if(member)
       members.push(member);
@@ -264,7 +265,7 @@ function updateDetailForm() {
   let numPlayers = 0;
   let numTShirts = 0;
   let moreTShirts = false;
-  for(let i = 1; i <= teamSize; i++) {
+  for(let i = 1; i <= teamSize.max; i++) {
     const inp = document.querySelector(`#details input[name=clen${i}]`);
     const empty = inp.value === '';
     for(const elm of document.querySelectorAll(`#details select[name*="${i}"]`))
@@ -300,7 +301,7 @@ async function doDetails(form) {
       sharing: getField('sdileni'),
       members: []
     };
-    for(let i = 1; i <= teamSize; i++) {
+    for(let i = 1; i <= teamSize.max; i++) {
       const name = getField(`clen${i}`);
       if(name)
         data.members.push({
@@ -315,11 +316,11 @@ async function doDetails(form) {
     await serverRequest('update', data);
     if(data.newPasswordHash)
       localStorage['passwordHash'] = data.newPasswordHash;
+    resetForms();
+    await updateTeams();
+    showTab('tymy');
   } catch(error) {
     console.error(error);
     alert(typeof error === 'string' ? error : 'Neznámá chyba');
   }
-  resetForms();
-  await updateTeams();
-  showTab('tymy');
 }

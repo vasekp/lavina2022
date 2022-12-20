@@ -1,4 +1,4 @@
-export const teamSize = 5;
+export const teamSize = {min: 3, max: 5};
 
 export const fees = {
   base: 1500,

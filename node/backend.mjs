@@ -69,7 +69,7 @@ async function handleObj(request) {
         && typeof team0.email === 'string' && team0.email.trim() !== ''
         && typeof team0.passwordHash === 'string' && team0.passwordHash.length == 64
         && typeof team0.phone === 'string' && team0.phone.trim() !== ''
-        && typeof team0.members === 'object' && team0.members.length >= 1 && team0.members.length <= teamSize
+        && typeof team0.members === 'object' && team0.members.length >= teamSize.min && team0.members.length <= teamSize.max
         && team0.members.every(member => typeof member === 'string' && member.trim() !== '' && member.length <= 30)
       ))
         throw 'Chybný požadavek.';
@@ -114,12 +114,14 @@ async function handleObj(request) {
         throw 'Neautorizovaný požadavek.';
       if(!(
         (!data.newPasswordHash || (typeof data.newPasswordHash === 'string' && data.newPasswordHash.length == 64))
-        && typeof data.members === 'object' && data.members.length <= teamSize
+        && typeof data.members === 'object' && data.members.length <= teamSize.max
         && data.members.every(member => typeof member.name === 'string' && member.name.trim() !== '' && member.name.length <= 30)
       ))
         throw 'Chybný požadavek.';
       if(data.members.length === 0)
         throw 'Nelze uložit prázdný tým. Jestli potřebujete zrušit účast, napište organizátorům.';
+      if(data.members.length < teamSize.min)
+        throw `Minimální velikost složení týmu je ${teamSize.min}.`;
       if(typeof data.phone === 'string' && data.phone.trim() !== '')
         team.phone = data.phone.trim();
       if(typeof data.email === 'string' && data.email.trim() !== '')
