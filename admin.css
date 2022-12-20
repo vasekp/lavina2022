@@ -38,6 +38,14 @@
   color: #808080;
 }
 
+.team-record[data-status="paid"] .name {
+  color: green;
+}
+
+.team-record[data-status="backup"] .name {
+  color: red;
+}
+
 [data-id="phone"], [data-id="email"] {
   user-select: all;
 }

@@ -79,6 +79,10 @@ async function loadTeams() {
       frag.querySelector('[data-id="paid"]').textContent = team.amountPaid ? `${team.amountPaid} (${new Date(team.datePaid).toLocaleString()})` : '—';
       if(team.hidden)
         frag.querySelector('.team-record').dataset.hidden = true;
+      else if(team.amountPaid)
+        frag.querySelector('.team-record').dataset.status = 'paid';
+      else if(!team.dateDue)
+        frag.querySelector('.team-record').dataset.status = 'backup';
       frag.querySelector('[data-id="set-hidden"]').checked = team.hidden;
       frag.querySelector('[data-id="set-countin"]').checked = team.countIn;
       frag.querySelector('[data-id="pay-amount"]').value = amountDue(team);
@@ -110,13 +114,14 @@ async function loadTeams() {
     for(const team of visibleTeams) {
       if(team.hidden)
         continue;
+      const status = team.amountPaid ? 'Z' : team.dateDue ? 'P' : 'N';
       const paid = team.amountPaid || 0;
       if(paid !== amountDue(team))
-        resty.append(newLI(`Tým ${team.name}: má dáti ${amountDue(team)}, dal ${paid}, rozdíl ${amountDue(team) - paid}`));
+        resty.append(newLI(`Tým ${team.name} (${status}): má dáti ${amountDue(team)}, dal ${paid}, rozdíl ${amountDue(team) - paid}`));
       if(team.members.some(member => !member.tshirt))
-        resty.append(newLI(`Tým ${team.name}: vybrat trička`));
+        resty.append(newLI(`Tým ${team.name} (${status}): vybrat trička`));
       if(team.members.some(member => !member.meal1 || !member.meal2))
-        resty.append(newLI(`Tým ${team.name}: vybrat jídlo`));
+        resty.append(newLI(`Tým ${team.name} (${status}): vybrat jídlo`));
     }
 
   } catch(error) {
