@@ -51,6 +51,10 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   for(let i = 1; i <= teamSize.min; i++)
     document.querySelector(`#register input[name="clen${i}"]`).required = true;
+  window.addEventListener('beforeunload', ev => {
+    if(document.getElementById('saveDetails').dataset.saved === undefined)
+      ev.preventDefault();
+  });
   resetForms();
   updateTeams();
   useCachedLogin();
@@ -263,6 +267,7 @@ function loadTeamData(data) {
   document.getElementById('termin').textContent = new Date(data.dateDue).toLocaleDateString('cs-CZ', { dateStyle: 'medium' });
   document.getElementById('tab-auth').dataset.auth = 1;
   updateDetailForm();
+  document.getElementById('saveDetails').dataset.saved = 0;
 }
 
 function logout(ev) {
@@ -300,6 +305,7 @@ function updateDetailForm() {
   if(moreTShirts)
     html += ` + případně${numTShirts > 0 ? ' další ' : ' '}trička`;
   document.getElementById('cena').innerHTML = html;
+  delete document.getElementById('saveDetails').dataset.saved;
 }
 
 async function doDetails(form) {
@@ -331,7 +337,11 @@ async function doDetails(form) {
       localStorage['passwordHash'] = data.newPasswordHash;
     resetForms();
     await updateTeams();
-    showTab('tymy');
+    const button = document.getElementById('saveDetails');
+    button.dataset.saved = 1;
+    button.classList.add('saveFlash');
+    button.offsetWidth;
+    button.classList.remove('saveFlash');
   } catch(error) {
     console.error(error);
     alert(typeof error === 'string' ? error : 'Neznámá chyba');

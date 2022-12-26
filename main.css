@@ -371,3 +371,20 @@ a {
   max-width: 100%;
   max-height: 100%;
 }
+
+#saveDetails {
+  transition: background 500ms ease-out;
+}
+
+#saveDetails::after {
+  content: 'Uložit';
+}
+
+#saveDetails[data-saved="1"]::after {
+  content: 'Uloženo';
+}
+
+#saveDetails.saveFlash {
+  background: #87ff0f;
+  transition: none;
+}
