@@ -1,5 +1,5 @@
 import { teamSize, fees, dates } from './config.js';
-import { hash, hex, serverRequest } from './shared.js';
+import { hash, hex, serverRequest, adminSalt } from './shared.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -12,10 +12,10 @@ window.addEventListener('DOMContentLoaded', () => {
     if(ev.target.id.substring(0, 4) === 'sel-')
       localStorage['lastTab'] = ev.target.id.substring(4);
   });
+  const now = Date.now();
   for(const elm of document.querySelectorAll('date-alt')) {
     const open = dates[elm.dataset.open];
     const close = dates[elm.dataset.close];
-    const now = Date.now();
     elm.dataset.alt = open && open > now ? 'pre' :
       close && close < now ? 'post' :
         'within';
@@ -23,11 +23,12 @@ window.addEventListener('DOMContentLoaded', () => {
   for(const elm of document.querySelectorAll('[data-visible-from], [data-visible-until]')) {
     const open = dates[elm.dataset.visibleFrom];
     const close = dates[elm.dataset.visibleUntil];
-    const now = Date.now();
     elm.hidden = open && open > now ? true :
       close && close < now ? true :
         false;
   }
+  if(now > dates.tshirtClose)
+    document.getElementById('detailsTmpl').content.querySelector('[name="tricko"]').dataset.disabled = '1';
   for(const elm of document.querySelectorAll('form')) {
     elm.addEventListener('input', validateField);
     elm.addEventListener('focusout', validateField);
@@ -51,6 +52,10 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   for(let i = 1; i <= teamSize.min; i++)
     document.querySelector(`#register input[name="clen${i}"]`).required = true;
+  window.addEventListener('beforeunload', ev => {
+    if(document.getElementById('saveDetails').dataset.saved === '0')
+      ev.preventDefault();
+  });
   resetForms();
   updateTeams();
   useCachedLogin();
@@ -204,14 +209,18 @@ async function doLogin(form) {
     const name = getField('nazev');
     const salt = await serverRequest('getSalt', {name});
     const passwordHash = await hash(getField('heslo'), salt);
+    const adminHash = await hash(getField('heslo'), adminSalt);
     const data = await serverRequest('login',
       {
         name,
-        passwordHash
+        passwordHash,
+        adminHash
       }
     );
     localStorage['teamName'] = data.name;
     localStorage['passwordHash'] = passwordHash;
+    if(data.adminLogin)
+      localStorage['adminHash'] = adminHash;
     loadTeamData(data);
   } catch(error) {
     console.error(error);
@@ -223,10 +232,11 @@ async function doLogin(form) {
 async function useCachedLogin() {
   const name = localStorage['teamName'];
   const passwordHash = localStorage['passwordHash'];
-  if(!name || !passwordHash)
+  const adminHash = localStorage['adminHash'];
+  if(!name || !(passwordHash || adminHash))
     return false;
   try {
-    const data = await serverRequest('login', {name, passwordHash});
+    const data = await serverRequest('login', {name, passwordHash, adminHash});
     loadTeamData(data);
     document.getElementById('tab-auth').dataset.auth = 1;
     return true;
@@ -248,8 +258,8 @@ function loadTeamData(data) {
   getField('teamSalt').value = data.salt;
   data.members.forEach((member, index) => {
     getField(`clen${index + 1}`).value = member.name;
-    getField(`jidloPa${index + 1}`).value = member.meal1 || '';
-    getField(`jidloSo${index + 1}`).value = member.meal2 || '';
+    getField(`jidloPa${index + 1}`).value = member.meal1 || 'pa-maso';
+    getField(`jidloSo${index + 1}`).value = member.meal2 || 'so-maso';
     getField(`tricko${index + 1}`).value = member.tshirt || '';
   });
   getField('sdileni').value = data.sharingPreferences || '';
@@ -258,6 +268,7 @@ function loadTeamData(data) {
   document.getElementById('termin').textContent = new Date(data.dateDue).toLocaleDateString('cs-CZ', { dateStyle: 'medium' });
   document.getElementById('tab-auth').dataset.auth = 1;
   updateDetailForm();
+  delete document.getElementById('saveDetails').dataset.saved;
 }
 
 function logout(ev) {
@@ -271,18 +282,14 @@ function logout(ev) {
 function updateDetailForm() {
   let numPlayers = 0;
   let numTShirts = 0;
-  let moreTShirts = false;
   for(let i = 1; i <= teamSize.max; i++) {
     const inp = document.querySelector(`#details input[name=clen${i}]`);
     const empty = inp.value === '';
     for(const elm of document.querySelectorAll(`#details select[name*="${i}"]`))
-      elm.disabled = empty;
+      elm.disabled = empty | elm.dataset.disabled === '1';
     if(!empty) {
       numPlayers++;
-      const t = document.querySelector(`#details select[name=tricko${i}]`).value;
-      if(!t)
-        moreTShirts = true;
-      else if(t !== 'nic')
+      if(document.querySelector(`#details select[name=tricko${i}]`).value)
         numTShirts++;
     }
   }
@@ -292,9 +299,8 @@ function updateDetailForm() {
   if(numTShirts > 0)
     html += ` + ${numTShirts} × ${fees.tshirt} / tričko`;
   html += ')';
-  if(moreTShirts)
-    html += ` + případně${numTShirts > 0 ? ' další ' : ' '}trička`;
   document.getElementById('cena').innerHTML = html;
+  document.getElementById('saveDetails').dataset.saved = '0';
 }
 
 async function doDetails(form) {
@@ -303,6 +309,7 @@ async function doDetails(form) {
     const data = {
       name: localStorage['teamName'],
       passwordHash: localStorage['passwordHash'],
+      adminHash: localStorage['adminHash'],
       phone: getField('telefon'),
       email: getField('email'),
       sharing: getField('sdileni'),
@@ -325,7 +332,11 @@ async function doDetails(form) {
       localStorage['passwordHash'] = data.newPasswordHash;
     resetForms();
     await updateTeams();
-    showTab('tymy');
+    const button = document.getElementById('saveDetails');
+    button.dataset.saved = '1';
+    button.classList.add('saveFlash');
+    button.offsetWidth;
+    button.classList.remove('saveFlash');
   } catch(error) {
     console.error(error);
     alert(typeof error === 'string' ? error : 'Neznámá chyba');

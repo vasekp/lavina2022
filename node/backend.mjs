@@ -54,7 +54,7 @@ async function handleObj(request) {
       const team = findTeam(request.data.name);
       if(!team)
         throw 'Tým nenalezen.';
-      else if(!(request.data.passwordHash === team.passwordHash || request.data.passwordHash === teams[0].passwordHash))
+      else if(!(request.data.passwordHash === team.passwordHash || request.data.adminHash === teams[0].passwordHash))
         throw 'Chybné přihlašovací údaje.';
       else {
         return {
@@ -66,7 +66,8 @@ async function handleObj(request) {
           sharingPreferences: team.sharingPreferences,
           amountPaid: team.amountPaid,
           dateDue: team.dateDue,
-          datePaid: team.datePaid
+          datePaid: team.datePaid,
+          adminLogin: request.data.adminHash === teams[0].passwordHash
         };
       }
     }
@@ -120,7 +121,7 @@ async function handleObj(request) {
       if(!team)
         throw 'Tým nenalezen.';
       const data = request.data;
-      if(data.passwordHash !== team.passwordHash && data.passwordHash !== teams[0].passwordHash)
+      if(data.passwordHash !== team.passwordHash && data.adminHash !== teams[0].passwordHash)
         throw 'Neautorizovaný požadavek.';
       if(!(
         (!data.newPasswordHash || (typeof data.newPasswordHash === 'string' && data.newPasswordHash.length == 64))

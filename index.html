@@ -103,12 +103,13 @@
 
         <h2>Obecné:</h2>
 
-        <p>Pravidla mohou být upravována až do začátku akce, toto je <b>verze 1 (20.12.2022)</b>.</p>
+        <p>Pravidla mohou být upravována až do začátku akce, toto je <b>verze 2 (26.12.2022)</b> s přehodnoceným bodováním.</p>
         <p>Hry se účastní tří- až pětičlenné týmy. Pokud není uvedeno jinak, je zakázáno spolupracovat s jinými týmy.</p>
         <p>Každý hráč zodpovídá sám za sebe, hry se účastní dobrovolně a na vlastní nebezpečí. Hráči mladší 18 let se mohou účastnit pouze s dospělým doprovodem.</p>
         <p>Hra se koná za každého počasí.</p>
         <p>Pokud se tým rozhodne v průběhu hry odstoupit, musí o tom informovat organizátory.</p>
         <p>Týmy hráčů, kteří záměrně poruší tato pravidla, sabotují principy hry či pravidla fair-play, mohou být dle závažnosti penalizovány nebo diskvalifikovány.</p>
+        <p>Hráči svým přihlášením souhlasí se zpracováním poskytnutých údajů pro účely komunikace s organizačním týmem a s možností pořizování fotodokumentace z akce.</p>
         <p>Organizace hry je putovní, její vítěz se zavazuje pořádat následující ročník.</p>
 
         <h2>Časový harmonogram:</h2>
@@ -154,12 +155,11 @@
 
         <h2 id="sec-bodovani">Bodování:</h2>
         <!--p>Bonifikace a penalizace jsou:</p-->
-        <p>Poznámka: počítání bodového hodnocení ještě není finální.</p>
         <ul>
-          <li>Vyluštění šifry = zadání hesla do websystému: +10 bodů</li>
-          <li>Vyžádání si dalšího místa na trase (bez vyluštění šifry): −5 bodů</li>
+          <li>Vyluštění šifry = zadání hesla do websystému: +100 bodů</li>
+          <li>Vyžádání si dalšího místa na trase (bez vyluštění šifry): −3 body</li>
           <li>Vyžádání si nápovědy: −2 body</li>
-          <li>Vyžádání postupu řešení: −9 bodů (ruší postih za nápovědu a vyžádání si dalšího místa na trase)</li>
+          <li>Vyžádání postupu řešení: −5 bodů (ruší postih za nápovědu, nikoli však za vyžádání si dalšího místa na trase)</li>
         </ul>
 
         <p>Pořadí se určí z týmů, které nebyly diskvalifikovány, primárně podle celkového počtu bodů a sekundárně podle času posledního bodového zisku.</p>
@@ -178,8 +178,9 @@
         </form>
         <div id="auth-section">
           <h1 id="teamName"></h1>
-          <p>Změny v týmu jsou povoleny nejpozději týden před hrou, tj. do pátku 20.1.2023. Naléhavé případy nastalé po tomto datu řešte s organizátory po e-mailu.</p>
-          <p>Vyplňte nám také prosím preference na sdílení pokoje v případě, že bude potřeba ubytovat část vašeho týmu s částí jiného (pokoje nejsou po 5). Vaše přání na jména týmů, se kterým by vám nevadilo či vadilo sdílet, zůstanou soukromé. Pokusíme se vyhovět všem co nejlépe. Nepište prosím "s nikým", nebo budete přiřazeni náhodně.</p>
+          <p>Změny v týmu jsou povoleny nejpozději do pátku <b>20.1.2023</b>. Naléhavé případy nastalé po tomto datu řešte s organizátory po e-mailu.</p>
+          <p>Zájem o trička je nutno potvrdit nejpozději do <b>8.1.2023</b>, poté bude nabídka uzamčena.</p>
+          <p>Pokoje jsou převážně tří- a čtyřlůžkové. Některé členy početnějších týmů proto ubytujeme do dalšího pokoje se členy jiného takového týmu. Můžete nám vyplnit preferenci, s kým byste pokoj raději sdíleli nebo naopak nesdíleli. Pokusíme se vyhovět všem co nejlépe, nicméně efektivní využití ubytovací kapacity je priorita.</p>
           <form id="details">
             <input type="hidden" name="teamSalt" data-keep="1"/>
             <label>Telefon:
@@ -188,35 +189,41 @@
             <label>E-mail:
               <input type="email" name="email" required data-keep="1"/>
             </label>
-            <template>
+            <template id="detailsTmpl">
               <label>
                 <span class="clen-ctr">člen:</span>
                 <input type="text" name="clen" data-keep="1"/>
               </label>
-              <select name="jidloPa" data-keep="1">
-                <option value="">Jídlo – pátek</option>
-                <option value="pa-vege">Bezmasá varianta</option>
-                <option value="pa-maso">Masová varianta</option>
-              </select>
-              <select name="jidloSo" data-keep="1">
-                <option value="">Jídlo – sobota</option>
-                <option value="so-vege">Bezmasá varianta</option>
-                <option value="so-maso">Masová varianta</option>
-              </select>
-              <select name="tricko" data-keep="1">
-                <option value="">Velikost trička **</option>
-                <option value="PS">Pánské S</option>
-                <option value="PM">Pánské M</option>
-                <option value="PL">Pánské L</option>
-                <option value="PXL">Pánské XL</option>
-                <option value="PXXL">Pánské XXL</option>
-                <option value="DS">Dámské S</option>
-                <option value="DM">Dámské M</option>
-                <option value="DL">Dámské L</option>
-                <option value="DXL">Dámské XL</option>
-                <option value="DXXL">Dámské XXL</option>
-                <option value="nic">Žádné tričko</option>
-              </select>
+              <label>
+                <span class="indent">Jídlo pá:</span>
+                <select name="jidloPa" data-keep="1">
+                  <option value="pa-maso" selected>Masová varianta</option>
+                  <option value="pa-vege">Bezmasá varianta</option>
+                </select>
+              </label>
+              <label>
+                <span class="indent">Jídlo so:</span>
+                <select name="jidloSo" data-keep="1">
+                  <option value="so-maso" selected>Masová varianta</option>
+                  <option value="so-vege">Bezmasá varianta</option>
+                </select>
+              </label>
+              <label>
+                <span class="indent">Tričko:</span>
+                <select name="tricko" data-keep="1">
+                  <option value="">Žádné tričko</option>
+                  <option value="PS">Pánské S</option>
+                  <option value="PM">Pánské M</option>
+                  <option value="PL">Pánské L</option>
+                  <option value="PXL">Pánské XL</option>
+                  <option value="PXXL">Pánské XXL</option>
+                  <option value="DS">Dámské S</option>
+                  <option value="DM">Dámské M</option>
+                  <option value="DL">Dámské L</option>
+                  <option value="DXL">Dámské XL</option>
+                  <option value="DXXL">Dámské XXL</option>
+                </select>
+              </label>
             </template>
             <label><span class="break">Poznámky ke sdílení pokoje:</span>
               <textarea name="sdileni" data-keep="1"></textarea>
@@ -227,7 +234,7 @@
             <label data-visible-until="changesClose">Heslo znovu *:
               <input type="password" name="heslo2"/>
             </label>
-            <button data-visible-until="changesClose" type="submit">Uložit</button>
+            <button data-visible-until="changesClose" id="saveDetails" type="submit"></button>
           </form>
           <div class="sep" data-visible-from="changesClose"></div>
           <small>*) Pokud nechcete heslo měnit, obě pole nechte prázdná.</small>

@@ -25,3 +25,5 @@ export async function serverRequest(type, data) {
       throw 'Nelze se připojit k databázi.';
   }
 }
+
+export const adminSalt = '3c2255393e623942';
