@@ -257,8 +257,8 @@ function loadTeamData(data) {
   getField('teamSalt').value = data.salt;
   data.members.forEach((member, index) => {
     getField(`clen${index + 1}`).value = member.name;
-    getField(`jidloPa${index + 1}`).value = member.meal1 || '';
-    getField(`jidloSo${index + 1}`).value = member.meal2 || '';
+    getField(`jidloPa${index + 1}`).value = member.meal1 || 'pa-maso';
+    getField(`jidloSo${index + 1}`).value = member.meal2 || 'so-maso';
     getField(`tricko${index + 1}`).value = member.tshirt || '';
   });
   getField('sdileni').value = data.sharingPreferences || '';
@@ -281,7 +281,6 @@ function logout(ev) {
 function updateDetailForm() {
   let numPlayers = 0;
   let numTShirts = 0;
-  let moreTShirts = false;
   for(let i = 1; i <= teamSize.max; i++) {
     const inp = document.querySelector(`#details input[name=clen${i}]`);
     const empty = inp.value === '';
@@ -289,10 +288,7 @@ function updateDetailForm() {
       elm.disabled = empty;
     if(!empty) {
       numPlayers++;
-      const t = document.querySelector(`#details select[name=tricko${i}]`).value;
-      if(!t)
-        moreTShirts = true;
-      else if(t !== 'nic')
+      if(document.querySelector(`#details select[name=tricko${i}]`).value)
         numTShirts++;
     }
   }
@@ -302,8 +298,6 @@ function updateDetailForm() {
   if(numTShirts > 0)
     html += ` + ${numTShirts} × ${fees.tshirt} / tričko`;
   html += ')';
-  if(moreTShirts)
-    html += ` + případně${numTShirts > 0 ? ' další ' : ' '}trička`;
   document.getElementById('cena').innerHTML = html;
   delete document.getElementById('saveDetails').dataset.saved;
 }

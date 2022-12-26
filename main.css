@@ -189,6 +189,10 @@ form label {
   display: contents;
 }
 
+.indent {
+  margin-left: 1em;
+}
+
 form input,
 form select {
   grid-column: 2/3;

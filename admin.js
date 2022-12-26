@@ -95,13 +95,14 @@ async function loadTeams() {
     document.getElementById('lidi').textContent = `${visibleTeams.length} / ${visibleTeams.reduce((a, t) => a + t.members.length, 0)}`;
     document.getElementById('lidi-paid').textContent = `${paidTeams.length} / ${paidTeams.reduce((a, t) => a + t.members.length, 0)}`;
     const allMembers = paidTeams.flatMap(team => team.members);
-    const tally = elm => Object.entries(allMembers.map(member => member[elm]).reduce((a, e) => {
-        if(e && e !== 'nic')
-          a[e] = (a[e] || 0) + 1;
+    const tally = (elm, def = '') => Object.entries(allMembers.map(member => member[elm]).reduce((a, e) => {
+        const val = e || def;
+        if(val)
+          a[val] = (a[val] || 0) + 1;
         return a;
       }, {})).map(e => `${e[1]}× ${e[0]}`).join(', ');
     document.getElementById('tricka').textContent = tally('tshirt');
-    document.getElementById('jidla').textContent = `${tally('meal1')}, ${tally('meal2')}`;
+    document.getElementById('jidla').textContent = `${tally('meal1', 'pa-maso')}, ${tally('meal2', 'so-maso')}`;
     document.getElementById('eml-list').textContent = visibleTeams.map(team => team.email).join(', ');
     document.getElementById('eml-list-paid').textContent = paidTeams.map(team => team.email).join(', ');
     /* Resty */
