@@ -52,7 +52,7 @@ window.addEventListener('DOMContentLoaded', () => {
   for(let i = 1; i <= teamSize.min; i++)
     document.querySelector(`#register input[name="clen${i}"]`).required = true;
   window.addEventListener('beforeunload', ev => {
-    if(document.getElementById('saveDetails').dataset.saved === undefined)
+    if(document.getElementById('saveDetails').dataset.saved === '0')
       ev.preventDefault();
   });
   resetForms();
@@ -267,7 +267,7 @@ function loadTeamData(data) {
   document.getElementById('termin').textContent = new Date(data.dateDue).toLocaleDateString('cs-CZ', { dateStyle: 'medium' });
   document.getElementById('tab-auth').dataset.auth = 1;
   updateDetailForm();
-  document.getElementById('saveDetails').dataset.saved = 0;
+  delete document.getElementById('saveDetails').dataset.saved;
 }
 
 function logout(ev) {
@@ -299,7 +299,7 @@ function updateDetailForm() {
     html += ` + ${numTShirts} × ${fees.tshirt} / tričko`;
   html += ')';
   document.getElementById('cena').innerHTML = html;
-  delete document.getElementById('saveDetails').dataset.saved;
+  document.getElementById('saveDetails').dataset.saved = '0';
 }
 
 async function doDetails(form) {
@@ -332,7 +332,7 @@ async function doDetails(form) {
     resetForms();
     await updateTeams();
     const button = document.getElementById('saveDetails');
-    button.dataset.saved = 1;
+    button.dataset.saved = '1';
     button.classList.add('saveFlash');
     button.offsetWidth;
     button.classList.remove('saveFlash');
