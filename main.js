@@ -227,10 +227,11 @@ async function doLogin(form) {
 async function useCachedLogin() {
   const name = localStorage['teamName'];
   const passwordHash = localStorage['passwordHash'];
-  if(!name || !passwordHash)
+  const adminHash = localStorage['adminHash'];
+  if(!name || !(passwordHash || adminHash))
     return false;
   try {
-    const data = await serverRequest('login', {name, passwordHash});
+    const data = await serverRequest('login', {name, passwordHash, adminHash});
     loadTeamData(data);
     document.getElementById('tab-auth').dataset.auth = 1;
     return true;
