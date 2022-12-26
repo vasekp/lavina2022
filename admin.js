@@ -1,5 +1,5 @@
 import { fees } from './config.js';
-import { hash, serverRequest } from './shared.js';
+import { hash, serverRequest, adminSalt } from './shared.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -25,7 +25,6 @@ async function submitForm(form, ev) {
 }
 
 async function doLogin(form) {
-  const adminSalt = '3c2255393e623942';
   const passwordHash = await hash(form.querySelector('[name="heslo"]').value, adminSalt);
   try {
     const data = await serverRequest('login', {name: 'admin', passwordHash});

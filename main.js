@@ -1,5 +1,5 @@
 import { teamSize, fees, dates } from './config.js';
-import { hash, hex, serverRequest } from './shared.js';
+import { hash, hex, serverRequest, adminSalt } from './shared.js';
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -204,14 +204,18 @@ async function doLogin(form) {
     const name = getField('nazev');
     const salt = await serverRequest('getSalt', {name});
     const passwordHash = await hash(getField('heslo'), salt);
+    const adminHash = await hash(getField('heslo'), adminSalt);
     const data = await serverRequest('login',
       {
         name,
-        passwordHash
+        passwordHash,
+        adminHash
       }
     );
     localStorage['teamName'] = data.name;
     localStorage['passwordHash'] = passwordHash;
+    if(data.adminLogin)
+      localStorage['adminHash'] = adminHash;
     loadTeamData(data);
   } catch(error) {
     console.error(error);
@@ -303,6 +307,7 @@ async function doDetails(form) {
     const data = {
       name: localStorage['teamName'],
       passwordHash: localStorage['passwordHash'],
+      adminHash: localStorage['adminHash'],
       phone: getField('telefon'),
       email: getField('email'),
       sharing: getField('sdileni'),
