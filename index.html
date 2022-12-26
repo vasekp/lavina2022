@@ -178,8 +178,9 @@
         </form>
         <div id="auth-section">
           <h1 id="teamName"></h1>
-          <p>Změny v týmu jsou povoleny nejpozději do pátku 20.1.2023. Naléhavé případy nastalé po tomto datu řešte s organizátory po e-mailu.</p>
-          <p>Vyplňte nám také prosím preference na sdílení pokoje v případě, že bude potřeba ubytovat část vašeho týmu s částí jiného (pokoje nejsou po 5). Vaše přání na jména týmů, se kterým by vám nevadilo či vadilo sdílet, zůstanou soukromé. Pokusíme se vyhovět všem co nejlépe. Nepište prosím "s nikým", nebo budete přiřazeni náhodně.</p>
+          <p>Změny v týmu jsou povoleny nejpozději do pátku <b>20.1.2023</b>. Naléhavé případy nastalé po tomto datu řešte s organizátory po e-mailu.</p>
+          <p>Zájem o trička je nutno potvrdit nejpozději do <b>8.1.2023</b>, poté bude nabídka uzamčena.</p>
+          <p>Pokoje jsou převážně tří- a čtyřlůžkové. Některé členy početnějších týmů proto ubytujeme do dalšího pokoje se členy jiného takového týmu. Můžete nám vyplnit preferenci, s kým byste pokoj raději sdíleli nebo naopak nesdíleli. Pokusíme se vyhovět všem co nejlépe, nicméně efektivní využití ubytovací kapacity je priorita.</p>
           <form id="details">
             <input type="hidden" name="teamSalt" data-keep="1"/>
             <label>Telefon:
@@ -188,7 +189,7 @@
             <label>E-mail:
               <input type="email" name="email" required data-keep="1"/>
             </label>
-            <template>
+            <template id="detailsTmpl">
               <label>
                 <span class="clen-ctr">člen:</span>
                 <input type="text" name="clen" data-keep="1"/>

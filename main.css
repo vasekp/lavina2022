@@ -211,6 +211,10 @@ form :invalid:not(.pristine) {
   background: #fdd;
 }
 
+:disabled {
+  color: var(--c-fg);
+}
+
 .clen-ctr {
   counter-increment: clen;
 }

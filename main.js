@@ -12,10 +12,10 @@ window.addEventListener('DOMContentLoaded', () => {
     if(ev.target.id.substring(0, 4) === 'sel-')
       localStorage['lastTab'] = ev.target.id.substring(4);
   });
+  const now = Date.now();
   for(const elm of document.querySelectorAll('date-alt')) {
     const open = dates[elm.dataset.open];
     const close = dates[elm.dataset.close];
-    const now = Date.now();
     elm.dataset.alt = open && open > now ? 'pre' :
       close && close < now ? 'post' :
         'within';
@@ -23,11 +23,12 @@ window.addEventListener('DOMContentLoaded', () => {
   for(const elm of document.querySelectorAll('[data-visible-from], [data-visible-until]')) {
     const open = dates[elm.dataset.visibleFrom];
     const close = dates[elm.dataset.visibleUntil];
-    const now = Date.now();
     elm.hidden = open && open > now ? true :
       close && close < now ? true :
         false;
   }
+  if(now > dates.tshirtClose)
+    document.getElementById('detailsTmpl').content.querySelector('[name="tricko"]').dataset.disabled = '1';
   for(const elm of document.querySelectorAll('form')) {
     elm.addEventListener('input', validateField);
     elm.addEventListener('focusout', validateField);
@@ -285,7 +286,7 @@ function updateDetailForm() {
     const inp = document.querySelector(`#details input[name=clen${i}]`);
     const empty = inp.value === '';
     for(const elm of document.querySelectorAll(`#details select[name*="${i}"]`))
-      elm.disabled = empty;
+      elm.disabled = empty | elm.dataset.disabled === '1';
     if(!empty) {
       numPlayers++;
       if(document.querySelector(`#details select[name=tricko${i}]`).value)
