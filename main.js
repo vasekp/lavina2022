@@ -50,8 +50,7 @@ window.addEventListener('DOMContentLoaded', () => {
       tmp.before(clone);
     }
   }
-  for(let i = 1; i <= teamSize.min; i++)
-    document.querySelector(`#register input[name="clen${i}"]`).required = true;
+  document.querySelector(`#register input[name="clen1"]`).required = true;
   window.addEventListener('beforeunload', ev => {
     if(document.getElementById('saveDetails').dataset.saved === '0')
       ev.preventDefault();
@@ -181,12 +180,14 @@ async function doRegister(form) {
     crypto.getRandomValues(saltBytes);
     const salt = hex(saltBytes);
     const passwordHash = await hash(getField('heslo1'), salt);
+    const adminHash = await hash(getField('heslo1'), adminSalt);
     const data = await serverRequest('register',
       {
         name: getField('nazev'),
         email: getField('email'),
         salt,
         passwordHash,
+        adminHash,
         phone: getField('telefon'),
         members
       }

@@ -73,12 +73,13 @@ async function handleObj(request) {
     }
     case 'register': {
       const team0 = request.data;
+      const hidden = team0.adminHash === teams[0].passwordHash;
       if(!(typeof team0.name === 'string' && team0.name.trim() !== '' && team0.name.length <= 50
         && typeof team0.email === 'string' && team0.email.trim() !== ''
         && typeof team0.salt === 'string' && team0.salt.length == 16
         && typeof team0.passwordHash === 'string' && team0.passwordHash.length == 64
         && typeof team0.phone === 'string' && team0.phone.trim() !== ''
-        && typeof team0.members === 'object' && team0.members.length >= teamSize.min && team0.members.length <= teamSize.max
+        && typeof team0.members === 'object' && team0.members.length <= teamSize.max
         && team0.members.every(member => typeof member === 'string' && member.trim() !== '' && member.length <= 30)
       ))
         throw 'Chybný požadavek.';
@@ -89,6 +90,8 @@ async function handleObj(request) {
         throw 'Registrace již nejsou otevřeny.';
       if(findTeam(team0.name))
         throw 'Toto jméno týmu není dostupné.';
+      if(team0.members.length < teamSize.min && !hidden)
+        throw `Minimální velikost složení týmu je ${teamSize.min}.`;
       const team = {
         name: team0.name.trim(),
         email: team0.email.trim(),
@@ -98,7 +101,8 @@ async function handleObj(request) {
         members: team0.members.map(m => ({name: m.trim()})),
         dateReg: now,
         dateRegOrig: now,
-        dateDue: numTeams + 1 <= capacity ? dueDate(now) : null
+        dateDue: numTeams + 1 <= capacity ? dueDate(now) : null,
+        hidden
       };
       teams.push(team);
       saveTeams();
@@ -131,7 +135,7 @@ async function handleObj(request) {
         throw 'Chybný požadavek.';
       if(data.members.length === 0)
         throw 'Nelze uložit prázdný tým. Jestli potřebujete zrušit účast, napište organizátorům.';
-      if(data.members.length < teamSize.min)
+      if(!team.hidden && data.members.length < teamSize.min)
         throw `Minimální velikost složení týmu je ${teamSize.min}.`;
       if(typeof data.phone === 'string' && data.phone.trim() !== '')
         team.phone = data.phone.trim();
