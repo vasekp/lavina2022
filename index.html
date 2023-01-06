@@ -14,8 +14,8 @@
     <input hidden type="radio" name="tab" id="sel-tymy"/>
     <input hidden type="radio" name="tab" id="sel-pravidla"/>
     <input hidden type="radio" name="tab" id="sel-auth"/>
-    <header><a href="#main" tabindex="-1"><img src="images/lavina-hlavicka.jpg"/></a></header>
-    <nav>
+    <header><a href="#nav" tabindex="-1"><img src="images/lavina-hlavicka.jpg"/></a></header>
+    <nav id="nav">
       <input hidden type="checkbox" id="nav-unfold"/>
       <label for="sel-uvod"><div>Úvod</div></label>
       <label for="sel-reg"><div>Registrace</div></label>
@@ -24,7 +24,7 @@
       <label for="sel-auth" data-visible-from="regOpen"><div>Můj tým</div></label>
       <span id="sipka">▼</span>
     </nav>
-    <main id="main">
+    <main>
       <article id="tab-uvod">
         <h1>Lavina XVII</h1>
         <p>Již sedmnáctý ročník putovní šifrovací hry s přesuny mezi stanovišti na běžkách.</p>
