@@ -213,6 +213,7 @@ form :invalid:not(.pristine) {
 
 :disabled {
   color: var(--c-fg);
+  opacity: 100%;
 }
 
 .clen-ctr {

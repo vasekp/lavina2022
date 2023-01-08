@@ -1,6 +1,8 @@
 import { fees } from './config.js';
 import { hash, serverRequest, adminSalt } from './shared.js';
 
+let teams = [];
+
 window.addEventListener('DOMContentLoaded', () => {
   {
     const chkbox = document.getElementById('nav-unfold');
@@ -8,9 +10,13 @@ window.addEventListener('DOMContentLoaded', () => {
       chkbox.checked = !chkbox.checked;
     });
   }
+  document.getElementById('kriteria').addEventListener('input', update);
   document.addEventListener('submit', ev => submitForm(ev.submitter.form, ev));
-  document.addEventListener('input', ev => doAdmin(ev.target));
-  document.addEventListener('click', ev => doAdmin(ev.target));
+  {
+    const tymy = document.getElementById('tab-tymy');
+    tymy.addEventListener('input', ev => doAdmin(ev.target));
+    tymy.addEventListener('click', ev => doAdmin(ev.target));
+  }
   document.getElementById('reloadFile').addEventListener('click', _ => doReload());
   useCachedLogin();
 });
@@ -54,81 +60,87 @@ async function loadTeams() {
   const passwordHash = localStorage['adminHash'];
   if(!passwordHash)
     return;
-  try {
-    const teams = await serverRequest('a:getTeams', {passwordHash});
-    const list = document.getElementById('team-list');
-    list.replaceChildren();
-    const tmp = document.getElementById('tmp-record').content;
-    const collator = new Intl.Collator().compare;
-    teams.sort((a, b) => collator(a.name, b.name));
-    teams.forEach((team, index) => {
-      const frag = tmp.cloneNode(true);
-      frag.querySelector('.name').htmlFor = frag.querySelector('.expand').id = `radio${index}`;
-      frag.querySelector('.name').textContent = team.name;
-      frag.querySelector('[data-id="phone"]').textContent = team.phone;
-      frag.querySelector('[data-id="email"]').textContent = team.email;
-      frag.querySelector('[data-id="size"]').textContent = team.members.length;
-      frag.querySelector('[data-id="tshirts"]').textContent = team.members
-        .map(member => member.tshirt)
-        .filter(type => type && type !== 'nic')
-        .join(', ') || 'žádná';
-      frag.querySelector('[data-id="sharing"]').textContent = team.sharingPreferences;
-      frag.querySelector('[data-id="date-reg"]').textContent = new Date(team.dateRegOrig).toLocaleString();
-      frag.querySelector('[data-id="date-due"]').textContent = team.amountPaid ? "zaplaceno" :
-        team.dateDue ? new Date(team.dateDue).toLocaleString() : "náhradník";
-      frag.querySelector('[data-id="to-pay"]').textContent = amountDue(team);
-      frag.querySelector('[data-id="paid"]').textContent = team.amountPaid ? `${team.amountPaid} (${new Date(team.datePaid).toLocaleString()})` : '—';
-      if(team.hidden)
-        frag.querySelector('.team-record').dataset.hidden = true;
-      else if(team.amountPaid)
-        frag.querySelector('.team-record').dataset.status = 'paid';
-      else if(!team.dateDue)
-        frag.querySelector('.team-record').dataset.status = 'backup';
-      frag.querySelector('[data-id="set-hidden"]').checked = team.hidden;
-      frag.querySelector('[data-id="set-countin"]').checked = team.countIn;
-      frag.querySelector('[data-id="pay-amount"]').value = amountDue(team);
-      list.append(frag);
-    });
-    /* Statistiky */
-    const visibleTeams = teams.filter(team => !team.hidden || team.countIn);
-    const paidTeams = visibleTeams.filter(team => team.amountPaid || team.countIn);
-    document.getElementById('lidi').textContent = `${visibleTeams.length} / ${visibleTeams.reduce((a, t) => a + t.members.length, 0)}`;
-    document.getElementById('lidi-paid').textContent = `${paidTeams.length} / ${paidTeams.reduce((a, t) => a + t.members.length, 0)}`;
-    const allMembers = paidTeams.flatMap(team => team.members);
-    const tally = (elm, def = '') => Object.entries(allMembers.map(member => member[elm]).reduce((a, e) => {
-        const val = e || def;
-        if(val)
-          a[val] = (a[val] || 0) + 1;
-        return a;
-      }, {})).map(e => `${e[1]}× ${e[0]}`).join(', ');
-    document.getElementById('tricka').textContent = tally('tshirt');
-    document.getElementById('jidla').textContent = `${tally('meal1', 'pa-maso')}, ${tally('meal2', 'so-maso')}`;
-    document.getElementById('eml-list').textContent = visibleTeams.map(team => team.email).join(', ');
-    document.getElementById('eml-list-paid').textContent = paidTeams.map(team => team.email).join(', ');
-    /* Resty */
-    const resty = document.getElementById('resty');
-    resty.replaceChildren();
-    const newLI = text => {
-      const li = document.createElement('li');
-      li.textContent = text;
-      return li;
-    };
-    for(const team of visibleTeams) {
-      if(team.hidden)
-        continue;
-      const status = team.amountPaid ? 'Z' : team.dateDue ? 'P' : 'N';
-      const paid = team.amountPaid || 0;
-      if(paid !== amountDue(team))
-        resty.append(newLI(`Tým ${team.name} (${status}): má dáti ${amountDue(team)}, dal ${paid}, rozdíl ${amountDue(team) - paid}`));
-      if(team.members.some(member => !member.tshirt))
-        resty.append(newLI(`Tým ${team.name} (${status}): vybrat trička`));
-      if(team.members.some(member => !member.meal1 || !member.meal2))
-        resty.append(newLI(`Tým ${team.name} (${status}): vybrat jídlo`));
-    }
+  teams = await serverRequest('a:getTeams', {passwordHash});
+  update();
+}
 
-  } catch(error) {
-    console.error(error);
-    alert(typeof error === 'string' ? error : 'Neznámá chyba');
+function update() {
+  const list = document.getElementById('team-list');
+  list.replaceChildren();
+  const tmp = document.getElementById('tmp-record').content;
+  const collator = new Intl.Collator().compare;
+  teams.sort((a, b) => collator(a.name, b.name));
+  teams.forEach((team, index) => {
+    const frag = tmp.cloneNode(true);
+    frag.querySelector('.name').htmlFor = frag.querySelector('.expand').id = `radio${index}`;
+    frag.querySelector('.name').textContent = team.name;
+    frag.querySelector('[data-id="phone"]').textContent = team.phone;
+    frag.querySelector('[data-id="email"]').textContent = team.email;
+    frag.querySelector('[data-id="size"]').textContent = team.members.length;
+    frag.querySelector('[data-id="tshirts"]').textContent = team.members
+      .map(member => member.tshirt)
+      .filter(type => type && type !== 'nic')
+      .join(', ') || 'žádná';
+    frag.querySelector('[data-id="sharing"]').textContent = team.sharingPreferences;
+    frag.querySelector('[data-id="date-reg"]').textContent = new Date(team.dateRegOrig).toLocaleString();
+    frag.querySelector('[data-id="date-due"]').textContent = team.amountPaid ? "zaplaceno" :
+      team.dateDue ? new Date(team.dateDue).toLocaleString() : "náhradník";
+    frag.querySelector('[data-id="to-pay"]').textContent = amountDue(team);
+    frag.querySelector('[data-id="paid"]').textContent = team.amountPaid ? `${team.amountPaid} (${new Date(team.datePaid).toLocaleString()})` : '—';
+    if(team.hidden)
+      frag.querySelector('.team-record').dataset.hidden = true;
+    else if(team.amountPaid)
+      frag.querySelector('.team-record').dataset.status = 'paid';
+    else if(!team.dateDue)
+      frag.querySelector('.team-record').dataset.status = 'backup';
+    frag.querySelector('[data-id="set-hidden"]').checked = team.hidden;
+    frag.querySelector('[data-id="set-countin"]').checked = team.countIn;
+    frag.querySelector('[data-id="pay-amount"]').value = amountDue(team);
+    list.append(frag);
+  });
+  /* Statistiky */
+  const krit = {};
+  for(const elm of document.getElementById('kriteria').querySelectorAll('input'))
+    krit[elm.name] = elm.checked;
+  const filtered = teams.filter(team => {
+    if(team.hidden)
+      return krit.hidden && team.countIn;
+    else if(team.amountPaid)
+      return krit.paid
+    else if(team.dateDue)
+      return krit.due
+    else
+      return krit.backup;
+  });
+  document.getElementById('lidi').textContent = `${filtered.length} / ${filtered.reduce((a, t) => a + t.members.length, 0)}`;
+  const tally = (elm, def = '') => Object.entries(filtered.flatMap(team => team.members).map(member => member[elm]).reduce((a, e) => {
+      const val = e || def;
+      if(val)
+        a[val] = (a[val] || 0) + 1;
+      return a;
+    }, {})).map(e => `${e[1]}× ${e[0]}`).join(', ');
+  document.getElementById('tricka').textContent = tally('tshirt');
+  document.getElementById('jidla').textContent = `${tally('meal1', 'pa-maso')}, ${tally('meal2', 'so-maso')}`;
+  document.getElementById('eml-list').textContent = filtered.map(team => `${team.name} <${team.email}>`).join(', ');
+  /* Resty */
+  const resty = document.getElementById('resty');
+  resty.replaceChildren();
+  const newLI = text => {
+    const li = document.createElement('li');
+    li.textContent = text;
+    return li;
+  };
+  for(const team of filtered) {
+    if(team.hidden)
+      continue;
+    const status = team.amountPaid ? 'Z' : team.dateDue ? 'P' : 'N';
+    const paid = team.amountPaid || 0;
+    if(paid !== amountDue(team))
+      resty.append(newLI(`Tým ${team.name} (${status}): má dáti ${amountDue(team)}, dal ${paid}, rozdíl ${amountDue(team) - paid}`));
+    if(team.members.some(member => !member.tshirt))
+      resty.append(newLI(`Tým ${team.name} (${status}): vybrat trička`));
+    if(team.members.some(member => !member.meal1 || !member.meal2))
+      resty.append(newLI(`Tým ${team.name} (${status}): vybrat jídlo`));
   }
 }
 

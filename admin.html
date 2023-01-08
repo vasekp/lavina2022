@@ -28,18 +28,21 @@
           <button type="submit">Přihlásit</button>
         </form>
         <div id="auth-section">
+          <h1>Výběr</h1>
+          <div id="kriteria">
+            <label><input type="checkbox" name="paid" checked/><span>Zaplacené</span></label>
+            <label><input type="checkbox" name="hidden" checked/><span>Skryté</span></label>
+            <label><input type="checkbox" name="due"/><span>Nezaplacené</span></label>
+            <label><input type="checkbox" name="backup"/><span>Náhradníci</span></label>
+          </div>
           <h1>Přehled</h1>
           <div id="prehled">
-            <span>Přihlášených týmů / lidí:</span><span id="lidi"></span>
-            <span>Z toho potvrzených:</span><span id="lidi-paid"></span>
-            <span>Jídla:</span><span id="jidla"></span>
+            <span>Počet týmů / lidí:</span><span id="lidi"></span>
             <span>Trička:</span><span id="tricka"></span>
+            <span>Jídla:</span><span id="jidla"></span>
           </div>
           <h1>E-mail seznam</h1>
-          <h2>Přihlášené týmy</h2>
           <p id="eml-list"></p>
-          <h2>Zaplacené týmy</h2>
-          <p id="eml-list-paid"></p>
           <h1>Resty</h1>
           <ul id="resty"></ul>
           <button id="reloadFile">Načíst z disku</button>
