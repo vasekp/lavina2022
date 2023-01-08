@@ -8,6 +8,7 @@
   scroll-behavior: smooth;
   --c-bg: #081333;
   --c-fg: #ffd932;
+  --c-weak: #808080;
   --c-inv: var(--c-bg);
   --c-thead: none;
   --c-alt-odd: #00000020;
@@ -58,7 +59,7 @@ nav label {
   display: block;
 }
 
-nav label div, button {
+nav label div {
   padding: 1em 2em;
   white-space: nowrap;
 }
@@ -72,8 +73,9 @@ nav label div, button {
 #sel-tymy:checked ~ nav label[for="sel-tymy"],
 #sel-pravidla:checked ~ nav label[for="sel-pravidla"],
 #sel-auth:checked ~ nav label[for="sel-auth"],
+#sel-hra:checked ~ nav label[for="sel-hra"],
 nav label:hover,
-button {
+button, .button {
   background: var(--c-fg);
   color: var(--c-inv);
 }
@@ -91,6 +93,8 @@ button {
 @media(max-width: 42rem) {
   :root {
     font-size: 11pt;
+    background: url('images/lavina-bg.jpg');
+    background-size: contain;
   }
 
   nav {
@@ -110,7 +114,8 @@ button {
   #sel-reg:checked ~ nav label[for="sel-reg"],
   #sel-tymy:checked ~ nav label[for="sel-tymy"],
   #sel-pravidla:checked ~ nav label[for="sel-pravidla"],
-  #sel-auth:checked ~ nav label[for="sel-auth"] {
+  #sel-auth:checked ~ nav label[for="sel-auth"],
+  #sel-hra:checked ~ nav label[for="sel-hra"] {
     height: 3.2em;
     background: revert /*var(--c-fg) -- solves a weird sub-pixel misalignment on Chrome */;
   }
@@ -134,7 +139,8 @@ main {
 #sel-reg:not(:checked) ~ main #tab-reg,
 #sel-tymy:not(:checked) ~ main #tab-tymy,
 #sel-pravidla:not(:checked) ~ main #tab-pravidla,
-#sel-auth:not(:checked) ~ main #tab-auth {
+#sel-auth:not(:checked) ~ main #tab-auth,
+#sel-hra:not(:checked) ~ main #tab-hra {
   display: none;
 }
 
@@ -177,14 +183,14 @@ blockquote {
   content: 'muz\2E cz';
 }
 
-form {
+.tform {
   display: grid;
   grid-template-columns: min-content minmax(min-content, 35ch);
   gap: 1ex;
   counter-reset: clen;
 }
 
-form label {
+.tform label {
   white-space: nowrap;
   display: contents;
 }
@@ -193,20 +199,20 @@ form label {
   margin-left: 1em;
 }
 
-form input,
-form select {
+.tform input,
+.tform select {
   grid-column: 2/3;
 }
 
-form button {
-  font-weight: bold;
+.tform button {
+  /*font-weight: bold;*/
   grid-column: 1/3;
-  appearance: none;
-  border: 0;
+  /*appearance: none;
+  border: 0;*/
   margin: 1em auto;
 }
 
-form :invalid:not(.pristine) {
+.tform :invalid:not(.pristine) {
   /*box-shadow: 0 0 3px red;*/
   background: #fdd;
 }
@@ -214,6 +220,15 @@ form :invalid:not(.pristine) {
 :disabled {
   color: var(--c-fg);
   opacity: 100%;
+}
+
+button, .button {
+  font: inherit;
+  display: block;
+  border-radius: .5em;
+  border: 2px solid #0008;
+  padding: .5em 1em;
+  white-space: nowrap;
 }
 
 .clen-ctr {
@@ -396,4 +411,142 @@ a {
 #saveDetails.saveFlash {
   background: #87ff0f;
   transition: none;
+}
+
+label[for="historie-ck"]::after {
+  margin-left: .2em;
+  content: '\25bc';
+}
+
+#historie-ck:checked ~ * label[for="historie-ck"]::after {
+  content: '\25b2';
+}
+
+#historie-div {
+  display: grid;
+  grid-auto-rows: 1.5em;
+  grid-template-columns: 2.5em minmax(5em, 10em) 2.5em;
+  max-height: 0;
+  margin-top: -.5em;
+  margin-bottom: 0;
+  overflow-y: scroll;
+  transition: max-height 300ms, margin-bottom 300ms;
+}
+
+#historie-ck:checked ~ #historie-div {
+  max-height: 11em;
+  margin-bottom: .5em;
+}
+
+#historie-div label {
+  display: contents;
+}
+
+#historie-div label.strike * {
+  color: var(--c-weak);
+  text-decoration: line-through;
+}
+
+#ctverecky {
+  display: flex;
+  max-width: 30em;
+  justify-content: center;
+}
+
+#ctverecky label {
+  display: block;
+  width: 2em;
+  height: 2em;
+  border: 2pt solid var(--c-fg);
+  margin: 0 -1pt;
+}
+
+#ctverecky label.solved {
+  background: #0f08;
+  text-align: center;
+}
+
+#ctverecky label.solved::after {
+  content: '\2713';
+  vertical-align: middle;
+  line-height: 2em;
+}
+
+#ctverecky label.penalty {
+  background: #fc08;
+}
+
+#ctverecky label.penalty.solved {
+  background: #cf08;
+}
+
+#ctverecky label.open {
+  background: #fff8;
+}
+
+#ctverecky :checked + label {
+  box-shadow: 0 0 3pt 2pt white;
+}
+
+#st-info {
+  display: grid;
+  grid-template-columns: max-content auto;
+  grid-gap: .5em;
+}
+
+#st-info > div {
+  display: contents;
+}
+
+#st-info > div > :first-child {
+  font-weight: bold;
+}
+
+#st-info p {
+  margin: 0 0 .5em 0;
+}
+
+#st-info p:last-child {
+  margin-bottom: 0;
+}
+
+.positive {
+  background: #8f0;
+}
+
+.noop {
+  background: #888;
+}
+
+.negative {
+  background: #f80;
+}
+
+.akce-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5em;
+  max-width: 30em;
+  margin: .5em 0;
+}
+
+input[name="st-akce-detail"]:not(:checked) + div {
+  display: none !important;
+}
+
+hr {
+  display: block;
+  height: .3em;
+  border: none;
+  border-radius: .15em;
+  background: repeating-linear-gradient(-45deg, black 0 10px, yellow 10px 20px);
+  margin: 1em 0;
+  max-width: 30em;
+}
+
+#in-reseni {
+  font: inherit;
+  font-size: 150%;
+  max-width: 100%;
 }

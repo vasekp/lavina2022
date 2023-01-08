@@ -14,14 +14,16 @@
     <input hidden type="radio" name="tab" id="sel-tymy"/>
     <input hidden type="radio" name="tab" id="sel-pravidla"/>
     <input hidden type="radio" name="tab" id="sel-auth"/>
+    <input hidden type="radio" name="tab" id="sel-hra"/>
     <header><a href="#nav" tabindex="-1"><img src="images/lavina-hlavicka.jpg"/></a></header>
     <nav id="nav">
       <input hidden type="checkbox" id="nav-unfold"/>
       <label for="sel-uvod"><div>Úvod</div></label>
-      <label for="sel-reg"><div>Registrace</div></label>
+      <label for="sel-reg" data-visible-from="regOpen" data-visible-until="regClose"><div>Registrace</div></label>
       <label for="sel-tymy" data-visible-from="regOpen"><div>Přihlášené týmy</div></label>
       <label for="sel-pravidla"><div>Pravidla</div></label>
       <label for="sel-auth" data-visible-from="regOpen"><div>Můj tým</div></label>
+      <label for="sel-hra" data-visible-from="gameOpen" data-visible-until="gameClose"><div>Hra</div></label>
       <span id="sipka">▼</span>
     </nav>
     <main>
@@ -43,7 +45,7 @@
         <date-alt data-open="regOpen" data-close="regClose">
           <alt-pre><p>Registrace týmů bude přístupná od úterý <b>27.12.2022, 12:00</b> do neděle 15.1.2023.</p></alt-pre>
           <alt-within>
-            <form id="register">
+            <form class="tform" id="register">
               <label>
                 <span>Název týmu:</span>
                 <input type="text" name="nazev" required maxlength="50"/>
@@ -167,7 +169,7 @@
         <p>Čestnou povinnost organizovat další ročník získává nejvýše postavený tým v takto utvořeném konečném pořadí.</p>
       </article>
       <article id="tab-auth">
-        <form id="login">
+        <form class="tform" id="login">
           <label>Název týmu:
             <input type="text" name="nazev" required data-keep="1"/>
           </label>
@@ -181,7 +183,7 @@
           <p>Změny v týmu jsou povoleny nejpozději do pátku <b>20.1.2023</b>. Naléhavé případy nastalé po tomto datu řešte s organizátory po e-mailu.</p>
           <p>Zájem o trička je nutno potvrdit nejpozději do <b>8.1.2023</b>, poté bude nabídka uzamčena.</p>
           <p>Pokoje jsou převážně tří- a čtyřlůžkové. Některé členy početnějších týmů proto ubytujeme do dalšího pokoje se členy jiného takového týmu. Můžete nám vyplnit preferenci, s kým byste pokoj raději sdíleli nebo naopak nesdíleli. Pokusíme se vyhovět všem co nejlépe, nicméně efektivní využití ubytovací kapacity je priorita.</p>
-          <form id="details">
+          <form class="tform" id="details">
             <input type="hidden" name="teamSalt" data-keep="1"/>
             <label>Telefon:
               <input type="tel" name="telefon" required pattern="\+?[0-9 -]{9,}" data-keep="1"/>
@@ -257,6 +259,109 @@
             </div>
           </div>
           <a href="#" id="logout">Odhlásit</a>
+        </div>
+      </article>
+      <article id="tab-hra">
+        <input hidden type="checkbox" id="historie-ck"/>
+        <h1>
+          <label for="historie-ck">Aktuální stav: <span id="body">396</span> bodů</label>
+        </h1>
+        <div id="historie-div">
+          <label for="st1">
+            <span class="h-cas">6:45</span>
+            <span class="h-akce">Merkur: řešení</span>
+            <span class="h-body">+100</span>
+          </label>
+          <label for="st2" class="strike">
+            <span class="h-cas">7:25</span>
+            <span class="h-akce">Venuše: nápověda</span>
+            <span class="h-body">-2</span>
+          </label>
+          <label for="st2">
+            <span class="h-cas">7:25</span>
+            <span class="h-akce">Venuše: postup</span>
+            <span class="h-body">-5</span>
+          </label>
+        </div>
+        <div id="ctverecky">
+          <input hidden type="radio" name="st-radio" id="st1"/>
+          <label for="st1" class="solved"></label>
+          <input hidden type="radio" name="st-radio" id="st2"/>
+          <label for="st2" class="penalty"></label>
+          <input hidden type="radio" name="st-radio" id="st3"/>
+          <label for="st3" class="penalty solved"></label>
+          <input hidden type="radio" name="st-radio" id="st4" checked/>
+          <label for="st4" class="open"></label>
+          <label for="st5" class=""></label>
+          <label for="st6" class=""></label>
+          <label for="st7" class=""></label>
+          <label for="st8" class=""></label>
+          <label for="st9" class=""></label>
+        </div>
+        <h1>Stanoviště MARS</h1>
+        <div id="st-info">
+          <div id="st-poloha">
+            <span>Poloha:</span>
+            <div>
+              <p>Uprostřed louky</p>
+              <p><a href="example.com">Odkaz na mapu</a></p>
+            </div>
+          </div>
+          <div id="st-napoveda">
+            <span>Nápověda:</span>
+            <span>Zkuste to rozstříhat.</span>
+          </div>
+        </div>
+        <input hidden type="radio" name="st-akce-detail" id="sad-menu" checked/>
+        <div class="akce-menu">
+          <label class="button positive" for="sad-reseni">Zadat ŘEŠENÍ</label>
+          <label class="button" for="sad-napoveda">Zažádat o NÁPOVĚDU</label>
+          <label class="button" for="sad-poloha">Zažádat o POLOHU další šifry</label>
+          <label class="button" for="sad-postup">Zažádat o POSTUP řešeníton</label>
+          <button id="ak-refresh" class="noop">Synchronizovat data</button>
+        </div>
+        <input hidden type="radio" name="st-akce-detail" id="sad-reseni"/>
+        <div>
+          <form id="f-reseni" target="a.html">
+            <p>Řešení stanoviště <b>MARS</b>:</p>
+            <input id="in-reseni"/>
+            <div class="sep"></div>
+            <small>Na diakritice ani velikosti písmen nezáleží.</small>
+            <div class="akce-menu">
+              <button type="submit" class="positive">Odeslat</button>
+              <label class="button noop" for="sad-menu">Zpět</label>
+            </div>
+          </form>
+        </div>
+        <input hidden type="radio" name="st-akce-detail" id="sad-napoveda"/>
+        <div>
+          <hr/>
+          <p>Žádáte o <b>NÁPOVĚDU</b> ke stanovišti <b>MARS</b>.</p>
+          <p>Tato akce vás bude stát <b>2 trestné body</b>.</p>
+          <div class="akce-menu">
+            <button class="negative">Potvrdit</button>
+            <label class="button noop" for="sad-menu">Zpět</label>
+          </div>
+        </div>
+        <input hidden type="radio" name="st-akce-detail" id="sad-poloha"/>
+        <div>
+          <hr/>
+          <p>Žádáte o <b>POLOHU STANOVIŠTĚ</b> následujícího za <b>MARS</b>.</p>
+          <p>Tato akce vás bude stát <b>3 trestné body</b>.</p>
+          <div class="akce-menu">
+            <button class="negative">Potvrdit</button>
+            <label class="button noop" for="sad-menu">Zpět</label>
+          </div>
+        </div>
+        <input hidden type="radio" name="st-akce-detail" id="sad-postup"/>
+        <div>
+          <hr/>
+          <p>Žádáte o <b>POSTUP ŘEŠENÍ</b> ke stanovišti <b>MARS</b>.</p>
+          <p>Tato akce vás bude stát <b>5 trestných bodů</b>.</p>
+          <div class="akce-menu">
+            <button class="negative">Potvrdit</button>
+            <label class="button noop" for="sad-menu">Zpět</label>
+          </div>
         </div>
       </article>
     </main>
