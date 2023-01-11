@@ -18,7 +18,8 @@ window.addEventListener('DOMContentLoaded', () => {
     tymy.addEventListener('click', ev => doAdmin(ev.target));
   }
   document.getElementById('hra-list').addEventListener('click', ev => doReset(ev.target));
-  document.getElementById('reloadFile').addEventListener('click', _ => doReload());
+  document.getElementById('refresh').addEventListener('click', loadTeams);
+  document.getElementById('reloadFile').addEventListener('click', doReload);
   useCachedLogin();
 });
 

@@ -1,7 +1,3 @@
-#reloadFile {
-  margin: 0 auto 1em;
-}
-
 #prehled {
   display: grid;
 }
@@ -102,4 +98,10 @@ button {
 
 [data-id="hra-reset"] {
   margin: 0 auto;
+}
+
+.button-row {
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
