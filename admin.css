@@ -1,3 +1,7 @@
+#reloadFile {
+  margin: 0 auto 1em;
+}
+
 #prehled {
   display: grid;
 }
@@ -77,6 +81,7 @@ button {
 
 .team-hra {
   max-width: 30em;
+  margin-top: .5em;
 }
 
 .historie-div {
