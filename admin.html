@@ -12,11 +12,13 @@
   <body>
     <input hidden type="radio" name="tab" id="sel-auth" checked/>
     <input hidden type="radio" name="tab" id="sel-tymy"/>
+    <input hidden type="radio" name="tab" id="sel-hra"/>
     <header><a href="#main" tabindex="-1"><img src="images/lavina-hlavicka.jpg"/></a></header>
     <nav>
       <input hidden type="checkbox" id="nav-unfold"/>
       <label for="sel-auth"><div>Přehled</div></label>
       <label for="sel-tymy" class="auth"><div>Týmy</div></label>
+      <label for="sel-hra" class="auth"><div>Hra</div></label>
       <span id="sipka">▼</span>
     </nav>
     <main id="main">
@@ -49,13 +51,13 @@
         </div>
       </article>
       <article id="tab-tymy">
-        <input type="checkbox" id="expand-all"/>
-        <label for="expand-all">Rozbalit všechny</label>
+        <input type="checkbox" class="expand-all" id="expand-tymy"/>
+        <label for="expand-tymy">Rozbalit všechny</label>
         <template id="tmp-record">
           <div class="team-record">
             <label class="name"></label>
             <input type="checkbox" class="expand">
-            <div class="details">
+            <div class="expanded details">
               <span>Telefon:</span><span data-id="phone"></span>
               <span>E-mail:</span><span data-id="email"></span>
               <span>Počet členů:</span><span data-id="size"></span>
@@ -85,6 +87,30 @@
           </div>
         </template>
         <div id="team-list">
+        </div>
+      </article>
+      <article id="tab-hra">
+        <input type="checkbox" class="expand-all" id="expand-hra"/>
+        <label for="expand-hra">Rozbalit všechny</label>
+        <template id="tmp-hra">
+          <div class="team-hra">
+            <label class="name"></label>
+            <input type="checkbox" class="expand">
+            <div class="expanded">
+              <div class="historie-div">
+              </div>
+              <button data-id="hra-reset" class="negative">Smazat vše</button>
+            </div>
+          </div>
+        </template>
+        <template id="tmp-historie">
+          <div>
+            <span class="h-cas"></span>
+            <span class="h-akce"></span>
+            <span class="h-body"></span>
+          </div>
+        </template>
+        <div id="hra-list">
         </div>
       </article>
     </main>

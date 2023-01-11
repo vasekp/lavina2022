@@ -202,6 +202,8 @@ async function handleObj(request) {
         case 'sol': {
           if(sum.sol)
             throw 'Chybný požadavek.';
+          // TODO kontrolovat řešení :-)
+          // TODO: focus
           const solution = normalizeName(data.text).toUpperCase();
           const next = rec.next;
           if(!next)

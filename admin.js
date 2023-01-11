@@ -17,6 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
     tymy.addEventListener('input', ev => doAdmin(ev.target));
     tymy.addEventListener('click', ev => doAdmin(ev.target));
   }
+  document.getElementById('hra-list').addEventListener('click', ev => doReset(ev.target));
   document.getElementById('reloadFile').addEventListener('click', _ => doReload());
   useCachedLogin();
 });
@@ -63,6 +64,15 @@ async function loadTeams() {
   teams = await serverRequest('a:getTeams', {passwordHash});
   update();
 }
+
+const timeFormat = new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'short' });
+const numberFormat = new Intl.NumberFormat('cs-CZ', { signDisplay: 'always' });
+const en2cz = {
+  'hint': 'nápověda',
+  'wt': 'postup řešení',
+  'loc': 'přeskočení',
+  'sol': 'řešení'
+};
 
 function update() {
   const list = document.getElementById('team-list');
@@ -142,6 +152,53 @@ function update() {
     if(team.members.some(member => !member.meal1 || !member.meal2))
       resty.append(newLI(`Tým ${team.name} (${status}): vybrat jídlo`));
   }
+  /* Hra */
+  const teams2 = [...teams.filter(team => team.amountPaid || team.countIn)];
+  const now = new Date();
+  for(const team of teams2) {
+    if(team.game) {
+      team.pts = team.game.actions.reduce((a, e) => a + e.pts + (e.inval ? -game.actions[e.inval - 1].pts : 0), 0);
+      if(team.game.actions.length)
+        team.last = new Date(team.game.actions[team.game.actions.length - 1].time);
+      else
+        team.last = now;
+    } else {
+      team.pts = 0;
+      team.last = now;
+    }
+  }
+  teams2.sort((a, b) =>
+    a.pts < b.pts ? 1
+    : a.pts > b.pts ? -1
+    : a.last < b.last ? -1
+    : a.last > b.last ? 1
+    : collator(a.name, b.name));
+  const htmp = document.getElementById('tmp-historie').content;
+  const tmp2 = document.getElementById('tmp-hra').content;
+  const list2 = document.getElementById('hra-list');
+  list2.replaceChildren();
+  teams2.forEach((team, index) => {
+    const frag = tmp2.cloneNode(true);
+    frag.querySelector('.name').htmlFor = frag.querySelector('.expand').id = `radio2-${index}`;
+    frag.querySelector('.name').textContent = `${team.name}: ${team.pts} b.`;
+    frag.querySelector('.name').dataset.name = team.name;
+    const hdiv = frag.querySelector('.historie-div');
+    hdiv.replaceChildren();
+    if(team.game)
+      for(const act of team.game.actions) {
+        const clone = htmp.cloneNode(true);
+        clone.querySelector('div').dataset.seq = act.seq;
+        clone.querySelector('.h-cas').textContent = timeFormat.format(new Date(act.time));
+        clone.querySelector('.h-akce').textContent = `${act.stan}: ${en2cz[act.type]}`;
+        if(act.type === 'sol')
+          clone.querySelector('.h-akce').textContent += ` ${act.text.toUpperCase()}`;
+        clone.querySelector('.h-body').textContent = numberFormat.format(act.pts);
+        hdiv.prepend(clone);
+        if(act.inval)
+          frag.querySelector(`div[data-seq="${act.inval}"`).classList.add('strike');
+      }
+    list2.append(frag);
+  });
 }
 
 async function doAdmin(tgt) {
@@ -187,4 +244,20 @@ function doReload() {
 
 function amountDue(team) {
   return fees.base + fees.member * team.members.length + fees.tshirt * team.members.map(member => member.tshirt).filter(val => val && val !== 'nic').length;
+}
+
+function doReset(tgt) {
+  const passwordHash = localStorage['adminHash'];
+  if(!passwordHash)
+    return;
+  if(tgt.dataset.id !== 'hra-reset')
+    return;
+  const record = tgt.closest('.team-hra');
+  const name = record?.querySelector('.name')?.dataset.name;
+  serverRequest('a:update', {passwordHash, name, field: 'game', undefined})
+    .then(loadTeams)
+    .catch(e => {
+      console.error(e);
+      alert(typeof e === 'string' ? e : 'Neznámá chyba');
+    });
 }
