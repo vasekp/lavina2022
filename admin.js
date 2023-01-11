@@ -71,7 +71,8 @@ const en2cz = {
   'hint': 'nápověda',
   'wt': 'postup řešení',
   'loc': 'přeskočení',
-  'sol': 'řešení'
+  'sol': 'řešení',
+  'error': 'chybný pokus'
 };
 
 function update() {
@@ -190,8 +191,8 @@ function update() {
         clone.querySelector('div').dataset.seq = act.seq;
         clone.querySelector('.h-cas').textContent = timeFormat.format(new Date(act.time));
         clone.querySelector('.h-akce').textContent = `${act.stan}: ${en2cz[act.type]}`;
-        if(act.type === 'sol')
-          clone.querySelector('.h-akce').textContent += ` ${act.text.toUpperCase()}`;
+        if(act.type === 'sol' || act.type === 'error')
+          clone.querySelector('.h-akce').textContent += ` "${act.text.toUpperCase()}"`;
         clone.querySelector('.h-body').textContent = numberFormat.format(act.pts);
         hdiv.prepend(clone);
         if(act.inval)

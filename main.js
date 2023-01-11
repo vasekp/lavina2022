@@ -382,13 +382,14 @@ const en2id = {
   'hint': 'napoveda',
   'wt': 'postup',
   'loc': 'poloha',
-  'sol': 'reseni'
+  'sol': 'reseni',
 };
 const en2cz = {
   'hint': 'nápověda',
   'wt': 'postup řešení',
   'loc': 'přeskočení',
-  'sol': 'řešení'
+  'sol': 'řešení',
+  'error': 'chybný pokus'
 };
 
 async function loadGameData(game_) {
@@ -416,6 +417,8 @@ async function updScore() {
     clone.querySelector('label').dataset.seq = act.seq;
     clone.querySelector('.h-cas').textContent = timeFormat.format(new Date(act.time));
     clone.querySelector('.h-akce').textContent = `${act.stan}: ${en2cz[act.type]}`;
+    if(act.type === 'sol' || act.type === 'error')
+      clone.querySelector('.h-akce').textContent += ` "${act.text.toUpperCase()}"`;
     clone.querySelector('.h-body').textContent = numberFormat.format(act.pts);
     clone.querySelector('label').htmlFor = `st-${act.stan}`;
     hdiv.prepend(clone);
@@ -487,20 +490,33 @@ function updStan(elm) {
 }
 
 async function doReseni(form) {
-  doGameAction('sol', document.getElementById('in-reseni').value);
-  document.getElementById('in-reseni').value = '';
+  const succ = await doGameAction('sol', document.getElementById('in-reseni').value);
+  const inp = document.getElementById('in-reseni');
+  if(succ)
+    inp.value = '';
+  else {
+    document.getElementById('sad-reseni').checked = true;
+    inp.classList.add('errorFlash');
+    inp.offsetWidth;
+    inp.focus();
+    inp.classList.remove('errorFlash');
+  }
 }
 
 function doGame(id) {
   switch(id) {
     case 'ak-refresh':
       useCachedLogin();
-      return;
+      break;
     case 'b-napoveda':
     case 'b-poloha':
     case 'b-postup':
       const type = id2en[id.substring(2)];
       doGameAction(type);
+      break;
+    case 'sad-reseni':
+      document.getElementById('in-reseni').focus();
+      break;
   }
 }
 
@@ -534,6 +550,7 @@ async function doGameAction(type, text) {
       mark(`st-${en2id[type]}-text`);
     }
     updScore();
+    return row.type !== 'error';
   } catch(error) {
     console.error(error);
     alert(typeof error === 'string' ? error : 'Neznámá chyba');

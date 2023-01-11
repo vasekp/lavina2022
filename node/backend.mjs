@@ -9,7 +9,8 @@ const points = {
   hint: -2,
   wt: -5,
   loc: -3,
-  sol: 100
+  sol: 100,
+  error: 0
 };
 
 let {capacity, teams, numTeams} = await loadTeams();
@@ -202,9 +203,9 @@ async function handleObj(request) {
         case 'sol': {
           if(sum.sol)
             throw 'Chybný požadavek.';
-          // TODO kontrolovat řešení :-)
-          // TODO: focus
           const solution = normalizeName(data.text).toUpperCase();
+          if(solution !== rec.sol)
+            return newRow(game, stan, 'error', { text: solution });
           const next = rec.next;
           if(!next)
             return newRow(game, stan, type, { text: solution });
@@ -276,6 +277,7 @@ async function loadGameData() {
   const stanMap = { };
   const struct = [ ];
   for(const stan of stanList) {
+    stan.sol = normalizeName(stan.sol).toUpperCase();
     stanMap[stan.name] = stan;
     struct.push({
       name: stan.name,
