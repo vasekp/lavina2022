@@ -2,7 +2,7 @@
   {
     "name": "Canaveral",
     "hint": "Nápověda k šifře Canaveral",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo CCC",
     "sol": "ccc",
     "next": "ISS",
     "autoOpen": true
@@ -10,7 +10,7 @@
   {
     "name": "Bajkonur",
     "hint": "Nápověda k šifře Bajkonur",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo BBB",
     "sol": "bbb",
     "next": "Měsíc",
     "autoOpen": true
@@ -20,7 +20,7 @@
     "locText": "Vysílač nad Pokovými Hutěmi",
     "locLink": "https://mapy.cz/s/bofecefedu",
     "hint": "Nápověda k šifře ISS / Měsíc",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo IM",
     "sol": "im",
     "parts": [ "ISS", "Měsíc" ],
     "next": "Merkur"
@@ -30,7 +30,7 @@
     "locText": "Zimní rozcestník v JZ rohu PP Pasecká slať",
     "locLink": "https://mapy.cz/s/fafavusoda",
     "hint": "Nápověda k šifře ISS / Měsíc",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo IM",
     "sol": "im",
     "parts": [ "ISS", "Měsíc" ],
     "next": "Merkur"
@@ -40,7 +40,7 @@
     "locText": "Posed 1km severně",
     "locLink": "https://mapy.cz/s/bopofazake",
     "hint": "Nápověda k šifře Merkur",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo MMM",
     "sol": "mmm",
     "next": "Venuše"
   },
@@ -49,7 +49,7 @@
     "locText": "Stolek u parkoviště Pláně",
     "locLink": "https://mapy.cz/s/lajajasopu",
     "hint": "Nápověda k šifře Venuše",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo VVV",
     "sol": "vvv",
     "next": "Mars"
   },
@@ -58,7 +58,7 @@
     "locText": "Rozhledna Skokanský můstek",
     "locLink": "https://mapy.cz/s/fevehakoko",
     "hint": "Nápověda k šifře Mars",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo MMM",
     "sol": "mmm",
     "next": "Jupiter"
   },
@@ -67,7 +67,7 @@
     "locText": "Cukrárna Ella",
     "locLink": "https://mapy.cz/s/ramagakolo",
     "hint": "Nápověda k šifře Jupiter",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo JJJ",
     "sol": "jjj",
     "next": "Saturn"
   },
@@ -76,7 +76,7 @@
     "locText": "Přístřešek Zlatá Studna",
     "locLink": "https://mapy.cz/s/labotebase",
     "hint": "Nápověda k šifře Saturn",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo SSS",
     "sol": "sss",
     "next": "Uran"
   },
@@ -85,7 +85,7 @@
     "locText": "Zastávka Horská Kvilda, U Prodejny",
     "locLink": "https://mapy.cz/s/razakaturu",
     "hint": "Nápověda k šifře Uran",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo UUU",
     "sol": "uuu",
     "next": "Neptun"
   },
@@ -94,7 +94,7 @@
     "locText": "Vyhlídková věž Jezerní slať",
     "locLink": "https://mapy.cz/s/butugugela",
     "hint": "Nápověda k šifře Neptun",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo NNN",
     "sol": "nnn",
     "next": "Pluto"
   },
@@ -103,7 +103,7 @@
     "locText": "Rysí výběh",
     "locLink": "https://mapy.cz/s/juhonocara",
     "hint": "Nápověda k šifře Pluto",
-    "wt": "Rozstříhej to a přečti",
+    "wt": "Zadej heslo PPP",
     "sol": "ppp"
   }
 ]
