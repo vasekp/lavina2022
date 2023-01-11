@@ -425,17 +425,14 @@ async function updScore() {
       last = document.getElementById(`st-${act.opens}`);
       last.disabled = false;
     }
-    const ctv = document.querySelector(`#ctverecky label[for="st-${act.stan}"]`);
-    switch(act.type) {
-      case 'sol':
-        ctv.classList.add('solved');
-        break;
-      case 'hint':
-      case 'wt':
-      case 'loc':
-        ctv.classList.add('penalty');
-        break;
-    }
+  }
+  for(const stan in game.summary) {
+    const ctv = document.querySelector(`#ctverecky label[for="st-${stan}"]`);
+    const rec = game.summary[stan];
+    if(rec.hint || rec.wt || rec.loc)
+      ctv.classList.add('penalty');
+    if(rec.sol)
+      ctv.classList.add('solved');
   }
   return last;
 }
@@ -508,10 +505,7 @@ function doGame(id) {
 }
 
 async function doGameAction(type, text) {
-  const mark = id => {
-    console.log(document.getElementById(id));
-    document.getElementById(id)?.classList.add('new')
-  }
+  const mark = id => document.getElementById(id)?.classList.add('new')
   try {
     const stan = document.getElementById('stanName').textContent;
     const data = {

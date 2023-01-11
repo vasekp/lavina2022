@@ -19,18 +19,20 @@
     "name": "ISS",
     "locText": "Vysílač nad Pokovými Hutěmi",
     "locLink": "https://mapy.cz/s/bofecefedu",
-    "hint": "Nápověda k šifře ISS",
+    "hint": "Nápověda k šifře ISS / Měsíc",
     "wt": "Rozstříhej to a přečti",
-    "sol": "iii",
+    "sol": "im",
+    "parts": [ "ISS", "Měsíc" ],
     "next": "Merkur"
   },
   {
     "name": "Měsíc",
     "locText": "Zimní rozcestník v JZ rohu PP Pasecká slať",
     "locLink": "https://mapy.cz/s/fafavusoda",
-    "hint": "Nápověda k šifře Měsíc",
+    "hint": "Nápověda k šifře ISS / Měsíc",
     "wt": "Rozstříhej to a přečti",
-    "sol": "mmm",
+    "sol": "im",
+    "parts": [ "ISS", "Měsíc" ],
     "next": "Merkur"
   },
   {

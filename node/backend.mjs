@@ -341,9 +341,10 @@ function teamGameData(team) {
 function newRow(game, stan, type, data) {
   const row = { seq: game.actions.length + 1, time: new Date(), stan, type, pts: points[type], ...data };
   const changes = { };
-  changes[stan] = { [type]: row.seq, ...(game.summary[stan] || { }) };
+  for(const part of (stanMap[stan].parts || [ stan ]))
+    changes[part] = { [type]: row.seq, ...(game.summary[part] || { }) };
   if(data.opens)
-    changes[data.opens] = { opened: row.seq };
+    changes[data.opens] = { ...(game.summary[data.opens] || { }), opened: row.seq };
   game.summary = { ...game.summary, ...changes };
   game.actions.push(row);
   // TODO save
