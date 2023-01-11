@@ -35,7 +35,7 @@ async function doLogin(form) {
   try {
     const data = await serverRequest('login', {name: 'admin', passwordHash});
     localStorage['adminHash'] = passwordHash;
-    document.getElementById('tab-auth').dataset.auth = 1;
+    document.documentElement.dataset.auth = 1;
     loadTeams();
   } catch(error) {
     console.error(error);
@@ -49,7 +49,7 @@ async function useCachedLogin() {
     return;
   try {
     await serverRequest('login', {name: 'admin', passwordHash});
-    document.getElementById('tab-auth').dataset.auth = 1;
+    document.documentElement.dataset.auth = 1;
     loadTeams();
   } catch(error) {
     console.error(error);
