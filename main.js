@@ -498,6 +498,7 @@ function updStan(elm) {
 
 async function doReseni(form) {
   doGameAction('sol', document.getElementById('in-reseni').value);
+  document.getElementById('in-reseni').value = '';
 }
 
 function doGame(id) {
