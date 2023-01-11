@@ -284,9 +284,17 @@ async function loadGameData() {
   return { stanMap, struct };
 }
 
-function saveTeams() {
+let saveDebounce = null;
+
+function saveTeams_() {
+  console.log('saveTeams');
   fs.writeFile('teams.json', JSON.stringify({capacity, teams}, null, 2));
   numTeams = teams.filter(team => !team.hidden).length;
+}
+
+function saveTeams() {
+  clearTimeout(saveDebounce);
+  saveDebounce = setTimeout(saveTeams_, 1000);
 }
 
 function findTeam(name) {
@@ -347,6 +355,6 @@ function newRow(game, stan, type, data) {
     changes[data.opens] = { ...(game.summary[data.opens] || { }), opened: row.seq };
   game.summary = { ...game.summary, ...changes };
   game.actions.push(row);
-  // TODO save
+  saveTeams();
   return { ...row, changes, added: true };
 }
