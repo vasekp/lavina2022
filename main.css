@@ -425,8 +425,9 @@ label[for="historie-ck"]::after {
 #historie-div {
   display: grid;
   grid-auto-rows: 1.5em;
-  grid-template-columns: 6ch minmax(5em, 10em) 2.5em;
+  grid-template-columns: 6ch auto 7ch;
   max-height: 0;
+  max-width: 30em;
   margin-top: -.5em;
   margin-bottom: 0;
   overflow-y: scroll;
@@ -445,6 +446,10 @@ label[for="historie-ck"]::after {
 #historie-div label.strike * {
   color: var(--c-weak);
   text-decoration: line-through;
+}
+
+.h-body::after {
+  content: ' b.';
 }
 
 #ctverecky {
