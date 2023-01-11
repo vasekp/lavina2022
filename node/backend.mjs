@@ -183,7 +183,14 @@ async function handleObj(request) {
         case 'loc': { // TODO zakázat u poslední
           if(sum.sol)
             throw 'Chybný požadavek.';
-          const opens = stan !== 'Venuše' ? 'Venuše' : undefined;
+          const opens = (_ => {
+            switch(stan) {
+              case 'Slunce':
+              case 'Merkur':
+                return 'Venuše';
+              case 'Venuše':
+                return 'Země';
+            }})();
           const loc = { text: 'poloha', link: 'https://mapy.cz' };
           return newRow(game, stan, type, { loc, opens });
         }
@@ -191,7 +198,14 @@ async function handleObj(request) {
           if(sum.sol)
             throw 'Chybný požadavek.';
           const solution = normalizeName(data.text).toUpperCase();
-          const opens = stan !== 'Venuše' ? 'Venuše' : undefined;
+          const opens = (_ => {
+            switch(stan) {
+              case 'Slunce':
+              case 'Merkur':
+                return 'Venuše';
+              case 'Venuše':
+                return 'Země';
+            }})();
           const text = solution;
           const loc = { text: 'poloha', link: 'https://mapy.cz' };
           return newRow(game, stan, type, { text, loc, opens });
@@ -315,7 +329,6 @@ function newRow(game, stan, type, data) {
     changes[data.opens] = { opened: row.seq };
   game.summary = { ...game.summary, ...changes };
   game.actions.push(row);
-  // TODO open next
   // TODO save
   return { ...row, changes };
 }

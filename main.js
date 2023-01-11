@@ -5,7 +5,7 @@ const stanoviste = [
   { name: 'Slunce', defOpen: true },
   { name: 'Merkur', defOpen: true },
   { name: 'Venuše' },
-  { name: 'Země' },
+  { name: 'Země', final: true },
   { name: 'Měsíc' },
   { name: 'Mars' },
   { name: 'Jupiter' },
@@ -14,6 +14,9 @@ const stanoviste = [
   { name: 'Neptun' },
   { name: 'Pluto' },
 ];
+const stMap = {};
+for(const stan of stanoviste)
+  stMap[stan.name] = stan;
 
 let game;
 
@@ -487,7 +490,7 @@ function updStan(elm) {
       enable(act, false);
   } else
     document.getElementById('st-reseni').hidden = true;
-  if(state.loc) // TODO nebo poslední
+  if(state.loc || stMap[stan].final)
     enable('poloha', false);
   for(const elm of document.querySelectorAll('.new'))
     elm.classList.remove('new');
