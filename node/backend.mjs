@@ -164,34 +164,37 @@ async function handleObj(request) {
       const team = findTeamAndLogin(data);
       const game = teamGameData(team);
       const stan = data.stan;
+      const type = data.type;
       const sum = game.summary[stan] || { };
       const act = game.actions;
-      switch(data.type) {
+      switch(type) {
         case 'hint': {
           if(sum.hint || sum.wt || sum.sol)
             throw 'Chybný požadavek.';
-          const response = 'Text nápovědy';
-          return newRow(game, stan, type, { response });
+          const text = 'Text nápovědy';
+          return newRow(game, stan, type, { text });
         }
         case 'wt': {
           if(sum.wt || sum.sol)
             throw 'Chybný požadavek.';
-          const response = 'Text postupu';
-          return newRow(game, stan, type, { response, inval: sum.hint });
+          const text = 'Text postupu';
+          return newRow(game, stan, type, { text, inval: sum.hint });
         }
         case 'loc': { // TODO zakázat u poslední
           if(sum.sol)
             throw 'Chybný požadavek.';
-          const response = 'Text polohy';
+          const opens = stan !== 'Venuše' ? 'Venuše' : undefined;
           const loc = { text: 'poloha', link: 'https://mapy.cz' };
-          return newRow(game, stan, type, { response, loc }); // TODO opens
+          return newRow(game, stan, type, { loc, opens });
         }
         case 'sol': {
           if(sum.sol)
             throw 'Chybný požadavek.';
-          const response = 'Poloha následujícího';
+          const solution = normalizeName(data.text).toUpperCase();
+          const opens = stan !== 'Venuše' ? 'Venuše' : undefined;
+          const text = solution;
           const loc = { text: 'poloha', link: 'https://mapy.cz' };
-          return newRow(game, stan, type, { response, loc });
+          return newRow(game, stan, type, { text, loc, opens });
         }
         default:
           throw 'Chybný požadavek.';
@@ -304,13 +307,15 @@ function teamGameData(team) {
   return team.game;
 }
 
-function newRow(game, row, stan, type, data) {
-  row = { seq: game.actions.length + 1, time: now, stan, type, pts: points[type], ...data };
+function newRow(game, stan, type, data) {
+  const row = { seq: game.actions.length + 1, time: new Date(), stan, type, pts: points[type], ...data };
+  const changes = { };
+  changes[stan] = { [type]: row.seq, ...(game.summary[stan] || { }) };
+  if(data.opens)
+    changes[data.opens] = { opened: row.seq };
+  game.summary = { ...game.summary, ...changes };
   game.actions.push(row);
-  if(!game.summary[stan])
-    game.summary.stan = { };
-  game.summary[stan][type] = row.seq;
   // TODO open next
   // TODO save
-  return row;
+  return { ...row, changes };
 }

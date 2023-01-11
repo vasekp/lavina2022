@@ -425,7 +425,7 @@ label[for="historie-ck"]::after {
 #historie-div {
   display: grid;
   grid-auto-rows: 1.5em;
-  grid-template-columns: 2.5em minmax(5em, 10em) 2.5em;
+  grid-template-columns: 6ch minmax(5em, 10em) 2.5em;
   max-height: 0;
   margin-top: -.5em;
   margin-bottom: 0;

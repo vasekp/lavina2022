@@ -80,6 +80,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if(document.getElementById('saveDetails').dataset.saved === '0')
       ev.preventDefault();
   });
+  document.getElementById('tab-hra').addEventListener('click', ev => doGame(ev.target.id));
   resetForms();
   updateTeams();
   useCachedLogin();
@@ -139,6 +140,9 @@ async function submitForm(form, ev) {
       break;
     case 'details':
       doDetails(form);
+      break;
+    case 'f-reseni':
+      doReseni(form);
       break;
   }
 }
@@ -373,15 +377,26 @@ async function doDetails(form) {
 
 const timeFormat = new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'short' });
 const numberFormat = new Intl.NumberFormat('cs-CZ', { signDisplay: 'always' });
-const actionDesc = {
-  hint: 'nápověda',
-  wt: 'postup řešení',
-  loc: 'přeskočení',
-  sol: 'řešení'
+const id2en = {
+  'napoveda': 'hint',
+  'postup': 'wt',
+  'poloha': 'loc'
+};
+const en2cz = {
+  'hint': 'nápověda',
+  'wt': 'postup řešení',
+  'loc': 'přeskočení',
+  'sol': 'řešení'
 };
 
 function loadGameData(game_) {
   game = game_;
+  const last = updScore();
+  last.checked = true;
+  updStan(last);
+}
+
+function updScore() {
   document.getElementById('hra-body').textContent = game.actions.reduce((a, e) => a + e.pts, 0);
   const hdiv = document.getElementById('historie-div');
   const htmp = document.getElementById('historie-tmpl').content;
@@ -394,9 +409,9 @@ function loadGameData(game_) {
     const clone = htmp.cloneNode(true);
     clone.querySelector('label').htmlFor = `st-${act.stan}`;
     clone.querySelector('label').dataset.seq = act.seq;
-    clone.querySelector('.h-cas').textContent = timeFormat.format(act.time);
-    clone.querySelector('.h-akce').textContent = `${act.stan}: ${actionDesc[act.type]}`;
-    clone.querySelector('.h-body').textContent = numberFormat(act.pts);
+    clone.querySelector('.h-cas').textContent = timeFormat.format(new Date(act.time));
+    clone.querySelector('.h-akce').textContent = `${act.stan}: ${en2cz[act.type]}`;
+    clone.querySelector('.h-body').textContent = numberFormat.format(act.pts);
     clone.querySelector('label').htmlFor = `st-${act.stan}`;
     hdiv.append(clone);
     if(act.inval)
@@ -406,12 +421,11 @@ function loadGameData(game_) {
       last.disabled = false;
     }
   }
-  last.checked = true;
-  updStan(last);
+  return last;
 }
 
-function updStan(elm) {
-  const stan = elm.id.substring(3);
+function updStan(elm) { // TODO: čtverečky
+  const stan = typeof elm === 'string' ? elm : elm.id.substring(3);
   for(const elm2 of document.querySelectorAll('.stanName'))
     elm2.textContent = stan;
   const state = game.summary[stan] || { };
@@ -433,14 +447,14 @@ function updStan(elm) {
   if(state.hint) {
     const row = game.actions[state.hint - 1];
     document.getElementById('st-napoveda').hidden = false;
-    document.getElementById('st-napoveda-text').textContent = row.response;
+    document.getElementById('st-napoveda-text').textContent = row.text;
     enable('napoveda', false);
   } else
     document.getElementById('st-napoveda').hidden = true;
   if(state.wt) {
     const row = game.actions[state.wt - 1];
     document.getElementById('st-postup').hidden = false;
-    document.getElementById('st-postup-text').textContent = row.response;
+    document.getElementById('st-postup-text').textContent = row.text;
     enable('napoveda', false);
     enable('postup', false);
   } else
@@ -448,11 +462,57 @@ function updStan(elm) {
   if(state.sol) {
     const row = game.actions[state.sol - 1];
     document.getElementById('st-reseni').hidden = false;
-    document.getElementById('st-reseni-text').textContent = row.response;
-    for(act of ['reseni', 'napoveda', 'poloha', 'postup'])
+    document.getElementById('st-reseni-text').textContent = row.text;
+    for(const act of ['reseni', 'napoveda', 'poloha', 'postup'])
       enable(act, false);
   } else
     document.getElementById('st-reseni').hidden = true;
-  if(state.loc)
+  if(state.loc) // TODO nebo poslední
     enable('poloha', false);
+}
+
+async function doReseni(form) {
+  doGameAction('sol', document.getElementById('in-reseni').value);
+}
+
+function doGame(id) {
+  switch(id) {
+    case 'ak-refresh':
+      useCachedLogin();
+      return;
+    case 'b-napoveda':
+    case 'b-poloha':
+    case 'b-postup':
+      const type = id2en[id.substring(2)];
+      doGameAction(type);
+  }
+}
+
+async function doGameAction(type, text) {
+  try {
+    const stan = document.getElementById('stanName').textContent;
+    const data = {
+      name: localStorage['teamName'],
+      passwordHash: localStorage['passwordHash'],
+      adminHash: localStorage['adminHash'],
+      stan,
+      type,
+      text
+    };
+    const row = await serverRequest('g:action', data);
+    game.actions.push(row);
+    game.summary = {...game.summary, ...row.changes};
+    //TODO když není seq postupně
+    if(row.opens) {
+      const next = document.getElementById(`st-${row.opens}`);
+      next.disabled = false;
+      next.checked = true;
+      updStan(next);
+    } else
+      updStan(stan);
+    updScore();
+  } catch(error) {
+    console.error(error);
+    alert(typeof error === 'string' ? error : 'Neznámá chyba');
+  }
 }
