@@ -380,7 +380,14 @@ const numberFormat = new Intl.NumberFormat('cs-CZ', { signDisplay: 'always' });
 const id2en = {
   'napoveda': 'hint',
   'postup': 'wt',
-  'poloha': 'loc'
+  'poloha': 'loc',
+  'reseni': 'sol'
+};
+const en2id = {
+  'hint': 'napoveda',
+  'wt': 'postup',
+  'loc': 'poloha',
+  'sol': 'reseni'
 };
 const en2cz = {
   'hint': 'nápověda',
@@ -469,6 +476,8 @@ function updStan(elm) { // TODO: čtverečky
     document.getElementById('st-reseni').hidden = true;
   if(state.loc) // TODO nebo poslední
     enable('poloha', false);
+  for(const elm of document.querySelectorAll('.new'))
+    elm.classList.remove('new');
 }
 
 async function doReseni(form) {
@@ -489,6 +498,10 @@ function doGame(id) {
 }
 
 async function doGameAction(type, text) {
+  const mark = id => {
+    console.log(document.getElementById(id));
+    document.getElementById(id)?.classList.add('new')
+  }
   try {
     const stan = document.getElementById('stanName').textContent;
     const data = {
@@ -508,8 +521,11 @@ async function doGameAction(type, text) {
       next.disabled = false;
       next.checked = true;
       updStan(next);
-    } else
+      mark('st-poloha-cell');
+    } else {
       updStan(stan);
+      mark(`st-${en2id[type]}-text`);
+    }
     updScore();
   } catch(error) {
     console.error(error);
