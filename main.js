@@ -412,6 +412,8 @@ function updScore() {
   for(const stan of stanoviste) {
     document.getElementById(`st-${stan.name}`).disabled = !stan.defOpen;
   }
+  for(const ctv of document.querySelectorAll('#ctverecky label'))
+    ctv.className = '';
   for(const act of game.actions) {
     const clone = htmp.cloneNode(true);
     clone.querySelector('label').htmlFor = `st-${act.stan}`;
@@ -422,16 +424,27 @@ function updScore() {
     clone.querySelector('label').htmlFor = `st-${act.stan}`;
     hdiv.append(clone);
     if(act.inval)
-      document.querySelector(`label[data-seq="${act.inval}"`).classList.add('strike');
+      document.querySelector(`#historie-div label[data-seq="${act.inval}"`).classList.add('strike');
     if(act.opens) {
       last = document.getElementById(`st-${act.opens}`);
       last.disabled = false;
+    }
+    const ctv = document.querySelector(`#ctverecky label[for="st-${act.stan}"]`);
+    switch(act.type) {
+      case 'sol':
+        ctv.classList.add('solved');
+        break;
+      case 'hint':
+      case 'wt':
+      case 'loc':
+        ctv.classList.add('penalty');
+        break;
     }
   }
   return last;
 }
 
-function updStan(elm) { // TODO: čtverečky
+function updStan(elm) {
   const stan = typeof elm === 'string' ? elm : elm.id.substring(3);
   for(const elm2 of document.querySelectorAll('.stanName'))
     elm2.textContent = stan;
