@@ -179,18 +179,18 @@ async function handleObj(request) {
           const response = 'Text postupu';
           return newRow(game, stan, type, { response, inval: sum.hint });
         }
-        case 'loc': {
+        case 'loc': { // TODO zakázat u poslední
           if(sum.sol)
             throw 'Chybný požadavek.';
           const response = 'Text polohy';
-          const loc = { lon: 50, lat: 15 };
+          const loc = { text: 'poloha', link: 'https://mapy.cz' };
           return newRow(game, stan, type, { response, loc }); // TODO opens
         }
         case 'sol': {
           if(sum.sol)
             throw 'Chybný požadavek.';
           const response = 'Poloha následujícího';
-          const loc = { lon: 50, lat: 15 };
+          const loc = { text: 'poloha', link: 'https://mapy.cz' };
           return newRow(game, stan, type, { response, loc });
         }
         default:
@@ -310,6 +310,7 @@ function newRow(game, row, stan, type, data) {
   if(!game.summary[stan])
     game.summary.stan = { };
   game.summary[stan][type] = row.seq;
+  // TODO open next
   // TODO save
   return row;
 }

@@ -15,6 +15,8 @@ const stanoviste = [
   { name: 'Pluto' },
 ];
 
+let game;
+
 window.addEventListener('DOMContentLoaded', () => {
   {
     const chkbox = document.getElementById('nav-unfold');
@@ -73,6 +75,7 @@ window.addEventListener('DOMContentLoaded', () => {
       tmp.before(clone);
     }
   }
+  document.getElementById('ctverecky').addEventListener('input', ev => updStan(ev.target));
   window.addEventListener('beforeunload', ev => {
     if(document.getElementById('saveDetails').dataset.saved === '0')
       ev.preventDefault();
@@ -273,7 +276,7 @@ async function useCachedLogin() {
 function loadTeamData(data) {
   const form = document.getElementById('details');
   const getField = field => form.querySelector(`[name="${field}"]`);
-  document.getElementById('teamName').innerText = data.name;
+  document.getElementById('teamName').textContent = data.name;
   for(const elm of form.querySelectorAll('input, select'))
     elm.value = '';
   getField('telefon').value = data.phone;
@@ -299,6 +302,7 @@ function logout(ev) {
   delete localStorage['teamName'];
   delete localStorage['passwordHash'];
   delete document.documentElement.dataset.auth;
+  game = null;
   updateTeams();
   ev.preventDefault()
 }
@@ -376,20 +380,79 @@ const actionDesc = {
   sol: 'řešení'
 };
 
-function loadGameData(game) {
-  document.getElementById('hra-body').innerText = game.actions.reduce((a, e) => a + e.pts, 0);
+function loadGameData(game_) {
+  game = game_;
+  document.getElementById('hra-body').textContent = game.actions.reduce((a, e) => a + e.pts, 0);
   const hdiv = document.getElementById('historie-div');
   const htmp = document.getElementById('historie-tmpl').content;
   hdiv.replaceChildren();
-  for(const act of game.actions) {
-    const clone = htmp.cloneNode(true);
-    clone.querySelector('label').htmlFor = `st-${act.stan}`;
-    clone.querySelector('.h-cas').textContent = timeFormat.format(act.time);
-    clone.querySelector('.h-akce').textContent = `${act.stan}: ${actionDesc[act.type]}`;
-    clone.querySelector('.h-body').textContent = numberFormat(act.pts);
-    hdiv.append(clone);
-  }
+  let last = document.getElementById(`st-${stanoviste[0].name}`);
   for(const stan of stanoviste) {
     document.getElementById(`st-${stan.name}`).disabled = !stan.defOpen;
   }
+  for(const act of game.actions) {
+    const clone = htmp.cloneNode(true);
+    clone.querySelector('label').htmlFor = `st-${act.stan}`;
+    clone.querySelector('label').dataset.seq = act.seq;
+    clone.querySelector('.h-cas').textContent = timeFormat.format(act.time);
+    clone.querySelector('.h-akce').textContent = `${act.stan}: ${actionDesc[act.type]}`;
+    clone.querySelector('.h-body').textContent = numberFormat(act.pts);
+    clone.querySelector('label').htmlFor = `st-${act.stan}`;
+    hdiv.append(clone);
+    if(act.inval)
+      document.querySelector(`label[data-seq="${act.inval}"`).classList.add('strike');
+    if(act.opens) {
+      last = document.getElementById(`st-${act.opens}`);
+      last.disabled = false;
+    }
+  }
+  last.checked = true;
+  updStan(last);
+}
+
+function updStan(elm) {
+  const stan = elm.id.substring(3);
+  for(const elm2 of document.querySelectorAll('.stanName'))
+    elm2.textContent = stan;
+  const state = game.summary[stan] || { };
+  document.getElementById('sad-menu').checked = true;
+  const enable = (what, enable) => {
+    document.getElementById(`sad-${what}`).disabled = !enable;
+    document.querySelector(`label[for="sad-${what}"]`).hidden = !enable;
+  }
+  for(const act of ['reseni', 'napoveda', 'poloha', 'postup'])
+    enable(act, true);
+  if(state.opened) {
+    const row = game.actions[state.opened - 1];
+    const {text, link} = row.loc;
+    document.getElementById('st-poloha').hidden = false;
+    document.getElementById('st-pol-text').textContent = text;
+    document.getElementById('st-pol-link').href = link;
+  } else
+    document.getElementById('st-poloha').hidden = true;
+  if(state.hint) {
+    const row = game.actions[state.hint - 1];
+    document.getElementById('st-napoveda').hidden = false;
+    document.getElementById('st-napoveda-text').textContent = row.response;
+    enable('napoveda', false);
+  } else
+    document.getElementById('st-napoveda').hidden = true;
+  if(state.wt) {
+    const row = game.actions[state.wt - 1];
+    document.getElementById('st-postup').hidden = false;
+    document.getElementById('st-postup-text').textContent = row.response;
+    enable('napoveda', false);
+    enable('postup', false);
+  } else
+    document.getElementById('st-postup').hidden = true;
+  if(state.sol) {
+    const row = game.actions[state.sol - 1];
+    document.getElementById('st-reseni').hidden = false;
+    document.getElementById('st-reseni-text').textContent = row.response;
+    for(act of ['reseni', 'napoveda', 'poloha', 'postup'])
+      enable(act, false);
+  } else
+    document.getElementById('st-reseni').hidden = true;
+  if(state.loc)
+    enable('poloha', false);
 }

@@ -281,18 +281,26 @@
             <label for="st-"></label>
           </template>
         </div>
-        <h1>Stanoviště MARS</h1>
+        <h1>Stanoviště <span class="stanName"></span></h1>
         <div id="st-info">
           <div id="st-poloha">
             <span>Poloha:</span>
             <div>
-              <p>Uprostřed louky</p>
-              <p><a href="example.com" target="_blank">Odkaz na mapu</a></p>
+              <p id="st-pol-text"></p>
+              <p><a id="st-pol-link" target="_blank">Ukázat na mapě</a></p>
             </div>
           </div>
           <div id="st-napoveda">
             <span>Nápověda:</span>
-            <span>Zkuste to rozstříhat.</span>
+            <span id="st-napoveda-text"></span>
+          </div>
+          <div id="st-postup">
+            <span>Postup řešení:</span>
+            <span id="st-postup-text"></span>
+          </div>
+          <div id="st-reseni">
+            <span>Řešení:</span>
+            <span id="st-reseni-text"></span>
           </div>
         </div>
         <input hidden type="radio" name="st-akce-detail" id="sad-menu" checked/>
@@ -300,13 +308,13 @@
           <label class="button positive" for="sad-reseni">Zadat ŘEŠENÍ</label>
           <label class="button" for="sad-napoveda">Zažádat o NÁPOVĚDU</label>
           <label class="button" for="sad-poloha">Zažádat o POLOHU další šifry</label>
-          <label class="button" for="sad-postup">Zažádat o POSTUP řešeníton</label>
+          <label class="button" for="sad-postup">Zažádat o POSTUP řešení</label>
           <button id="ak-refresh" class="noop">Synchronizovat data</button>
         </div>
         <input hidden type="radio" name="st-akce-detail" id="sad-reseni"/>
         <div>
           <form id="f-reseni" target="a.html">
-            <p>Řešení stanoviště <b>MARS</b>:</p>
+            <p>Řešení stanoviště <b class="stanName"></b>:</p>
             <input id="in-reseni"/>
             <div class="sep"></div>
             <small>Na diakritice ani velikosti písmen nezáleží.</small>
@@ -319,7 +327,7 @@
         <input hidden type="radio" name="st-akce-detail" id="sad-napoveda"/>
         <div>
           <hr/>
-          <p>Žádáte o <b>NÁPOVĚDU</b> ke stanovišti <b>MARS</b>.</p>
+          <p>Žádáte o <b>NÁPOVĚDU</b> ke stanovišti <b class="stanName"></b>.</p>
           <p>Tato akce vás bude stát <b>2 trestné body</b>.</p>
           <div class="akce-menu">
             <button class="negative">Potvrdit</button>
@@ -329,7 +337,7 @@
         <input hidden type="radio" name="st-akce-detail" id="sad-poloha"/>
         <div>
           <hr/>
-          <p>Žádáte o <b>POLOHU STANOVIŠTĚ</b> následujícího za <b>MARS</b>.</p>
+          <p>Žádáte o <b>POLOHU STANOVIŠTĚ</b> následujícího za <b class="stanName"></b>.</p>
           <p>Tato akce vás bude stát <b>3 trestné body</b>.</p>
           <div class="akce-menu">
             <button class="negative">Potvrdit</button>
@@ -339,7 +347,7 @@
         <input hidden type="radio" name="st-akce-detail" id="sad-postup"/>
         <div>
           <hr/>
-          <p>Žádáte o <b>POSTUP ŘEŠENÍ</b> ke stanovišti <b>MARS</b>.</p>
+          <p>Žádáte o <b>POSTUP ŘEŠENÍ</b> ke stanovišti <b class="stanName"></b>.</p>
           <p>Tato akce vás bude stát <b>5 trestných bodů</b>.</p>
           <div class="akce-menu">
             <button class="negative">Potvrdit</button>
