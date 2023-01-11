@@ -261,8 +261,7 @@ async function useCachedLogin() {
   try {
     const data = await serverRequest('login', {name, passwordHash, adminHash});
     loadTeamData(data);
-    document.getElementById('tab-auth').dataset.auth = 1;
-    // TODO game: auth
+    document.documentElement.dataset.auth = 1;
     return true;
   } catch(error) {
     console.error(error);
@@ -290,7 +289,7 @@ function loadTeamData(data) {
   document.getElementById('platba').dataset.paid = data.amountPaid ? 1
     : data.dateDue ? 0 : -1;
   document.getElementById('termin').textContent = new Date(data.dateDue).toLocaleDateString('cs-CZ', { dateStyle: 'medium' });
-  document.getElementById('tab-auth').dataset.auth = 1;
+  document.documentElement.dataset.auth = 1;
   updateDetailForm();
   delete document.getElementById('saveDetails').dataset.saved;
   loadGameData(data.game);
@@ -299,7 +298,7 @@ function loadTeamData(data) {
 function logout(ev) {
   delete localStorage['teamName'];
   delete localStorage['passwordHash'];
-  delete document.getElementById('tab-auth').dataset.auth;
+  delete document.documentElement.dataset.auth;
   updateTeams();
   ev.preventDefault()
 }

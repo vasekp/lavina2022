@@ -23,7 +23,7 @@
       <label for="sel-tymy" data-visible-from="regOpen"><div>Přihlášené týmy</div></label>
       <label for="sel-pravidla"><div>Pravidla</div></label>
       <label for="sel-auth" data-visible-from="regOpen"><div>Můj tým</div></label>
-      <label for="sel-hra" data-visible-from="gameOpen" data-visible-until="gameClose"><div>Hra</div></label>
+      <label for="sel-hra" class="auth" data-visible-from="gameOpen" data-visible-until="gameClose"><div>Hra</div></label>
       <span id="sipka">▼</span>
     </nav>
     <main>
@@ -178,7 +178,7 @@
           </label>
           <button type="submit">Přihlásit</button>
         </form>
-        <div id="auth-section">
+        <div id="auth-section" class="auth">
           <h1 id="teamName"></h1>
           <p>Změny v týmu jsou povoleny nejpozději do pátku <b>20.1.2023</b>. Naléhavé případy nastalé po tomto datu řešte s organizátory po e-mailu.</p>
           <p>Zájem o trička je nutno potvrdit nejpozději do <b>8.1.2023</b>, poté bude nabídka uzamčena.</p>
@@ -261,7 +261,7 @@
           <a href="#" id="logout">Odhlásit</a>
         </div>
       </article>
-      <article id="tab-hra">
+      <article id="tab-hra" class="auth">
         <input hidden type="checkbox" id="historie-ck"/>
         <h1>
           <label for="historie-ck">Aktuální stav: <span id="hra-body">396</span> bodů</label>
