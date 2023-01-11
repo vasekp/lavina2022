@@ -1,24 +1,14 @@
 import { teamSize, fees, dates } from './config.js';
 import { hash, hex, serverRequest, adminSalt } from './shared.js';
 
-const stanoviste = [
-  { name: 'Slunce', defOpen: true },
-  { name: 'Merkur', defOpen: true },
-  { name: 'Venuše' },
-  { name: 'Země', final: true },
-  { name: 'Měsíc' },
-  { name: 'Mars' },
-  { name: 'Jupiter' },
-  { name: 'Saturn' },
-  { name: 'Uran' },
-  { name: 'Neptun' },
-  { name: 'Pluto' },
-];
 const stMap = {};
-for(const stan of stanoviste)
-  stMap[stan.name] = stan;
+const stPromise = serverRequest('getGameStruct').then(stanList => {
+  for(const stan of stanList)
+    stMap[stan.name] = stan;
+  return stanList;
+});
 
-let game;
+let game; // local copy of server object
 
 window.addEventListener('DOMContentLoaded', () => {
   {
@@ -70,14 +60,16 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
   document.querySelector(`#register input[name="clen1"]`).required = true;
-  for(const tmp of document.querySelectorAll('template[data-per=stan]')) {
-    for(const stan of stanoviste) {
-      const clone = tmp.content.cloneNode(true);
-      clone.querySelectorAll('[id]').forEach(elm => elm.id += stan.name);
-      clone.querySelectorAll('[for]').forEach(elm => elm.htmlFor += stan.name);
-      tmp.before(clone);
+  stPromise.then(stanoviste => {
+    for(const tmp of document.querySelectorAll('template[data-per=stan]')) {
+      for(const stan of stanoviste) {
+        const clone = tmp.content.cloneNode(true);
+        clone.querySelectorAll('[id]').forEach(elm => elm.id += stan.name);
+        clone.querySelectorAll('[for]').forEach(elm => elm.htmlFor += stan.name);
+        tmp.before(clone);
+      }
     }
-  }
+  });
   document.getElementById('ctverecky').addEventListener('input', ev => updStan(ev.target));
   window.addEventListener('beforeunload', ev => {
     if(document.getElementById('saveDetails').dataset.saved === '0')
@@ -399,21 +391,22 @@ const en2cz = {
   'sol': 'řešení'
 };
 
-function loadGameData(game_) {
+async function loadGameData(game_) {
   game = game_;
-  const last = updScore();
+  const last = await updScore();
   last.checked = true;
   updStan(last);
 }
 
-function updScore() {
+async function updScore() {
   document.getElementById('hra-body').textContent = game.actions.reduce((a, e) => a + e.pts + (e.inval ? -game.actions[e.inval - 1].pts : 0), 0);
   const hdiv = document.getElementById('historie-div');
   const htmp = document.getElementById('historie-tmpl').content;
   hdiv.replaceChildren();
+  const stanoviste = await stPromise;
   let last = document.getElementById(`st-${stanoviste[0].name}`);
   for(const stan of stanoviste) {
-    document.getElementById(`st-${stan.name}`).disabled = !stan.defOpen;
+    document.getElementById(`st-${stan.name}`).disabled = !stan.autoOpen;
   }
   for(const ctv of document.querySelectorAll('#ctverecky label'))
     ctv.className = '';

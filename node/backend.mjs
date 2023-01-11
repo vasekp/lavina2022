@@ -13,6 +13,7 @@ const points = {
 };
 
 let {capacity, teams, numTeams} = await loadTeams();
+const { stanMap, struct } = await loadGameData();
 
 http.createServer((req, res) => {
   res.setHeader('Content-type', 'application/json');
@@ -56,6 +57,9 @@ async function handleObj(request) {
       if(!team)
         throw 'Tým nenalezen.';
       return team.salt;
+    }
+    case 'getGameStruct': {
+      return struct;
     }
     case 'login': {
       const team = findTeamAndLogin(request.data);
@@ -164,6 +168,9 @@ async function handleObj(request) {
       const team = findTeamAndLogin(data);
       const game = teamGameData(team);
       const stan = data.stan;
+      const rec = stanMap[stan];
+      if(!rec)
+        throw('Chybný požadavek.');
       const type = data.type;
       const sum = game.summary[stan] || { };
       const act = game.actions;
@@ -173,48 +180,37 @@ async function handleObj(request) {
             return game.actions[sum.hint - 1];
           if(sum.wt || sum.sol)
             throw 'Chybný požadavek.';
-          const text = 'Text nápovědy';
-          return newRow(game, stan, type, { text });
+          return newRow(game, stan, type, { text: rec.hint });
         }
         case 'wt': {
           if(sum.wt)
             return game.actions[sum.wt - 1];
           if(sum.sol)
             throw 'Chybný požadavek.';
-          const text = 'Text postupu';
-          return newRow(game, stan, type, { text, inval: sum.hint });
+          return newRow(game, stan, type, { text: rec.wt, inval: sum.hint });
         }
-        case 'loc': { // TODO zakázat u poslední
+        case 'loc': {
           if(sum.loc)
             return game.actions[sum.loc - 1];
-          if(sum.sol)
+          const next = rec.next;
+          if(!next || sum.sol)
             throw 'Chybný požadavek.';
-          const opens = (_ => {
-            switch(stan) {
-              case 'Slunce':
-              case 'Merkur':
-                return 'Venuše';
-              case 'Venuše':
-                return 'Země';
-            }})();
-          const loc = { text: 'poloha', link: 'https://mapy.cz' };
-          return newRow(game, stan, type, { loc, opens });
+          const nextRec = stanMap[next];
+          const loc = { text: nextRec.locText, link: nextRec.locLink };
+          return newRow(game, stan, type, { loc, opens: next });
         }
         case 'sol': {
           if(sum.sol)
             throw 'Chybný požadavek.';
           const solution = normalizeName(data.text).toUpperCase();
-          const opens = (_ => {
-            switch(stan) {
-              case 'Slunce':
-              case 'Merkur':
-                return 'Venuše';
-              case 'Venuše':
-                return 'Země';
-            }})();
-          const text = solution;
-          const loc = { text: 'poloha', link: 'https://mapy.cz' };
-          return newRow(game, stan, type, { text, loc, opens });
+          const next = rec.next;
+          if(!next)
+            return newRow(game, stan, type, { text: solution });
+          // else
+          const nextRec = stanMap[next];
+          console.log(next, nextRec);
+          const loc = { text: nextRec.locText, link: nextRec.locLink };
+          return newRow(game, stan, type, { text: solution, loc, opens: next });
         }
         default:
           throw 'Chybný požadavek.';
@@ -271,6 +267,21 @@ async function loadTeams() {
     console.error(e);
     throw 'Chyba při načítání týmů!';
   }
+}
+
+async function loadGameData() {
+  const stanList = await fs.readFile('game.json').then(data => JSON.parse(data));
+  const stanMap = { };
+  const struct = [ ];
+  for(const stan of stanList) {
+    stanMap[stan.name] = stan;
+    struct.push({
+      name: stan.name,
+      autoOpen: stan.autoOpen,
+      final: !stan.next
+    });
+  }
+  return { stanMap, struct };
 }
 
 function saveTeams() {

@@ -1,0 +1,107 @@
+[
+  {
+    "name": "Canaveral",
+    "hint": "Nápověda k šifře Canaveral",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "ccc",
+    "next": "ISS",
+    "autoOpen": true
+  },
+  {
+    "name": "Bajkonur",
+    "hint": "Nápověda k šifře Bajkonur",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "bbb",
+    "next": "Měsíc",
+    "autoOpen": true
+  },
+  {
+    "name": "ISS",
+    "locText": "Vysílač nad Pokovými Hutěmi",
+    "locLink": "https://mapy.cz/s/bofecefedu",
+    "hint": "Nápověda k šifře ISS",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "iii",
+    "next": "Merkur"
+  },
+  {
+    "name": "Měsíc",
+    "locText": "Zimní rozcestník v JZ rohu PP Pasecká slať",
+    "locLink": "https://mapy.cz/s/fafavusoda",
+    "hint": "Nápověda k šifře Měsíc",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "mmm",
+    "next": "Merkur"
+  },
+  {
+    "name": "Merkur",
+    "locText": "Posed 1km severně",
+    "locLink": "https://mapy.cz/s/bopofazake",
+    "hint": "Nápověda k šifře Merkur",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "mmm",
+    "next": "Venuše"
+  },
+  {
+    "name": "Venuše",
+    "locText": "Stolek u parkoviště Pláně",
+    "locLink": "https://mapy.cz/s/lajajasopu",
+    "hint": "Nápověda k šifře Venuše",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "vvv",
+    "next": "Mars"
+  },
+  {
+    "name": "Mars",
+    "locText": "Rozhledna Skokanský můstek",
+    "locLink": "https://mapy.cz/s/fevehakoko",
+    "hint": "Nápověda k šifře Mars",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "mmm",
+    "next": "Jupiter"
+  },
+  {
+    "name": "Jupiter",
+    "locText": "Cukrárna Ella",
+    "locLink": "https://mapy.cz/s/ramagakolo",
+    "hint": "Nápověda k šifře Jupiter",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "jjj",
+    "next": "Saturn"
+  },
+  {
+    "name": "Saturn",
+    "locText": "Přístřešek Zlatá Studna",
+    "locLink": "https://mapy.cz/s/labotebase",
+    "hint": "Nápověda k šifře Saturn",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "sss",
+    "next": "Uran"
+  },
+  {
+    "name": "Uran",
+    "locText": "Zastávka Horská Kvilda, U Prodejny",
+    "locLink": "https://mapy.cz/s/razakaturu",
+    "hint": "Nápověda k šifře Uran",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "uuu",
+    "next": "Neptun"
+  },
+  {
+    "name": "Neptun",
+    "locText": "Vyhlídková věž Jezerní slať",
+    "locLink": "https://mapy.cz/s/butugugela",
+    "hint": "Nápověda k šifře Neptun",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "nnn",
+    "next": "Pluto"
+  },
+  {
+    "name": "Pluto",
+    "locText": "Rysí výběh",
+    "locLink": "https://mapy.cz/s/juhonocara",
+    "hint": "Nápověda k šifře Pluto",
+    "wt": "Rozstříhej to a přečti",
+    "sol": "ppp"
+  }
+]
