@@ -169,18 +169,24 @@ async function handleObj(request) {
       const act = game.actions;
       switch(type) {
         case 'hint': {
-          if(sum.hint || sum.wt || sum.sol)
+          if(sum.hint)
+            return game.actions[sum.hint - 1];
+          if(sum.wt || sum.sol)
             throw 'Chybný požadavek.';
           const text = 'Text nápovědy';
           return newRow(game, stan, type, { text });
         }
         case 'wt': {
-          if(sum.wt || sum.sol)
+          if(sum.wt)
+            return game.actions[sum.wt - 1];
+          if(sum.sol)
             throw 'Chybný požadavek.';
           const text = 'Text postupu';
           return newRow(game, stan, type, { text, inval: sum.hint });
         }
         case 'loc': { // TODO zakázat u poslední
+          if(sum.loc)
+            return game.actions[sum.loc - 1];
           if(sum.sol)
             throw 'Chybný požadavek.';
           const opens = (_ => {
@@ -330,5 +336,5 @@ function newRow(game, stan, type, data) {
   game.summary = { ...game.summary, ...changes };
   game.actions.push(row);
   // TODO save
-  return { ...row, changes };
+  return { ...row, changes, added: true };
 }

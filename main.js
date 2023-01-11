@@ -529,9 +529,12 @@ async function doGameAction(type, text) {
       text
     };
     const row = await serverRequest('g:action', data);
+    if(!row.added || row.seq !== game.actions.length + 1) {
+      useCachedLogin();
+      return;
+    }
     game.actions.push(row);
     game.summary = {...game.summary, ...row.changes};
-    //TODO když není seq postupně
     if(row.opens) {
       const next = document.getElementById(`st-${row.opens}`);
       next.disabled = false;
@@ -546,5 +549,6 @@ async function doGameAction(type, text) {
   } catch(error) {
     console.error(error);
     alert(typeof error === 'string' ? error : 'Neznámá chyba');
+    useCachedLogin();
   }
 }
