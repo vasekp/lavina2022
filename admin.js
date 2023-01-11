@@ -194,7 +194,7 @@ function update() {
         if(act.type === 'sol' || act.type === 'error')
           clone.querySelector('.h-akce').textContent += ` "${act.text.toUpperCase()}"`;
         clone.querySelector('.h-body').textContent = numberFormat.format(act.pts);
-        hdiv.prepend(clone);
+        hdiv.append(clone);
         if(act.inval)
           frag.querySelector(`div[data-seq="${act.inval}"`).classList.add('strike');
       }
