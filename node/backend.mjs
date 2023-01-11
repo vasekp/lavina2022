@@ -161,7 +161,7 @@ async function handleObj(request) {
     }
     case 'g:action': {
       const now = new Date();
-      if(now < dates.gateStart)
+      if(now < dates.gameStart)
         throw 'Hra ještě nezačala.';
       if(now > dates.gameEnd)
         throw 'Hra již skončila.';
@@ -211,7 +211,6 @@ async function handleObj(request) {
             return newRow(game, stan, type, { text: solution });
           // else
           const nextRec = stanMap[next];
-          console.log(next, nextRec);
           const loc = { text: nextRec.locText, link: nextRec.locLink };
           return newRow(game, stan, type, { text: solution, loc, opens: next });
         }
