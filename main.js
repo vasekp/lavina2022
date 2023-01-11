@@ -407,7 +407,7 @@ function loadGameData(game_) {
 }
 
 function updScore() {
-  document.getElementById('hra-body').textContent = game.actions.reduce((a, e) => a + e.pts, 0);
+  document.getElementById('hra-body').textContent = game.actions.reduce((a, e) => a + e.pts + (e.inval ? -game.actions[e.inval - 1].pts : 0), 0);
   const hdiv = document.getElementById('historie-div');
   const htmp = document.getElementById('historie-tmpl').content;
   hdiv.replaceChildren();
@@ -425,7 +425,7 @@ function updScore() {
     clone.querySelector('.h-akce').textContent = `${act.stan}: ${en2cz[act.type]}`;
     clone.querySelector('.h-body').textContent = numberFormat.format(act.pts);
     clone.querySelector('label').htmlFor = `st-${act.stan}`;
-    hdiv.append(clone);
+    hdiv.prepend(clone);
     if(act.inval)
       document.querySelector(`#historie-div label[data-seq="${act.inval}"`).classList.add('strike');
     if(act.opens) {
