@@ -90,7 +90,7 @@ button, .button {
   transition: opacity 300ms;
 }
 
-@media(max-width: 42rem) {
+@media(max-width: 50rem) {
   :root {
     font-size: 11pt;
     background: url('images/lavina-bg.jpg');
@@ -459,6 +459,7 @@ label[for="historie-ck"]::after {
   height: 2em;
   border: 2pt solid var(--c-fg);
   margin: 0 -1pt;
+  background: #fff8;
 }
 
 #ctverecky label.solved {
@@ -480,12 +481,12 @@ label[for="historie-ck"]::after {
   background: #cf08;
 }
 
-#ctverecky label.open {
-  background: #fff8;
-}
-
 #ctverecky :checked + label {
   box-shadow: 0 0 3pt 2pt white;
+}
+
+#ctverecky :disabled + label {
+  background: transparent;
 }
 
 #st-info {
@@ -549,4 +550,5 @@ hr {
   font: inherit;
   font-size: 150%;
   max-width: 100%;
+  text-transform: uppercase;
 }

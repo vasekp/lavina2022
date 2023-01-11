@@ -5,6 +5,13 @@ import { dates, teamSize } from '../config.js';
 
 const port = 3001;
 
+const points = {
+  hint: -2,
+  wt: -5,
+  loc: -3,
+  sol: 100
+};
+
 let {capacity, teams, numTeams} = await loadTeams();
 
 http.createServer((req, res) => {
@@ -51,25 +58,20 @@ async function handleObj(request) {
       return team.salt;
     }
     case 'login': {
-      const team = findTeam(request.data.name);
-      if(!team)
-        throw 'Tým nenalezen.';
-      else if(!(request.data.passwordHash === team.passwordHash || request.data.adminHash === teams[0].passwordHash))
-        throw 'Chybné přihlašovací údaje.';
-      else {
-        return {
-          name: team.name,
-          phone: team.phone,
-          email: team.email,
-          salt: team.salt,
-          members: team.members,
-          sharingPreferences: team.sharingPreferences,
-          amountPaid: team.amountPaid,
-          dateDue: team.dateDue,
-          datePaid: team.datePaid,
-          adminLogin: request.data.adminHash === teams[0].passwordHash
-        };
-      }
+      const team = findTeamAndLogin(request.data);
+      return {
+        name: team.name,
+        phone: team.phone,
+        email: team.email,
+        salt: team.salt,
+        members: team.members,
+        sharingPreferences: team.sharingPreferences,
+        amountPaid: team.amountPaid,
+        dateDue: team.dateDue,
+        datePaid: team.datePaid,
+        adminLogin: request.data.adminHash === teams[0].passwordHash,
+        game: teamGameData(team)
+      };
     }
     case 'register': {
       const team0 = request.data;
@@ -114,19 +116,16 @@ async function handleObj(request) {
         members: team.members,
         amountPaid: team.amountPaid,
         dateDue: team.dateDue,
-        datePaid: team.datePaid
+        datePaid: team.datePaid,
+        game: teamGameData(team) // creates empty record
       };
     }
     case 'update': {
       const now = new Date();
       if(now > dates.changesClose)
         throw 'Změny již nejsou povoleny.';
-      const team = findTeam(request.data.name);
-      if(!team)
-        throw 'Tým nenalezen.';
       const data = request.data;
-      if(data.passwordHash !== team.passwordHash && data.adminHash !== teams[0].passwordHash)
-        throw 'Neautorizovaný požadavek.';
+      const team = findTeamAndLogin(data);
       if(!(
         (!data.newPasswordHash || (typeof data.newPasswordHash === 'string' && data.newPasswordHash.length == 64))
         && typeof data.members === 'object' && data.members.length <= teamSize.max
@@ -150,6 +149,53 @@ async function handleObj(request) {
       team.members = data.members;
       saveTeams();
       return;
+    }
+    case 'g:getData': {
+      const team = findTeamAndLogin(request.data);
+      return teamGameData(team);
+    }
+    case 'g:action': {
+      const now = new Date();
+      if(now < dates.gateStart)
+        throw 'Hra ještě nezačala.';
+      if(now > dates.gameEnd)
+        throw 'Hra již skončila.';
+      const data = request.data;
+      const team = findTeamAndLogin(data);
+      const game = teamGameData(team);
+      const stan = data.stan;
+      const sum = game.summary[stan] || { };
+      const act = game.actions;
+      switch(data.type) {
+        case 'hint': {
+          if(sum.hint || sum.wt || sum.sol)
+            throw 'Chybný požadavek.';
+          const response = 'Text nápovědy';
+          return newRow(game, stan, type, { response });
+        }
+        case 'wt': {
+          if(sum.wt || sum.sol)
+            throw 'Chybný požadavek.';
+          const response = 'Text postupu';
+          return newRow(game, stan, type, { response, inval: sum.hint });
+        }
+        case 'loc': {
+          if(sum.sol)
+            throw 'Chybný požadavek.';
+          const response = 'Text polohy';
+          const loc = { lon: 50, lat: 15 };
+          return newRow(game, stan, type, { response, loc }); // TODO opens
+        }
+        case 'sol': {
+          if(sum.sol)
+            throw 'Chybný požadavek.';
+          const response = 'Poloha následujícího';
+          const loc = { lon: 50, lat: 15 };
+          return newRow(game, stan, type, { response, loc });
+        }
+        default:
+          throw 'Chybný požadavek.';
+      }
     }
     case 'a:getTeams': {
       if(request.data.passwordHash !== teams[0].passwordHash)
@@ -215,6 +261,15 @@ function findTeam(name) {
   return teams.find(team => normalizeName(team.name) === normalizeName(name));
 }
 
+function findTeamAndLogin(data) {
+  const team = findTeam(data.name);
+  if(!team)
+    throw 'Tým nenalezen.';
+  if(data.passwordHash !== team.passwordHash && data.adminHash !== teams[0].passwordHash)
+    throw 'Chybné přihlašovací údaje.';
+  return team;
+}
+
 let updateThrottle = null;
 
 function updateDueDates() {
@@ -238,4 +293,23 @@ function dueDate(date) {
   due.setDate(due.getDate() + 5);
   due.setHours(23, 59, 59, 999);
   return due;
+}
+
+function teamGameData(team) {
+  if(!team.game)
+    team.game = {
+      summary: { },
+      actions: [ ]
+    };
+  return team.game;
+}
+
+function newRow(game, row, stan, type, data) {
+  row = { seq: game.actions.length + 1, time: now, stan, type, pts: points[type], ...data };
+  game.actions.push(row);
+  if(!game.summary[stan])
+    game.summary.stan = { };
+  game.summary[stan][type] = row.seq;
+  // TODO save
+  return row;
 }

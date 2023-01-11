@@ -1,6 +1,20 @@
 import { teamSize, fees, dates } from './config.js';
 import { hash, hex, serverRequest, adminSalt } from './shared.js';
 
+const stanoviste = [
+  { name: 'Slunce', defOpen: true },
+  { name: 'Merkur', defOpen: true },
+  { name: 'Venuše' },
+  { name: 'Země' },
+  { name: 'Měsíc' },
+  { name: 'Mars' },
+  { name: 'Jupiter' },
+  { name: 'Saturn' },
+  { name: 'Uran' },
+  { name: 'Neptun' },
+  { name: 'Pluto' },
+];
+
 window.addEventListener('DOMContentLoaded', () => {
   {
     const chkbox = document.getElementById('nav-unfold');
@@ -28,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
         false;
   }
   if(now > dates.tshirtClose)
-    document.getElementById('detailsTmpl').content.querySelector('[name="tricko"]').dataset.disabled = '1';
+    document.getElementById('details-tmpl').content.querySelector('[name="tricko"]').dataset.disabled = '1';
   for(const elm of document.querySelectorAll('form')) {
     elm.addEventListener('input', validateField);
     elm.addEventListener('focusout', validateField);
@@ -43,7 +57,7 @@ window.addEventListener('DOMContentLoaded', () => {
     ev.preventDefault();
   });
   document.getElementById('navrh-div').addEventListener('click', ev => ev.currentTarget.hidden = true);
-  for(const tmp of document.querySelectorAll('template')) {
+  for(const tmp of document.querySelectorAll('template[data-per=player]')) {
     for(let i = 1; i <= teamSize.max; i++) {
       const clone = tmp.content.cloneNode(true);
       clone.querySelectorAll('[name]').forEach(elm => elm.name += i);
@@ -51,6 +65,14 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
   document.querySelector(`#register input[name="clen1"]`).required = true;
+  for(const tmp of document.querySelectorAll('template[data-per=stan]')) {
+    for(const stan of stanoviste) {
+      const clone = tmp.content.cloneNode(true);
+      clone.querySelectorAll('[id]').forEach(elm => elm.id += stan.name);
+      clone.querySelectorAll('[for]').forEach(elm => elm.htmlFor += stan.name);
+      tmp.before(clone);
+    }
+  }
   window.addEventListener('beforeunload', ev => {
     if(document.getElementById('saveDetails').dataset.saved === '0')
       ev.preventDefault();
@@ -240,6 +262,7 @@ async function useCachedLogin() {
     const data = await serverRequest('login', {name, passwordHash, adminHash});
     loadTeamData(data);
     document.getElementById('tab-auth').dataset.auth = 1;
+    // TODO game: auth
     return true;
   } catch(error) {
     console.error(error);
@@ -270,6 +293,7 @@ function loadTeamData(data) {
   document.getElementById('tab-auth').dataset.auth = 1;
   updateDetailForm();
   delete document.getElementById('saveDetails').dataset.saved;
+  loadGameData(data.game);
 }
 
 function logout(ev) {
@@ -341,5 +365,32 @@ async function doDetails(form) {
   } catch(error) {
     console.error(error);
     alert(typeof error === 'string' ? error : 'Neznámá chyba');
+  }
+}
+
+const timeFormat = new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'short' });
+const numberFormat = new Intl.NumberFormat('cs-CZ', { signDisplay: 'always' });
+const actionDesc = {
+  hint: 'nápověda',
+  wt: 'postup řešení',
+  loc: 'přeskočení',
+  sol: 'řešení'
+};
+
+function loadGameData(game) {
+  document.getElementById('hra-body').innerText = game.actions.reduce((a, e) => a + e.pts, 0);
+  const hdiv = document.getElementById('historie-div');
+  const htmp = document.getElementById('historie-tmpl').content;
+  hdiv.replaceChildren();
+  for(const act of game.actions) {
+    const clone = htmp.cloneNode(true);
+    clone.querySelector('label').htmlFor = `st-${act.stan}`;
+    clone.querySelector('.h-cas').textContent = timeFormat.format(act.time);
+    clone.querySelector('.h-akce').textContent = `${act.stan}: ${actionDesc[act.type]}`;
+    clone.querySelector('.h-body').textContent = numberFormat(act.pts);
+    hdiv.append(clone);
+  }
+  for(const stan of stanoviste) {
+    document.getElementById(`st-${stan.name}`).disabled = !stan.defOpen;
   }
 }

@@ -66,7 +66,7 @@
                 <span>Telefon:</span>
                 <input type="tel" name="telefon" required pattern="\+?[0-9 -]{9,}"/>
               </label>
-              <template>
+              <template data-per="player">
                 <label>
                   <span class="clen-ctr">člen:</span>
                   <input type="text" name="clen" maxlength="30"/>
@@ -191,7 +191,7 @@
             <label>E-mail:
               <input type="email" name="email" required data-keep="1"/>
             </label>
-            <template id="detailsTmpl">
+            <template id="details-tmpl" data-per="player">
               <label>
                 <span class="clen-ctr">člen:</span>
                 <input type="text" name="clen" data-keep="1"/>
@@ -264,39 +264,22 @@
       <article id="tab-hra">
         <input hidden type="checkbox" id="historie-ck"/>
         <h1>
-          <label for="historie-ck">Aktuální stav: <span id="body">396</span> bodů</label>
+          <label for="historie-ck">Aktuální stav: <span id="hra-body">396</span> bodů</label>
         </h1>
+        <template id="historie-tmpl">
+          <label for="stanoviste">
+            <span class="h-cas"></span>
+            <span class="h-akce"></span>
+            <span class="h-body"></span>
+          </label>
+        </template>
         <div id="historie-div">
-          <label for="st1">
-            <span class="h-cas">6:45</span>
-            <span class="h-akce">Merkur: řešení</span>
-            <span class="h-body">+100</span>
-          </label>
-          <label for="st2" class="strike">
-            <span class="h-cas">7:25</span>
-            <span class="h-akce">Venuše: nápověda</span>
-            <span class="h-body">-2</span>
-          </label>
-          <label for="st2">
-            <span class="h-cas">7:25</span>
-            <span class="h-akce">Venuše: postup</span>
-            <span class="h-body">-5</span>
-          </label>
         </div>
         <div id="ctverecky">
-          <input hidden type="radio" name="st-radio" id="st1"/>
-          <label for="st1" class="solved"></label>
-          <input hidden type="radio" name="st-radio" id="st2"/>
-          <label for="st2" class="penalty"></label>
-          <input hidden type="radio" name="st-radio" id="st3"/>
-          <label for="st3" class="penalty solved"></label>
-          <input hidden type="radio" name="st-radio" id="st4" checked/>
-          <label for="st4" class="open"></label>
-          <label for="st5" class=""></label>
-          <label for="st6" class=""></label>
-          <label for="st7" class=""></label>
-          <label for="st8" class=""></label>
-          <label for="st9" class=""></label>
+          <template data-per="stan">
+            <input hidden type="radio" name="st-radio" id="st-"/>
+            <label for="st-"></label>
+          </template>
         </div>
         <h1>Stanoviště MARS</h1>
         <div id="st-info">
@@ -304,7 +287,7 @@
             <span>Poloha:</span>
             <div>
               <p>Uprostřed louky</p>
-              <p><a href="example.com">Odkaz na mapu</a></p>
+              <p><a href="example.com" target="_blank">Odkaz na mapu</a></p>
             </div>
           </div>
           <div id="st-napoveda">
