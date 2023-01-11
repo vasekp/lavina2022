@@ -158,7 +158,7 @@ function update() {
   const now = new Date();
   for(const team of teams2) {
     if(team.game) {
-      team.pts = team.game.actions.reduce((a, e) => a + e.pts + (e.inval ? -game.actions[e.inval - 1].pts : 0), 0);
+      team.pts = team.game.actions.reduce((a, e) => a + e.pts + (e.inval ? -team.game.actions[e.inval - 1].pts : 0), 0);
       if(team.game.actions.length)
         team.last = new Date(team.game.actions[team.game.actions.length - 1].time);
       else
