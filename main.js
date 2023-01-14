@@ -459,7 +459,7 @@ function updStan(elm) {
     enable(act, true);
   if(state.opened) {
     const row = game.actions[state.opened - 1];
-    const {text, link, gps} = row.loc;
+    const {text, gps} = row.loc;
     const gpsText = `${gps[0]}N, ${gps[1]}E`;
     document.getElementById('st-poloha').hidden = false;
     document.getElementById('st-pol-text').textContent = text;
