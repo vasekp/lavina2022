@@ -1,8 +1,8 @@
 import { teamSize, fees, dates } from './config.js';
 import { hash, hex, serverRequest, adminSalt } from './shared.js';
 
-if(location.protocol !== "https:")
-  location.protocol = "https:";
+if(location.protocol !== 'https:' && location.hostname !== 'localhost')
+  location.protocol = 'https:';
 
 const stMap = {};
 const stPromise = serverRequest('getGameStruct').then(stanList => {
