@@ -80,6 +80,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('tab-hra').addEventListener('click', ev => doGame(ev.target.id));
   document.getElementById('copy-emoji').addEventListener('click', ev => copyGPS(ev.currentTarget));
+  document.getElementById('in-reseni').addEventListener('input', ev => ev.currentTarget.classList.remove('error'));
   resetForms();
   updateTeams();
   useCachedLogin();
@@ -503,10 +504,8 @@ async function doReseni(form) {
     inp.value = '';
   else {
     document.getElementById('sad-reseni').checked = true;
-    inp.classList.add('errorFlash');
-    inp.offsetWidth;
+    inp.classList.add('error');
     inp.focus();
-    inp.classList.remove('errorFlash');
   }
 }
 

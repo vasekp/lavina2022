@@ -557,12 +557,11 @@ hr {
   max-width: 100%;
   text-transform: uppercase;
   background: white;
-  transition: background 500ms ease-out;
 }
 
-#in-reseni.errorFlash {
-  background: #f44;
-  transition: none;
+#in-reseni.error {
+  background: #fcc;
+  color: #400;
 }
 
 .stanName {
