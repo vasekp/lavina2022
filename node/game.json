@@ -4,7 +4,7 @@
     "hint": "Nápověda k šifře Canaveral",
     "wt": "Zadej heslo CCC",
     "sol": "ccc",
-    "next": "ISS",
+    "next": "Oběžná dráha 1/2",
     "autoOpen": true
   },
   {
@@ -12,29 +12,29 @@
     "hint": "Nápověda k šifře Bajkonur",
     "wt": "Zadej heslo BBB",
     "sol": "bbb",
-    "next": "Měsíc",
+    "next": "Oběžná dráha 2/2",
     "autoOpen": true
   },
   {
-    "name": "ISS",
+    "name": "Oběžná dráha 1/2",
     "locText": "Vysílač nad Pokovými Hutěmi",
     "locGPS": [49.0460072, 13.6496314],
     "locLink": "https://mapy.cz/s/bofecefedu",
-    "hint": "Nápověda k šifře ISS / Měsíc",
-    "wt": "Zadej heslo IM",
-    "sol": "im",
-    "parts": [ "ISS", "Měsíc" ],
+    "hint": "Nápověda k šifře Oběžná dráha",
+    "wt": "Zadej heslo OOO",
+    "sol": "ooo",
+    "parts": [ "Oběžná dráha 1/2", "Oběžná dráha 2/2" ],
     "next": "Merkur"
   },
   {
-    "name": "Měsíc",
+    "name": "Oběžná dráha 2/2",
     "locText": "Zimní rozcestník v JZ rohu PP Pasecká slať",
     "locGPS": [49.0252681, 13.6590419],
     "locLink": "https://mapy.cz/s/fafavusoda",
-    "hint": "Nápověda k šifře ISS / Měsíc",
-    "wt": "Zadej heslo IM",
-    "sol": "im",
-    "parts": [ "ISS", "Měsíc" ],
+    "hint": "Nápověda k šifře Oběžná dráha",
+    "wt": "Zadej heslo OOO",
+    "sol": "ooo",
+    "parts": [ "Oběžná dráha 1/2", "Oběžná dráha 2/2" ],
     "next": "Merkur"
   },
   {
