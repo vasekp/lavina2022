@@ -400,17 +400,18 @@ const en2cz = {
 async function loadGameData(game_) {
   game = game_;
   const last = await updScore();
-  last.checked = true;
-  updStan(last);
+  const lastElm = document.getElementById(`st-${last}`);
+  lastElm.checked = true;
+  updStan(lastElm);
 }
 
-async function updScore() {
+async function updScore() { // vrací: stanoviště příslušné poslední akci, či jí otevřené
   document.getElementById('hra-body').textContent = game.actions.reduce((a, e) => a + e.pts + (e.inval ? -game.actions[e.inval - 1].pts : 0), 0);
   const hdiv = document.getElementById('historie-div');
   const htmp = document.getElementById('historie-tmpl').content;
   hdiv.replaceChildren();
   const stanoviste = await stPromise;
-  let last = document.getElementById(`st-${stanoviste[0].name}`);
+  let last = stanoviste[0].name;
   for(const stan of stanoviste) {
     document.getElementById(`st-${stan.name}`).disabled = !stan.autoOpen;
   }
@@ -429,9 +430,10 @@ async function updScore() {
     hdiv.prepend(clone);
     if(act.inval)
       document.querySelector(`#historie-div label[data-seq="${act.inval}"`).classList.add('strike');
+    last = act.stan;
     if(act.opens) {
-      last = document.getElementById(`st-${act.opens}`);
-      last.disabled = false;
+      last = act.opens;
+      document.getElementById(`st-${last}`).disabled = false;
     }
   }
   for(const stan in game.summary) {
