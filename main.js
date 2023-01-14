@@ -497,15 +497,18 @@ function updStan(elm) {
     enable('poloha', false);
   for(const elm of document.querySelectorAll('.new'))
     elm.classList.remove('new');
+  const inp = document.getElementById('in-reseni');
+  inp.value = '';
+  inp.classList.remove('error');
 }
 
 async function doReseni(form) {
-  const succ = await doGameAction('sol', document.getElementById('in-reseni').value);
   const inp = document.getElementById('in-reseni');
-  if(succ)
-    inp.value = '';
-  else {
+  const value = inp.value;
+  const succ = await doGameAction('sol', value);
+  if(!succ) {
     document.getElementById('sad-reseni').checked = true;
+    inp.value = value;
     inp.classList.add('error');
     inp.focus();
   }
