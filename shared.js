@@ -15,7 +15,8 @@ export async function hash(str, saltHex) {
 
 export async function serverRequest(type, data) {
   const rqParcel = {type, data};
-  const resObj = await fetch('backend.php', { method: 'POST', body: JSON.stringify(rqParcel) });
+  const resObj = await fetch('backend.php', { method: 'POST', body: JSON.stringify(rqParcel) })
+    .catch(e => { throw('Nelze se připojit k serveru.') });
   switch(resObj.status) {
     case 200:
       return resObj.json().catch(_ => ({}));
