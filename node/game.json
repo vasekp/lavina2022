@@ -18,6 +18,7 @@
   {
     "name": "ISS",
     "locText": "Vysílač nad Pokovými Hutěmi",
+    "locGPS": [49.0460072, 13.6496314],
     "locLink": "https://mapy.cz/s/bofecefedu",
     "hint": "Nápověda k šifře ISS / Měsíc",
     "wt": "Zadej heslo IM",
@@ -28,6 +29,7 @@
   {
     "name": "Měsíc",
     "locText": "Zimní rozcestník v JZ rohu PP Pasecká slať",
+    "locGPS": [49.0252681, 13.6590419],
     "locLink": "https://mapy.cz/s/fafavusoda",
     "hint": "Nápověda k šifře ISS / Měsíc",
     "wt": "Zadej heslo IM",
@@ -38,6 +40,7 @@
   {
     "name": "Merkur",
     "locText": "Posed 1km severně",
+    "locGPS": [49.0489583, 13.6395083],
     "locLink": "https://mapy.cz/s/bopofazake",
     "hint": "Nápověda k šifře Merkur",
     "wt": "Zadej heslo MMM",
@@ -47,6 +50,7 @@
   {
     "name": "Venuše",
     "locText": "Stolek u parkoviště Pláně",
+    "locGPS": [49.0537000, 13.6340783],
     "locLink": "https://mapy.cz/s/lajajasopu",
     "hint": "Nápověda k šifře Venuše",
     "wt": "Zadej heslo VVV",
@@ -56,6 +60,7 @@
   {
     "name": "Mars",
     "locText": "Rozhledna Skokanský můstek",
+    "locGPS": [49.0613675, 13.6296717],
     "locLink": "https://mapy.cz/s/fevehakoko",
     "hint": "Nápověda k šifře Mars",
     "wt": "Zadej heslo MMM",
@@ -65,6 +70,7 @@
   {
     "name": "Jupiter",
     "locText": "Cukrárna Ella",
+    "locGPS": [49.0658928, 13.6225531],
     "locLink": "https://mapy.cz/s/ramagakolo",
     "hint": "Nápověda k šifře Jupiter",
     "wt": "Zadej heslo JJJ",
@@ -74,6 +80,7 @@
   {
     "name": "Saturn",
     "locText": "Přístřešek Zlatá Studna",
+    "locGPS": [49.0606511, 13.6013114],
     "locLink": "https://mapy.cz/s/labotebase",
     "hint": "Nápověda k šifře Saturn",
     "wt": "Zadej heslo SSS",
@@ -83,6 +90,7 @@
   {
     "name": "Uran",
     "locText": "Zastávka Horská Kvilda, U Prodejny",
+    "locGPS": [49.0546150, 13.5631536],
     "locLink": "https://mapy.cz/s/razakaturu",
     "hint": "Nápověda k šifře Uran",
     "wt": "Zadej heslo UUU",
@@ -92,6 +100,7 @@
   {
     "name": "Neptun",
     "locText": "Vyhlídková věž Jezerní slať",
+    "locGPS": [49.0397447, 13.5754397],
     "locLink": "https://mapy.cz/s/butugugela",
     "hint": "Nápověda k šifře Neptun",
     "wt": "Zadej heslo NNN",
@@ -101,6 +110,7 @@
   {
     "name": "Pluto",
     "locText": "Rysí výběh",
+    "locGPS": [49.0335264, 13.5827483],
     "locLink": "https://mapy.cz/s/juhonocara",
     "hint": "Nápověda k šifře Pluto",
     "wt": "Zadej heslo PPP",

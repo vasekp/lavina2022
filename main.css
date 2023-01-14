@@ -572,3 +572,39 @@ hr {
 .new {
   box-shadow: 0 0 3pt 2pt white;
 }
+
+#copy-emoji {
+  margin-left: .3em;
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+
+#copy-emoji::before, #copy-emoji::after {
+  position: absolute;
+  content: '\1f4c4';
+}
+
+#copy-emoji::after {
+  left: 2px;
+  top: -2px;
+}
+
+#copied {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 1.5em);
+  background: var(--c-bg);
+  border: 2px solid var(--c-fg);
+  padding: .5em;
+  border-radius: .5em;
+  transition: opacity 1000ms;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#copied.showFlash {
+  transition: none;
+  opacity: 100%;
+}

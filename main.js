@@ -79,6 +79,7 @@ window.addEventListener('DOMContentLoaded', () => {
       ev.preventDefault();
   });
   document.getElementById('tab-hra').addEventListener('click', ev => doGame(ev.target.id));
+  document.getElementById('copy-emoji').addEventListener('click', ev => copyGPS(ev.currentTarget));
   resetForms();
   updateTeams();
   useCachedLogin();
@@ -457,10 +458,13 @@ function updStan(elm) {
     enable(act, true);
   if(state.opened) {
     const row = game.actions[state.opened - 1];
-    const {text, link} = row.loc;
+    const {text, link, gps} = row.loc;
+    const gpsText = `${gps[0]}N, ${gps[1]}E`;
     document.getElementById('st-poloha').hidden = false;
     document.getElementById('st-pol-text').textContent = text;
-    document.getElementById('st-pol-link').href = link;
+    document.getElementById('st-pol-link').textContent = gpsText;
+    document.getElementById('st-pol-link').href = `https://mapy.cz/zimni?q=${gpsText}`;
+    document.getElementById('copy-emoji').dataset.text = gpsText;
   } else
     document.getElementById('st-poloha').hidden = true;
   if(state.hint) {
@@ -559,4 +563,15 @@ async function doGameAction(type, text) {
     alert(typeof error === 'string' ? error : 'Neznámá chyba');
     useCachedLogin();
   }
+}
+
+function copyGPS(elm) {
+  const text = elm.dataset.text;
+  const popup = document.getElementById('copied');
+  navigator.clipboard.writeText(text)
+    .then(_ => {
+      popup.classList.add('showFlash');
+      setTimeout(_ => popup.classList.remove('showFlash'), 500);
+    })
+    .catch(_ => {});
 }

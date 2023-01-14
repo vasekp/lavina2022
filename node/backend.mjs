@@ -197,7 +197,7 @@ async function handleObj(request) {
           if(!next || sum.sol)
             throw 'Chybný požadavek.';
           const nextRec = stanMap[next];
-          const loc = { text: nextRec.locText, link: nextRec.locLink };
+          const loc = { text: nextRec.locText, link: nextRec.locLink, gps: nextRec.locGPS };
           return newRow(game, stan, type, { loc, opens: next });
         }
         case 'sol': {
@@ -211,7 +211,7 @@ async function handleObj(request) {
             return newRow(game, stan, type, { text: solution });
           // else
           const nextRec = stanMap[next];
-          const loc = { text: nextRec.locText, link: nextRec.locLink };
+          const loc = { text: nextRec.locText, link: nextRec.locLink, gps: nextRec.locGPS };
           return newRow(game, stan, type, { text: solution, loc, opens: next });
         }
         default:
