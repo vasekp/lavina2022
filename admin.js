@@ -17,7 +17,6 @@ window.addEventListener('DOMContentLoaded', () => {
     tymy.addEventListener('input', ev => doAdmin(ev.target));
     tymy.addEventListener('click', ev => doAdmin(ev.target));
   }
-  document.getElementById('hra-list').addEventListener('click', ev => doReset(ev.target));
   document.getElementById('refresh').addEventListener('click', loadTeams);
   document.getElementById('reloadFile').addEventListener('click', doReload);
   useCachedLogin();
@@ -246,20 +245,4 @@ function doReload() {
 
 function amountDue(team) {
   return fees.base + fees.member * team.members.length + fees.tshirt * team.members.map(member => member.tshirt).filter(val => val && val !== 'nic').length;
-}
-
-function doReset(tgt) {
-  const passwordHash = localStorage['adminHash'];
-  if(!passwordHash)
-    return;
-  if(tgt.dataset.id !== 'hra-reset')
-    return;
-  const record = tgt.closest('.team-hra');
-  const name = record?.querySelector('.name')?.dataset.name;
-  serverRequest('a:update', {passwordHash, name, field: 'game', undefined})
-    .then(loadTeams)
-    .catch(e => {
-      console.error(e);
-      alert(typeof e === 'string' ? e : 'Neznámá chyba');
-    });
 }
