@@ -16,15 +16,20 @@ const points = {
 let {capacity, teams, numTeams} = await loadTeams();
 const { stanMap, struct } = await loadGameData();
 
+function log(type, obj) {
+  console.log(new Date(), type, obj);
+}
+
 http.createServer((req, res) => {
   res.setHeader('Content-type', 'application/json');
   let body = '';
   req.on('data', data => body += data);
   req.on('end', () => handle(body).then(({status, reply}) => {
     res.statusCode = status;
+    log('<<<', reply);
     res.end(JSON.stringify(reply));
   }));
-}).listen(port, () => console.log(`Server open at ${port}`));
+}).listen(port, () => log('LOAD', `Server open at ${port}`));
 
 async function handle(body) {
   if(!body)
@@ -32,13 +37,13 @@ async function handle(body) {
   try {
     return { status: 200, reply: await handleObj(JSON.parse(body)) };
   } catch(e) { // catches throws from handleObj as well as JSON parse errors
-    console.error(e);
+    log('ERR', e);
     return { status: 400, reply: typeof e === 'string' ? e : 'Chybný požadavek.' };
   }
 }
 
 async function handleObj(request) {
-  console.log(request);
+  log('>>>', request);
   switch(request.type) {
     case 'getTeams': {
       if(updateDueDates())
@@ -272,7 +277,7 @@ async function loadTeams() {
     const numTeams = teams.filter(team => !team.hidden).length;
     return { capacity, teams, numTeams };
   } catch(e) {
-    console.error(e);
+    log('ERR', e);
     throw 'Chyba při načítání týmů!';
   }
 }
@@ -296,7 +301,7 @@ async function loadGameData() {
 let saveDebounce = null;
 
 function saveTeams_() {
-  console.log('saveTeams');
+  log('INFO', 'saveTeams');
   fs.writeFile('teams.json', JSON.stringify({capacity, teams}, null, 2));
   numTeams = teams.filter(team => !team.hidden).length;
 }
