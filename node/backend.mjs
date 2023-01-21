@@ -213,9 +213,9 @@ async function handleObj(request) {
             if(diff < attemptDelay * 1000)
               throw 'Ještě neuběhl časový odstup od posledního pokusu.';
           }
-          if(stan.autoOpen && new Date(stan.autoOpen) > now)
+          if(rec.autoOpen && new Date(rec.autoOpen) > now)
             throw 'Stanoviště není otevřeno.';
-          if(stan.autoClose && new Date(stan.autoClose) < now)
+          if(rec.autoClose && new Date(rec.autoClose) < now)
             throw 'Stanoviště není otevřeno.';
           const solution = normalizeName(data.text).toUpperCase();
           if(solution !== rec.sol)
