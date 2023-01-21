@@ -213,6 +213,10 @@ async function handleObj(request) {
             if(diff < attemptDelay * 1000)
               throw 'Ještě neuběhl časový odstup od posledního pokusu.';
           }
+          if(stan.autoOpen && new Date(stan.autoOpen) > now)
+            throw 'Stanoviště není otevřeno.';
+          if(stan.autoClose && new Date(stan.autoClose) < now)
+            throw 'Stanoviště není otevřeno.';
           const solution = normalizeName(data.text).toUpperCase();
           if(solution !== rec.sol)
             return newRow(game, stan, 'error', points.error, { text: solution });
