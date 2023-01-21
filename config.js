@@ -16,3 +16,5 @@ export const dates = {
   gameEnd: new Date('2023-01-28T20:00:00.000+01:00'),
   gameClose: new Date('2023-01-28T23:59:59.999+01:00')
 };
+
+export const attemptDelay = 60;

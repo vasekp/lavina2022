@@ -1,7 +1,7 @@
 import * as fs from 'node:fs/promises';
 import * as http from 'node:http';
 import normalizeName from './normalize.mjs';
-import { dates, teamSize } from '../config.js';
+import { dates, teamSize, attemptDelay } from '../config.js';
 
 const port = 3001;
 
@@ -207,6 +207,12 @@ async function handleObj(request) {
         case 'sol': {
           if(sum.sol)
             throw 'Chybný požadavek.';
+          if(sum.error) {
+            const errTime = game.actions[sum.error - 1].time;
+            const diff = now - errTime;
+            if(diff < attemptDelay * 1000)
+              throw 'Ještě neuběhl časový odstup od posledního pokusu.';
+          }
           const solution = normalizeName(data.text).toUpperCase();
           if(solution !== rec.sol)
             return newRow(game, stan, 'error', points.error, { text: solution });

@@ -1,4 +1,4 @@
-import { teamSize, fees, dates } from './config.js';
+import { teamSize, fees, dates, attemptDelay } from './config.js';
 import { hash, hex, serverRequest, adminSalt } from './shared.js';
 
 if(location.protocol !== 'https:' && location.hostname !== 'localhost')
@@ -523,7 +523,7 @@ function updStan(which) {
     if(state.error) {
       const errRow = game.actions[state.error - 1];
       const errTime = new Date(errRow.time);
-      let diff = 60 - Math.floor((new Date() - errTime) / 1000);
+      let diff = attemptDelay - Math.floor((new Date() - errTime) / 1000);
       const minsec = x => `${Math.floor(x / 60)}:${(x % 60).toString().padStart(2, '0')}`;
       const timer = setInterval(_ => {
         diff -= 1;
