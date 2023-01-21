@@ -92,6 +92,11 @@ function update() {
       .map(member => member.tshirt)
       .filter(type => type && type !== 'nic')
       .join(', ') || 'žádná';
+    frag.querySelector('[data-id="meals"]').textContent = Object.entries(team.members
+      .flatMap(member => [member.meal1, member.meal2])
+      .reduce((a, e) => { a[e] = (a[e] || 0) + 1; return a; }, {}))
+      .map(e => `${e[1]}× ${e[0]}`)
+      .join(', ');
     frag.querySelector('[data-id="sharing"]').textContent = team.sharingPreferences;
     frag.querySelector('[data-id="date-reg"]').textContent = new Date(team.dateRegOrig).toLocaleString();
     frag.querySelector('[data-id="date-due"]').textContent = team.amountPaid ? "zaplaceno" :
