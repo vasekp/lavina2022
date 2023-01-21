@@ -532,6 +532,15 @@ label[for="historie-ck"]::after {
   background: #f80;
 }
 
+.positive:disabled {
+  background: #ae8;
+  color: #888;
+}
+
+.positive:disabled::after {
+  content: ' (' attr(data-delay) ')';
+}
+
 .akce-menu {
   display: flex;
   flex-direction: column;

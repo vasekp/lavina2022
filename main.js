@@ -458,15 +458,15 @@ async function updScore() { // vrací: stanoviště příslušné poslední akci
   return last;
 }
 
-function updStan(elm) {
-  if(!elm) {
+function updStan(which) {
+  if(!which) {
     document.getElementById('st-section').hidden = true;
     return;
   } else
     document.getElementById('st-section').hidden = false;
-  const stan = typeof elm === 'string' ? elm : elm.id.substring(3);
-  for(const elm2 of document.querySelectorAll('.stanName'))
-    elm2.textContent = stan;
+  const stan = typeof which === 'string' ? which : which.id.substring(3);
+  for(const elm of document.querySelectorAll('.stanName'))
+    elm.textContent = stan;
   const state = game.summary[stan] || { };
   document.getElementById('sad-menu').checked = true;
   const enable = (what, enable) => {
@@ -513,6 +513,32 @@ function updStan(elm) {
       enable(act, false);
   } else
     document.getElementById('st-reseni').hidden = true;
+  {
+    const elm = document.getElementById('b-reseni');
+    if(elm.dataset.timer) {
+      clearTimeout(+elm.dataset.timer);
+      delete elm.dataset.timer;
+    }
+    elm.disabled = false;
+    if(state.error) {
+      const errRow = game.actions[state.error - 1];
+      const errTime = new Date(errRow.time);
+      let diff = 60 - Math.floor((new Date() - errTime) / 1000);
+      const minsec = x => `${Math.floor(x / 60)}:${(x % 60).toString().padStart(2, '0')}`;
+      const timer = setInterval(_ => {
+        diff -= 1;
+        if(diff <= 0 && timer === +elm.dataset.timer) {
+          clearTimeout(timer);
+          delete elm.dataset.timer;
+          elm.disabled = false;
+        } else
+          elm.dataset.delay = minsec(diff);
+      }, 1000);
+      elm.disabled = true;
+      elm.dataset.delay = minsec(diff);
+      elm.dataset.timer = timer;
+    }
+  }
   if(state.loc || stMap[stan].final)
     enable('poloha', false);
   for(const elm of document.querySelectorAll('.new'))

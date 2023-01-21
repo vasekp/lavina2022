@@ -367,7 +367,7 @@ function newRow(game, stan, type, pts, data) {
   const row = { seq: game.actions.length + 1, time: new Date(), stan, type, pts, ...data };
   const changes = { };
   for(const part of (stanMap[stan].parts || [ stan ]))
-    changes[part] = { [type]: row.seq, ...(game.summary[part] || { }) };
+    changes[part] = { ...(game.summary[part] || { }), [type]: row.seq };
   if(data.opens)
     changes[data.opens] = { ...(game.summary[data.opens] || { }), opened: row.seq };
   game.summary = { ...game.summary, ...changes };
