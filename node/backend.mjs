@@ -294,6 +294,8 @@ async function loadGameData() {
       name: stan.name,
       autoOpen: stan.autoOpen,
       autoClose: stan.autoClose,
+      hintAvailable: !!stan.hint,
+      wtAvailable: !!stan.wt,
       final: !stan.next
     });
   }

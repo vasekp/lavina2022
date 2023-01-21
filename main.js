@@ -491,16 +491,20 @@ function updStan(elm) {
     document.getElementById('st-napoveda').hidden = false;
     document.getElementById('st-napoveda-text').textContent = row.text;
     enable('napoveda', false);
-  } else
+  } else {
+    enable('napoveda', stMap[stan].hintAvailable);
     document.getElementById('st-napoveda').hidden = true;
+  }
   if(state.wt) {
     const row = game.actions[state.wt - 1];
     document.getElementById('st-postup').hidden = false;
     document.getElementById('st-postup-text').textContent = row.text;
     enable('napoveda', false);
     enable('postup', false);
-  } else
+  } else {
+    enable('postup', stMap[stan].wtAvailable);
     document.getElementById('st-postup').hidden = true;
+  }
   if(state.sol) {
     const row = game.actions[state.sol - 1];
     document.getElementById('st-reseni').hidden = false;
