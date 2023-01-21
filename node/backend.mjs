@@ -9,7 +9,6 @@ const points = {
   hint: -2,
   wt: -5,
   loc: -3,
-  sol: 100,
   error: 0
 };
 
@@ -186,14 +185,14 @@ async function handleObj(request) {
             return game.actions[sum.hint - 1];
           if(sum.wt || sum.sol)
             throw 'Chybný požadavek.';
-          return newRow(game, stan, type, { text: rec.hint });
+          return newRow(game, stan, type, points.hint, { text: rec.hint });
         }
         case 'wt': {
           if(sum.wt)
             return game.actions[sum.wt - 1];
           if(sum.sol)
             throw 'Chybný požadavek.';
-          return newRow(game, stan, type, { text: rec.wt, inval: sum.hint });
+          return newRow(game, stan, type, points.wt, { text: rec.wt, inval: sum.hint });
         }
         case 'loc': {
           if(sum.loc)
@@ -203,21 +202,21 @@ async function handleObj(request) {
             throw 'Chybný požadavek.';
           const nextRec = stanMap[next];
           const loc = { text: nextRec.locText, gps: nextRec.locGPS };
-          return newRow(game, stan, type, { loc, opens: next });
+          return newRow(game, stan, type, points.loc, { loc, opens: next });
         }
         case 'sol': {
           if(sum.sol)
             throw 'Chybný požadavek.';
           const solution = normalizeName(data.text).toUpperCase();
           if(solution !== rec.sol)
-            return newRow(game, stan, 'error', { text: solution });
+            return newRow(game, stan, 'error', points.error, { text: solution });
           const next = rec.next;
           if(!next)
-            return newRow(game, stan, type, { text: solution });
+            return newRow(game, stan, type, rec.pts, { text: solution });
           // else
           const nextRec = stanMap[next];
           const loc = { text: nextRec.locText, gps: nextRec.locGPS };
-          return newRow(game, stan, type, { text: solution, loc, opens: next });
+          return newRow(game, stan, type, rec.pts, { text: solution, loc, opens: next });
         }
         default:
           throw 'Chybný požadavek.';
@@ -364,8 +363,8 @@ function teamGameData(team) {
   return team.game;
 }
 
-function newRow(game, stan, type, data) {
-  const row = { seq: game.actions.length + 1, time: new Date(), stan, type, pts: points[type], ...data };
+function newRow(game, stan, type, pts, data) {
+  const row = { seq: game.actions.length + 1, time: new Date(), stan, type, pts, ...data };
   const changes = { };
   for(const part of (stanMap[stan].parts || [ stan ]))
     changes[part] = { [type]: row.seq, ...(game.summary[part] || { }) };
