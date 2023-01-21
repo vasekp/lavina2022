@@ -227,6 +227,7 @@ async function handleObj(request) {
       const data = request.data;
       const team = findTeamAndLogin(data);
       team.game = undefined;
+      saveTeams();
       return;
     }
     case 'a:getTeams': {
@@ -292,6 +293,7 @@ async function loadGameData() {
     struct.push({
       name: stan.name,
       autoOpen: stan.autoOpen,
+      autoClose: stan.autoClose,
       final: !stan.next
     });
   }

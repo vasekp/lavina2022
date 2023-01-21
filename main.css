@@ -498,6 +498,10 @@ label[for="historie-ck"]::after {
   background: transparent;
 }
 
+#st-section {
+  margin-top: 1rem;
+}
+
 #st-info {
   display: grid;
   grid-template-columns: max-content auto;

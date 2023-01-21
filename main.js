@@ -401,7 +401,8 @@ async function loadGameData(game_) {
   game = game_;
   const last = await updScore();
   const lastElm = document.getElementById(`st-${last}`);
-  lastElm.checked = true;
+  if(lastElm)
+    lastElm.checked = true;
   updStan(lastElm);
 }
 
@@ -411,9 +412,15 @@ async function updScore() { // vrací: stanoviště příslušné poslední akci
   const htmp = document.getElementById('historie-tmpl').content;
   hdiv.replaceChildren();
   const stanoviste = await stPromise;
-  let last = stanoviste[0].name;
+  let last = null;
+  const now = Date.now();
   for(const stan of stanoviste) {
-    document.getElementById(`st-${stan.name}`).disabled = !stan.autoOpen;
+    if(stan.autoOpen && new Date(stan.autoOpen) < now) {
+      document.getElementById(`st-${stan.name}`).disabled = false;
+      if(!last)
+        last = stan.name;
+    } else
+      document.getElementById(`st-${stan.name}`).disabled = true;
   }
   for(const ctv of document.querySelectorAll('#ctverecky label'))
     ctv.className = '';
@@ -436,6 +443,10 @@ async function updScore() { // vrací: stanoviště příslušné poslední akci
       document.getElementById(`st-${last}`).disabled = false;
     }
   }
+  for(const stan of stanoviste) {
+    if(stan.autoClose && new Date(stan.autoClose) < now)
+      document.getElementById(`st-${stan.name}`).disabled = true;
+  }
   for(const stan in game.summary) {
     const ctv = document.querySelector(`#ctverecky label[for="st-${stan}"]`);
     const rec = game.summary[stan];
@@ -448,6 +459,11 @@ async function updScore() { // vrací: stanoviště příslušné poslední akci
 }
 
 function updStan(elm) {
+  if(!elm) {
+    document.getElementById('st-section').hidden = true;
+    return;
+  } else
+    document.getElementById('st-section').hidden = false;
   const stan = typeof elm === 'string' ? elm : elm.id.substring(3);
   for(const elm2 of document.querySelectorAll('.stanName'))
     elm2.textContent = stan;
