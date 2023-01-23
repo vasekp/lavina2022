@@ -3,8 +3,8 @@
     "name": "Prolog",
     "sol": "meteor",
     "pts": 50,
-    "autoOpen": "2023-01-21T20:00:00.000+01:00",
-    "autoClose": "2023-01-21T20:29:59.999+01:00"
+    "autoOpen": "2023-01-27T20:30:00.000+01:00",
+    "autoClose": "2023-01-27T23:59:59.999+01:00"
   },
   {
     "name": "Canaveral",
@@ -13,7 +13,7 @@
     "sol": "taktovka",
     "pts": 100,
     "next": "Oběžná dráha 1/2",
-    "autoOpen": "2023-01-21T20:40:00.000+01:00"
+    "autoOpen": "2023-01-28T06:30:00.000+01:00"
   },
   {
     "name": "Bajkonur",
@@ -22,7 +22,7 @@
     "sol": "lunochod",
     "pts": 100,
     "next": "Oběžná dráha 2/2",
-    "autoOpen": "2023-01-21T20:40:00.000+01:00"
+    "autoOpen": "2023-01-28T06:30:00.000+01:00"
   },
   {
     "name": "Oběžná dráha 1/2",
