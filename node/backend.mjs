@@ -232,13 +232,6 @@ async function handleObj(request) {
           throw 'Chybný požadavek.';
       }
     }
-    case 'g:reset': {
-      const data = request.data;
-      const team = findTeamAndLogin(data);
-      team.game = undefined;
-      saveTeams();
-      return;
-    }
     case 'a:getTeams': {
       if(request.data.passwordHash !== teams[0].passwordHash)
         throw 'Neautorizovaný požadavek.';

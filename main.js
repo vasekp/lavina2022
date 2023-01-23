@@ -565,9 +565,6 @@ function doGame(id) {
     case 'ak-refresh':
       useCachedLogin();
       break;
-    case 'ak-reset':
-      doReset();
-      break;
     case 'b-napoveda':
     case 'b-poloha':
     case 'b-postup':
@@ -627,12 +624,4 @@ function copyGPS(elm) {
       setTimeout(_ => popup.classList.remove('showFlash'), 500);
     })
     .catch(_ => {});
-}
-
-function doReset() {
-  serverRequest('g:reset', {
-    name: localStorage['teamName'],
-    passwordHash: localStorage['passwordHash'],
-    adminHash: localStorage['adminHash']
-  }).then(useCachedLogin);
 }
