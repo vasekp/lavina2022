@@ -3,7 +3,7 @@ import * as http from 'node:http';
 import normalizeName from './normalize.mjs';
 import { dates, teamSize, attemptDelay } from '../config.js';
 
-const port = 3001;
+const port = 3000;
 
 const points = {
   hint: -2,
