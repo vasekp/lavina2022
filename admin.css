@@ -20,12 +20,12 @@
   display: none;
 }
 
-.details {
+.expanded {
   display: none;
 }
 
-#expand-all:checked ~ #team-list .details,
-.expand:checked + .details {
+.expand-all:checked ~ * .expanded,
+.expand:checked + .expanded {
   display: grid;
 }
 
@@ -73,4 +73,35 @@ button {
 
 #eml-list {
   user-select: all;
+}
+
+.team-hra {
+  max-width: 30em;
+  margin-top: .5em;
+}
+
+.historie-div {
+  display: grid;
+  grid-auto-rows: 1.5em;
+  grid-template-columns: 6ch auto 7ch;
+  max-width: 30em;
+}
+
+.historie-div > div {
+  display: contents;
+}
+
+.historie-div > .strike * {
+  color: var(--c-weak);
+  text-decoration: line-through;
+}
+
+[data-id="hra-reset"] {
+  margin: 0 auto;
+}
+
+.button-row {
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }

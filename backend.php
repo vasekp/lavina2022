@@ -6,12 +6,13 @@
   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
   curl_setopt($ch, CURLOPT_HEADER, true);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  list($header, $contents) = preg_split('/([\r\n][\r\n])\\1/', curl_exec($ch), 2);
-  if(curl_errno($ch)) {
+  $ret = curl_exec($ch);
+  if($ret === false) {
     http_response_code(503);
     header('Content-type: text/plain');
     echo 'Curl error: ' . curl_error($ch);
   } else {
+    list($header, $contents) = explode("\r\n\r\n", $ret, 2);
     http_response_code(curl_getinfo($ch, CURLINFO_HTTP_CODE));
     curl_close($ch);
     header('Content-type: application/json');
