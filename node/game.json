@@ -71,8 +71,8 @@
     "locText": "Přístřešek Zlatá Studna",
     "locGPS": [49.0606511, 13.6013114],
     "hint": "Nápověda k šifře Mars",
-    "wt": "Zadej heslo SOKOL",
-    "sol": "sokol",
+    "wt": "Zadej heslo KOMETA",
+    "sol": "kometa",
     "pts": 100,
     "next": "Jupiter"
   },
@@ -111,8 +111,8 @@
     "locText": "Západní vyhlídka na jelení výběh",
     "locGPS": [49.0299717, 13.5842714],
     "hint": "Nápověda k šifře Neptun",
-    "wt": "Zadej heslo KOMETA",
-    "sol": "kometa",
+    "wt": "Zadej heslo SOKOL",
+    "sol": "sokol",
     "pts": 100,
     "next": "Návrat"
   },
