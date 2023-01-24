@@ -17,7 +17,7 @@ let {capacity, teams, numTeams} = await loadTeams();
 const { stanMap, struct } = await loadGameData();
 
 function log(type, obj) {
-  console.log(new Date(), type, util.inspect(obj, false, 0, true));
+  console.log(new Date(), type, util.inspect(obj, false, 1, true));
 }
 
 http.createServer((req, res) => {
