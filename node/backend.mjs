@@ -2,6 +2,7 @@ import * as fs from 'node:fs/promises';
 import * as http from 'node:http';
 import normalizeName from './normalize.mjs';
 import { dates, teamSize, attemptDelay } from '../config.js';
+import * as util from 'node:util';
 
 const port = 3000;
 
@@ -16,7 +17,7 @@ let {capacity, teams, numTeams} = await loadTeams();
 const { stanMap, struct } = await loadGameData();
 
 function log(type, obj) {
-  console.log(new Date(), type, obj);
+  console.log(new Date(), type, util.inspect(obj, false, 0, true));
 }
 
 http.createServer((req, res) => {
