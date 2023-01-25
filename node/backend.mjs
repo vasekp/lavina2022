@@ -132,8 +132,6 @@ async function handleObj(request) {
     }
     case 'update': {
       const now = new Date();
-      if(now > dates.changesClose)
-        throw 'Změny již nejsou povoleny.';
       const data = request.data;
       const team = findTeamAndLogin(data);
       if(!(
@@ -142,21 +140,23 @@ async function handleObj(request) {
         && data.members.every(member => typeof member.name === 'string' && member.name.trim() !== '' && member.name.length <= 30)
       ))
         throw 'Chybný požadavek.';
-      if(data.members.length === 0)
-        throw 'Nelze uložit prázdný tým. Jestli potřebujete zrušit účast, napište organizátorům.';
-      if(!team.hidden && data.members.length < teamSize.min)
-        throw `Minimální velikost složení týmu je ${teamSize.min}.`;
+      if(now < dates.changesClose) {
+        if(data.members.length === 0)
+          throw 'Nelze uložit prázdný tým. Jestli potřebujete zrušit účast, napište organizátorům.';
+        if(!team.hidden && data.members.length < teamSize.min)
+          throw `Minimální velikost složení týmu je ${teamSize.min}.`;
+        if(typeof data.sharing === 'string')
+          team.sharingPreferences = data.sharing;
+        for(const m of data.members)
+          m.name = m.name.trim();
+        team.members = data.members;
+      }
       if(typeof data.phone === 'string' && data.phone.trim() !== '')
         team.phone = data.phone.trim();
       if(typeof data.email === 'string' && data.email.trim() !== '')
         team.email = data.email.trim();
       if(typeof data.newPasswordHash === 'string' && data.newPasswordHash.length == 64)
         team.passwordHash = data.newPasswordHash;
-      if(typeof data.sharing === 'string')
-        team.sharingPreferences = data.sharing;
-      for(const m of data.members)
-        m.name = m.name.trim();
-      team.members = data.members;
       saveTeams();
       return;
     }

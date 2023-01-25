@@ -39,8 +39,17 @@ window.addEventListener('DOMContentLoaded', () => {
       close && close < now ? true :
         false;
   }
-  if(now > dates.tshirtClose)
-    document.getElementById('details-tmpl').content.querySelector('[name="tricko"]').dataset.disabled = '1';
+  {
+    const tmpl = document.getElementById('details-tmpl').content;
+    if(now > dates.tshirtClose)
+      tmpl.querySelector('[name="tricko"]').dataset.disabled = '1';
+    if(now > dates.changesClose) {
+      tmpl.querySelector('[name="clen"]').dataset.disabled = '1';
+      tmpl.querySelector('[name="jidloPa"]').dataset.disabled = '1';
+      tmpl.querySelector('[name="jidloSo"]').dataset.disabled = '1';
+      document.querySelector('[name="sdileni"]').disabled = true;
+    }
+  }
   for(const elm of document.querySelectorAll('form')) {
     elm.addEventListener('input', validateField);
     elm.addEventListener('focusout', validateField);
@@ -59,6 +68,7 @@ window.addEventListener('DOMContentLoaded', () => {
     for(let i = 1; i <= teamSize.max; i++) {
       const clone = tmp.content.cloneNode(true);
       clone.querySelectorAll('[name]').forEach(elm => elm.name += i);
+      clone.querySelectorAll('[id]').forEach(elm => elm.id += i);
       tmp.before(clone);
     }
   }
@@ -292,6 +302,13 @@ function loadTeamData(data) {
     getField(`jidloSo${index + 1}`).value = member.meal2 || 'so-maso';
     getField(`tricko${index + 1}`).value = member.tshirt || '';
   });
+  if(new Date() > dates.changesClose) {
+    const size = data.members.length;
+    for(let i = 0; i < teamSize.max; i++) {
+      getField(`clen${i + 1}`).disabled = true;
+      document.getElementById(`data${i + 1}`).hidden = i >= size;
+    }
+  }
   getField('sdileni').value = data.sharingPreferences || '';
   document.getElementById('platba').dataset.paid = data.amountPaid ? 1
     : data.dateDue ? 0 : -1;
@@ -317,8 +334,10 @@ function updateDetailForm() {
   for(let i = 1; i <= teamSize.max; i++) {
     const inp = document.querySelector(`#details input[name=clen${i}]`);
     const empty = inp.value === '';
-    for(const elm of document.querySelectorAll(`#details select[name*="${i}"]`))
+    for(const field of ['jidloPa', 'jidloSo', 'tricko']) {
+      const elm = document.querySelector(`#details [name="${field}${i}"]`);
       elm.disabled = empty | elm.dataset.disabled === '1';
+    }
     if(!empty) {
       numPlayers++;
       if(document.querySelector(`#details select[name=tricko${i}]`).value)

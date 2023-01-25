@@ -194,53 +194,55 @@
               <input type="email" name="email" required data-keep="1"/>
             </label>
             <template id="details-tmpl" data-per="player">
-              <label>
-                <span class="clen-ctr">člen:</span>
-                <input type="text" name="clen" data-keep="1"/>
-              </label>
-              <label>
-                <span class="indent">Jídlo pá:</span>
-                <select name="jidloPa" data-keep="1">
-                  <option value="pa-maso" selected>Krkovice, bramborový knedlík a zelí</option>
-                  <option value="pa-vege">Čočka, sázené vejce, okurka</option>
-                </select>
-              </label>
-              <label>
-                <span class="indent">Jídlo so:</span>
-                <select name="jidloSo" data-keep="1">
-                  <option value="so-maso" selected>Pečené kuře, brambor, zelný salát</option>
-                  <option value="so-vege">Dušená bretaňská zelenina, brambor</option>
-                </select>
-              </label>
-              <label>
-                <span class="indent">Tričko:</span>
-                <select name="tricko" data-keep="1">
-                  <option value="">Žádné tričko</option>
-                  <option value="PS">Pánské S</option>
-                  <option value="PM">Pánské M</option>
-                  <option value="PL">Pánské L</option>
-                  <option value="PXL">Pánské XL</option>
-                  <option value="PXXL">Pánské XXL</option>
-                  <option value="DS">Dámské S</option>
-                  <option value="DM">Dámské M</option>
-                  <option value="DL">Dámské L</option>
-                  <option value="DXL">Dámské XL</option>
-                  <option value="DXXL">Dámské XXL</option>
-                </select>
-              </label>
+              <div class="trans" id="data">
+                <label>
+                  <span class="clen-ctr">člen:</span>
+                  <input type="text" name="clen" data-keep="1"/>
+                </label>
+                <label>
+                  <span class="indent">Jídlo pá:</span>
+                  <select name="jidloPa" data-keep="1">
+                    <option value="pa-maso" selected>Krkovice, bramborový knedlík a zelí</option>
+                    <option value="pa-vege">Čočka, sázené vejce, okurka</option>
+                  </select>
+                </label>
+                <label>
+                  <span class="indent">Jídlo so:</span>
+                  <select name="jidloSo" data-keep="1">
+                    <option value="so-maso" selected>Pečené kuře, brambor, zelný salát</option>
+                    <option value="so-vege">Dušená bretaňská zelenina, brambor</option>
+                  </select>
+                </label>
+                <label>
+                  <span class="indent">Tričko:</span>
+                  <select name="tricko" data-keep="1">
+                    <option value="">Žádné tričko</option>
+                    <option value="PS">Pánské S</option>
+                    <option value="PM">Pánské M</option>
+                    <option value="PL">Pánské L</option>
+                    <option value="PXL">Pánské XL</option>
+                    <option value="PXXL">Pánské XXL</option>
+                    <option value="DS">Dámské S</option>
+                    <option value="DM">Dámské M</option>
+                    <option value="DL">Dámské L</option>
+                    <option value="DXL">Dámské XL</option>
+                    <option value="DXXL">Dámské XXL</option>
+                  </select>
+                </label>
+              </div>
             </template>
             <label><span class="break">Poznámky ke sdílení pokoje:</span>
               <textarea name="sdileni" data-keep="1"></textarea>
             </label>
-            <label data-visible-until="changesClose">Změnit heslo *:
+            <label>Změnit heslo *:
               <input type="password" name="heslo1"/>
             </label>
-            <label data-visible-until="changesClose">Heslo znovu *:
+            <label>Heslo znovu *:
               <input type="password" name="heslo2"/>
             </label>
-            <button data-visible-until="changesClose" id="saveDetails" type="submit"></button>
+            <button id="saveDetails" type="submit"></button>
           </form>
-          <div class="sep" data-visible-from="changesClose"></div>
+          <div class="sep"></div>
           <small>*) Pokud nechcete heslo měnit, obě pole nechte prázdná.</small>
           <small>**) <a href="#" id="navrh">Návrh trička</a></small>
           <h2>Platební údaje</h2>
