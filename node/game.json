@@ -70,7 +70,7 @@
     "name": "Mars",
     "locText": "Přístřešek Zlatá Studna",
     "locGPS": [49.0606511, 13.6013114],
-    "hint": "<img src=\"images/napoveda-obrazky.png\"/>",
+    "hint": "<img src=\"images/napoveda-obrazky.png\" style=\"max-width: 100%; vertical-align: bottom\"/>",
     "wt": "Každý z obrázků pojmenujte názvem některé planety (českým nebo anglickým). Planet je 8, dvojice pak označují znak ze semaforové abecedy, v očíslování z šifrovací pomůcky (1 = Merkur).",
     "sol": "kometa",
     "pts": 100,
