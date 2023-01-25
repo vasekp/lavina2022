@@ -508,7 +508,7 @@ function updStan(which) {
   if(state.hint) {
     const row = game.actions[state.hint - 1];
     document.getElementById('st-napoveda').hidden = false;
-    document.getElementById('st-napoveda-text').textContent = row.text;
+    document.getElementById('st-napoveda-text').innerHTML = row.text;
     enable('napoveda', false);
   } else {
     enable('napoveda', stMap[stan].hintAvailable);
