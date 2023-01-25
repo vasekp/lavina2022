@@ -176,7 +176,7 @@ blockquote {
 }
 
 .trans {
-  display: content;
+  display: contents;
 }
 
 #obfs::before {

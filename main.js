@@ -68,6 +68,7 @@ window.addEventListener('DOMContentLoaded', () => {
     for(let i = 1; i <= teamSize.max; i++) {
       const clone = tmp.content.cloneNode(true);
       clone.querySelectorAll('[name]').forEach(elm => elm.name += i);
+      clone.querySelectorAll('[id]').forEach(elm => elm.id += i);
       tmp.before(clone);
     }
   }
@@ -303,8 +304,10 @@ function loadTeamData(data) {
   });
   if(new Date() > dates.changesClose) {
     const size = data.members.length;
-    for(let i = 0; i < teamSize.max; i++)
+    for(let i = 0; i < teamSize.max; i++) {
       getField(`clen${i + 1}`).disabled = true;
+      document.getElementById(`data${i + 1}`).hidden = i >= size;
+    }
   }
   getField('sdileni').value = data.sharingPreferences || '';
   document.getElementById('platba').dataset.paid = data.amountPaid ? 1
