@@ -19,6 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   document.getElementById('refresh').addEventListener('click', loadTeams);
   document.getElementById('reloadFile').addEventListener('click', doReload);
+  document.getElementById('tab-stat').addEventListener('click', doExport);
   useCachedLogin();
 });
 
@@ -66,6 +67,7 @@ async function loadTeams() {
 }
 
 const timeFormat = new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'short' });
+const timeFormatMedium = new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'medium' });
 const numberFormat = new Intl.NumberFormat('cs-CZ', { signDisplay: 'always' });
 const en2cz = {
   'hint': 'nápověda',
@@ -250,4 +252,73 @@ function doReload() {
 
 function amountDue(team) {
   return fees.base + fees.member * team.members.length + fees.tshirt * team.members.map(member => member.tshirt).filter(val => val && val !== 'nic').length;
+}
+
+function doExport(ev) {
+  const elm = ev.target;
+  switch(elm.id) {
+    case 'stat-akce':
+      doExport0(elm, statAkce(), 'akce.csv');
+      return;
+    case 'stat-tymy':
+      doExport0(elm, statTymy(), 'tymy.csv');
+      return;
+  }
+}
+
+function doExport0(elm, data, filename) {
+  console.dir(data);
+  const blob = new Blob([formatCSV(data)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.hidden = true;
+  anchor.download = filename;
+  anchor.href = url;
+  elm.append(anchor);
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+function formatCSV(data) {
+  return data.map(row => row.map(text => `"${text.toString().replaceAll('"', '""')}"`).join(',')).join('\r\n') + '\r\n';
+}
+
+function statAkce() {
+  return teams.flatMap(team => {
+    let total = 0;
+    if(!team.game)
+      return [];
+    return team.game.actions.map(action => {
+      total += +action.pts;
+      if(action.inval)
+        total -= +team.game.actions[action.inval - 1].pts;
+      return [
+        team.name,
+        timeFormatMedium.format(new Date(action.time)),
+        action.stan,
+        action.type,
+        action.type === 'sol' || action.type === 'error' ? action.text : '',
+        total
+      ];
+    });
+  });
+}
+
+function statTymy() {
+  return teams.flatMap(team => {
+    let total = 0;
+    if(!team.game)
+      return [];
+    return Object.entries(team.game.summary).map(row => {
+      const [stan, data] = row;
+      return [
+        team.name,
+        stan,
+        data.wt ? 2 : data.hint ? 1 : 0,
+        data.loc ? 1 : 0,
+        data.sol ? 1 : 0,
+        data.sol ? timeFormatMedium.format(new Date(team.game.actions[data.sol - 1].time)) : ''
+      ];
+    });
+  });
 }

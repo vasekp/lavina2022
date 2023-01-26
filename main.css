@@ -78,6 +78,7 @@ nav label div {
 #sel-pravidla:checked ~ nav label[for="sel-pravidla"],
 #sel-auth:checked ~ nav label[for="sel-auth"],
 #sel-hra:checked ~ nav label[for="sel-hra"],
+#sel-stat:checked ~ nav label[for="sel-stat"],
 nav label:hover,
 button, .button {
   background: var(--c-fg);
@@ -119,7 +120,8 @@ button, .button {
   #sel-tymy:checked ~ nav label[for="sel-tymy"],
   #sel-pravidla:checked ~ nav label[for="sel-pravidla"],
   #sel-auth:checked ~ nav label[for="sel-auth"],
-  #sel-hra:checked ~ nav label[for="sel-hra"] {
+  #sel-hra:checked ~ nav label[for="sel-hra"],
+  #sel-stat:checked ~ nav label[for="sel-stat"] {
     height: 3.2em;
     background: revert /*var(--c-fg) -- solves a weird sub-pixel misalignment on Chrome */;
   }
@@ -144,7 +146,8 @@ main {
 #sel-tymy:not(:checked) ~ main #tab-tymy,
 #sel-pravidla:not(:checked) ~ main #tab-pravidla,
 #sel-auth:not(:checked) ~ main #tab-auth,
-#sel-hra:not(:checked) ~ main #tab-hra {
+#sel-hra:not(:checked) ~ main #tab-hra,
+#sel-stat:not(:checked) ~ main #tab-stat {
   display: none;
 }
 
