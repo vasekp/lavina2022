@@ -13,12 +13,14 @@
     <input hidden type="radio" name="tab" id="sel-auth" checked/>
     <input hidden type="radio" name="tab" id="sel-tymy"/>
     <input hidden type="radio" name="tab" id="sel-hra"/>
+    <input hidden type="radio" name="tab" id="sel-stat"/>
     <header><a href="#main" tabindex="-1"><img src="images/lavina-hlavicka.jpg"/></a></header>
     <nav>
       <input hidden type="checkbox" id="nav-unfold"/>
       <label for="sel-auth"><div>Přehled</div></label>
       <label for="sel-tymy" class="auth"><div>Týmy</div></label>
       <label for="sel-hra" class="auth"><div>Hra</div></label>
+      <label for="sel-stat" class="auth"><div>Export</div></label>
       <span id="sipka">▼</span>
     </nav>
     <main id="main">
@@ -115,6 +117,18 @@
         </template>
         <div id="hra-list">
         </div>
+      </article>
+      <article id="tab-stat">
+        <button id="stat-akce">Herní akce</button>
+        <p>Sloupce: čas, tým, stanoviště, akce, zadaný text, body (kumulativně)</p>
+        <button id="stat-tymy">Souhrn týmů</button>
+        <p>Sloupce: tým, stanoviště, nápověda (0/1/2), lokace, řešení, čas řešení</p>
+        <button id="stat-stan-vyvoj">Vývoj stanovišť</button>
+        <p>Sloupce: stanoviště, čas, počty: nápověd, postupů, lokace, řešení, špatných</p>
+        <button id="stat-stan">Statistika stanovišť</button>
+        <p>Sloupce: stanoviště, počty: nic, náp, post, lokace, L+N, L+P, řešení, Ř+N, Ř+P, lokace+řešení, L+Ř+N, L+Ř+P</p>
+        <button id="szn-lidi">Seznam lidí</button>
+        <p>Sloupce: tým, jméno, jídlo pátek, jídlo sobota, tričko</p>
       </article>
     </main>
   </body>

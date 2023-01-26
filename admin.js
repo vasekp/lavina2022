@@ -1,4 +1,4 @@
-import { fees } from './config.js';
+import { fees, dates } from './config.js';
 import { hash, serverRequest, adminSalt } from './shared.js';
 
 let teams = [];
@@ -19,6 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   document.getElementById('refresh').addEventListener('click', loadTeams);
   document.getElementById('reloadFile').addEventListener('click', doReload);
+  document.getElementById('tab-stat').addEventListener('click', doExport);
   useCachedLogin();
 });
 
@@ -66,6 +67,7 @@ async function loadTeams() {
 }
 
 const timeFormat = new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'short' });
+const timeFormatExport = new Intl.DateTimeFormat('cs-CZ', { /*dateStyle: 'medium',*/ timeStyle: 'medium' });
 const numberFormat = new Intl.NumberFormat('cs-CZ', { signDisplay: 'always' });
 const en2cz = {
   'hint': 'nápověda',
@@ -250,4 +252,150 @@ function doReload() {
 
 function amountDue(team) {
   return fees.base + fees.member * team.members.length + fees.tshirt * team.members.map(member => member.tshirt).filter(val => val && val !== 'nic').length;
+}
+
+async function doExport(ev) {
+  const elm = ev.target;
+  switch(elm.id) {
+    case 'stat-akce':
+      doExport0(elm, statAkce(), 'akce.csv');
+      return;
+    case 'stat-tymy':
+      doExport0(elm, statTymy(), 'tymy.csv');
+      return;
+    case 'stat-stan-vyvoj':
+      doExport0(elm, statStanVyvoj(), 'stan-vyvoj.csv');
+      return;
+    case 'stat-stan':
+      doExport0(elm, statStan(), 'stan-stat.csv');
+      return;
+    case 'szn-lidi':
+      doExport0(elm, statLidi(), 'lidi.csv');
+      return;
+  }
+}
+
+function doExport0(elm, data, filename) {
+  console.dir(data);
+  const blob = new Blob([formatCSV(data)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.hidden = true;
+  anchor.download = filename;
+  anchor.href = url;
+  elm.append(anchor);
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+function formatCSV(data) {
+  return data.map(row => row.map(text => `"${text.toString().replaceAll('"', '""')}"`).join(',')).join('\r\n') + '\r\n';
+}
+
+function statAkce() {
+  return teams.flatMap(team => {
+    let total = 0;
+    if(!team.game)
+      return [];
+    return team.game.actions.map(action => {
+      total += +action.pts;
+      if(action.inval)
+        total -= +team.game.actions[action.inval - 1].pts;
+      return [
+        team.name,
+        timeFormatExport.format(new Date(action.time)),
+        action.stan,
+        action.type,
+        action.type === 'sol' || action.type === 'error' ? action.text : '',
+        total
+      ];
+    });
+  });
+}
+
+function statTymy() {
+  return teams.flatMap(team => {
+    let total = 0;
+    if(!team.game)
+      return [];
+    return Object.entries(team.game.summary).map(row => {
+      const [stan, data] = row;
+      return [
+        team.name,
+        stan,
+        data.wt ? 2 : data.hint ? 1 : 0,
+        data.loc ? 1 : 0,
+        data.sol ? 1 : 0,
+        data.sol ? timeFormatExport.format(new Date(team.game.actions[data.sol - 1].time)) : ''
+      ];
+    });
+  });
+}
+
+function statStanVyvoj() {
+  const stMap = {};
+  const actions = teams.flatMap(team => {
+    if(!team.game)
+      return [];
+    return team.game.actions;
+  });
+  actions.sort((a, b) => a.time < b.time ? -1 : 1);
+  const ret = [];
+  actions.forEach(action => {
+    const stan = action.stan;
+    if(!stMap[stan]) {
+      stMap[stan] = {hint: 0, wt: 0, loc: 0, sol: 0, error: 0};
+      ret.push([stan, '06:30:00', 0, 0, 0, 0, 0]);
+    }
+    const rec = stMap[stan];
+    rec[action.type]++;
+    ret.push([
+      stan,
+      timeFormatExport.format(new Date(action.time)),
+      rec.hint,
+      rec.wt,
+      rec.loc,
+      rec.sol,
+      rec.error
+    ]);
+  });
+  return ret;
+}
+
+function statStan() {
+  const stMap = {};
+  const stList = [];
+  const size = teams.filter(team => !team.hidden).length;
+  const stNum = state => (state.sol ? 6 : 0) + (state.loc ? 3 : 0) + (state.wt ? 2 : state.hint ? 1 : 0);
+  teams.forEach(team => {
+    let total = 0;
+    if(!team.game)
+      return [];
+    return Object.entries(team.game.summary).map(row => {
+      const [stan, data] = row;
+      if(!stMap[stan]) {
+        stMap[stan] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        stList.push(stan);
+      }
+      stMap[stan][stNum(data)]++;
+    });
+  });
+  return stList.map(stan => [
+    stan,
+    ...stMap[stan]
+  ]);
+}
+
+function statLidi() {
+  return teams.flatMap(team => {
+    if(team.hidden && !team.countIn)
+      return [];
+    return team.members.map(member => [
+      team.name,
+      member.name,
+      member.meal1,
+      member.meal2,
+      member.tshirt
+    ]);
+  });
 }
