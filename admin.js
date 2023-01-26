@@ -269,6 +269,9 @@ async function doExport(ev) {
     case 'stat-stan':
       doExport0(elm, statStan(), 'stan-stat.csv');
       return;
+    case 'szn-lidi':
+      doExport0(elm, statLidi(), 'lidi.csv');
+      return;
   }
 }
 
@@ -381,4 +384,18 @@ function statStan() {
     stan,
     ...stMap[stan]
   ]);
+}
+
+function statLidi() {
+  return teams.flatMap(team => {
+    if(team.hidden && !team.countIn)
+      return [];
+    return team.members.map(member => [
+      team.name,
+      member.name,
+      member.meal1,
+      member.meal2,
+      member.tshirt
+    ]);
+  });
 }
