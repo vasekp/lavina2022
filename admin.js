@@ -1,4 +1,4 @@
-import { fees } from './config.js';
+import { fees, dates } from './config.js';
 import { hash, serverRequest, adminSalt } from './shared.js';
 
 let teams = [];
@@ -67,7 +67,7 @@ async function loadTeams() {
 }
 
 const timeFormat = new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'short' });
-const timeFormatMedium = new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'medium' });
+const timeFormatExport = new Intl.DateTimeFormat('cs-CZ', { /*dateStyle: 'medium',*/ timeStyle: 'medium' });
 const numberFormat = new Intl.NumberFormat('cs-CZ', { signDisplay: 'always' });
 const en2cz = {
   'hint': 'nápověda',
@@ -254,7 +254,7 @@ function amountDue(team) {
   return fees.base + fees.member * team.members.length + fees.tshirt * team.members.map(member => member.tshirt).filter(val => val && val !== 'nic').length;
 }
 
-function doExport(ev) {
+async function doExport(ev) {
   const elm = ev.target;
   switch(elm.id) {
     case 'stat-akce':
@@ -262,6 +262,12 @@ function doExport(ev) {
       return;
     case 'stat-tymy':
       doExport0(elm, statTymy(), 'tymy.csv');
+      return;
+    case 'stat-stan-vyvoj':
+      doExport0(elm, statStanVyvoj(), 'stan-vyvoj.csv');
+      return;
+    case 'stat-stan':
+      doExport0(elm, statStan(), 'stan-stat.csv');
       return;
   }
 }
@@ -294,7 +300,7 @@ function statAkce() {
         total -= +team.game.actions[action.inval - 1].pts;
       return [
         team.name,
-        timeFormatMedium.format(new Date(action.time)),
+        timeFormatExport.format(new Date(action.time)),
         action.stan,
         action.type,
         action.type === 'sol' || action.type === 'error' ? action.text : '',
@@ -317,8 +323,62 @@ function statTymy() {
         data.wt ? 2 : data.hint ? 1 : 0,
         data.loc ? 1 : 0,
         data.sol ? 1 : 0,
-        data.sol ? timeFormatMedium.format(new Date(team.game.actions[data.sol - 1].time)) : ''
+        data.sol ? timeFormatExport.format(new Date(team.game.actions[data.sol - 1].time)) : ''
       ];
     });
   });
+}
+
+function statStanVyvoj() {
+  const stMap = {};
+  const actions = teams.flatMap(team => {
+    if(!team.game)
+      return [];
+    return team.game.actions;
+  });
+  actions.sort((a, b) => a.time < b.time ? -1 : 1);
+  const ret = [];
+  actions.forEach(action => {
+    const stan = action.stan;
+    if(!stMap[stan]) {
+      stMap[stan] = {hint: 0, wt: 0, loc: 0, sol: 0, error: 0};
+      ret.push([stan, '06:30:00', 0, 0, 0, 0, 0]);
+    }
+    const rec = stMap[stan];
+    rec[action.type]++;
+    ret.push([
+      stan,
+      timeFormatExport.format(new Date(action.time)),
+      rec.hint,
+      rec.wt,
+      rec.loc,
+      rec.sol,
+      rec.error
+    ]);
+  });
+  return ret;
+}
+
+function statStan() {
+  const stMap = {};
+  const stList = [];
+  const size = teams.filter(team => !team.hidden).length;
+  const stNum = state => (state.sol ? 6 : 0) + (state.loc ? 3 : 0) + (state.wt ? 2 : state.hint ? 1 : 0);
+  teams.forEach(team => {
+    let total = 0;
+    if(!team.game)
+      return [];
+    return Object.entries(team.game.summary).map(row => {
+      const [stan, data] = row;
+      if(!stMap[stan]) {
+        stMap[stan] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        stList.push(stan);
+      }
+      stMap[stan][stNum(data)]++;
+    });
+  });
+  return stList.map(stan => [
+    stan,
+    ...stMap[stan]
+  ]);
 }
