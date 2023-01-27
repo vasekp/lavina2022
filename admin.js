@@ -67,7 +67,7 @@ async function loadTeams() {
 }
 
 const timeFormat = new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'short' });
-const timeFormatExport = new Intl.DateTimeFormat('cs-CZ', { /*dateStyle: 'medium',*/ timeStyle: 'medium' });
+const timeFormatExport = new Intl.DateTimeFormat('cs-CZ', { dateStyle: 'medium', timeStyle: 'medium' });
 const numberFormat = new Intl.NumberFormat('cs-CZ', { signDisplay: 'always' });
 const en2cz = {
   'hint': 'nápověda',
@@ -345,7 +345,7 @@ function statStanVyvoj() {
     const stan = action.stan;
     if(!stMap[stan]) {
       stMap[stan] = {hint: 0, wt: 0, loc: 0, sol: 0, error: 0};
-      ret.push([stan, '06:30:00', 0, 0, 0, 0, 0]);
+      ret.push([stan, timeFormatExport.format(dates.gameMain), 0, 0, 0, 0, 0]);
     }
     const rec = stMap[stan];
     rec[action.type]++;
