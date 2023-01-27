@@ -1,6 +1,8 @@
 [
   {
     "name": "Prolog",
+    "hint": "Satelit M je Zemi nejblíže, takže také obíhá nejrychleji.",
+    "wt": "Po nebi kromě hvězd krouží 6 různých satelitů po pevných drahách (pokud se vám zdá, že méně, počkejte; pokud že více, pozor na rotaci Země). Každý bliká jedno morseovkové písmenko. Poznejte je a seřaďte od nejbližšího (je také největší a nejrychlejší) k nejvzdálenějšímu. Oběžné dráhy jsou zhruba mezi jednou a pěti minutami.",
     "sol": "meteor",
     "pts": 50,
     "autoOpen": "2023-01-27T20:30:00.000+01:00",
