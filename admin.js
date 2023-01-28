@@ -369,7 +369,7 @@ function statStanVyvoj() {
   actions.sort((a, b) => a.time < b.time ? -1 : 1);
   const ret = [];
   actions.forEach(action => {
-    const stan = action.stan;
+    const stan = action.stan.replace(/ \d\/\d/, '');
     if(!stMap[stan]) {
       stMap[stan] = {hint: 0, wt: 0, loc: 0, sol: 0, error: 0};
       ret.push([stan, timeFormatExport.format(dates.gameMain), 0, 0, 0, 0, 0]);
