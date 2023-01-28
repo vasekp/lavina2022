@@ -249,9 +249,11 @@ function update() {
   ];
   thr.appendChild(document.createElement('th'));
   stList.forEach((stan, index) => {
-    const td = document.createElement('th');
-    td.textContent = stan.replace(/ \d\/\d/, '');
-    thr.appendChild(td);
+    const th = document.createElement('th');
+    const span = document.createElement('span');
+    span.textContent = stan.replace(/ \d\/\d/, '');
+    th.appendChild(span);
+    thr.appendChild(th);
   });
   thead.appendChild(thr);
   for(const team of teams2) {

@@ -636,12 +636,18 @@ hr {
 }
 
 #vysl-table th {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  width: 1em;
   font-weight: normal;
-  vertical-align: top;
-  padding-top: .5em;
+  position: relative;
+  height: 7em;
+}
+
+#vysl-table th span {
+  position: absolute;
+  bottom: 0;
+  left: 1.4em;
+  transform: rotate(-90deg) translate(.5em,0);
+  transform-origin: bottom left;
+  white-space: nowrap;
 }
 
 #vysl-table td:first-child {
