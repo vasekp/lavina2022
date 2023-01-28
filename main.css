@@ -78,6 +78,7 @@ nav label div {
 #sel-pravidla:checked ~ nav label[for="sel-pravidla"],
 #sel-auth:checked ~ nav label[for="sel-auth"],
 #sel-hra:checked ~ nav label[for="sel-hra"],
+#sel-vysl:checked ~ nav label[for="sel-vysl"],
 #sel-stat:checked ~ nav label[for="sel-stat"],
 nav label:hover,
 button, .button {
@@ -121,6 +122,7 @@ button, .button {
   #sel-pravidla:checked ~ nav label[for="sel-pravidla"],
   #sel-auth:checked ~ nav label[for="sel-auth"],
   #sel-hra:checked ~ nav label[for="sel-hra"],
+  #sel-vysl:checked ~ nav label[for="sel-vysl"],
   #sel-stat:checked ~ nav label[for="sel-stat"] {
     height: 3.2em;
     background: revert /*var(--c-fg) -- solves a weird sub-pixel misalignment on Chrome */;
@@ -147,6 +149,7 @@ main {
 #sel-pravidla:not(:checked) ~ main #tab-pravidla,
 #sel-auth:not(:checked) ~ main #tab-auth,
 #sel-hra:not(:checked) ~ main #tab-hra,
+#sel-vysl:not(:checked) ~ main #tab-vysl,
 #sel-stat:not(:checked) ~ main #tab-stat {
   display: none;
 }
@@ -247,25 +250,25 @@ button, .button {
 }
 
 table {
-  width: 100%;
   border-collapse: collapse;
 }
 
-thead {
+#tymy {
+  width: 100%;
+  border: var(--b-table);
+}
+
+#tymy thead {
   background: var(--c-thead);
   font-weight: bold;
   text-align: left;
 }
 
-tbody td:first-of-type {
+#tymy tbody td:first-of-type {
   text-align: right;
 }
 
-table {
-  border: var(--b-table);
-}
-
-thead th {
+#tymy thead th {
   border-bottom: var(--b-table); /* Firefox bug 217769: empty #tymy-content kills border below thead */
 }
 
@@ -273,11 +276,11 @@ th, td {
   padding: 3px;
 }
 
-tbody tr:nth-of-type(even) {
+#tymy tbody tr:nth-of-type(even) {
   background: var(--c-alt-even);
 }
 
-tbody tr:nth-of-type(odd) {
+#tymy tbody tr:nth-of-type(odd) {
   background: var(--c-alt-odd);
 }
 
@@ -472,11 +475,11 @@ label[for="historie-ck"]::after {
   border: 2pt solid var(--c-fg);
   margin: 0 -1pt;
   background: #fff8;
+  text-align: center;
 }
 
-#ctverecky label.solved {
+.solved {
   background: #0f08;
-  text-align: center;
 }
 
 #ctverecky label.solved::after {
@@ -485,11 +488,11 @@ label[for="historie-ck"]::after {
   line-height: 2em;
 }
 
-#ctverecky label.penalty {
+.penalty {
   background: #fc08;
 }
 
-#ctverecky label.penalty.solved {
+.penalty.solved {
   background: #cf08;
 }
 
@@ -622,4 +625,19 @@ hr {
 #copied.showFlash {
   transition: none;
   opacity: 100%;
+}
+
+#tab-vysl th {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  width: 1em;
+  font-weight: normal;
+  vertical-align: top;
+}
+
+#tab-vysl td:not(:first-child):not(:last-child) {
+  border: var(--b-table);
+  width: 1.2em;
+  height: 1.2em;
+  text-align: center;
 }
