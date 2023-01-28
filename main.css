@@ -627,6 +627,14 @@ hr {
   opacity: 100%;
 }
 
+#tab-vysl {
+  overflow-x: scroll;
+}
+
+#vysl-table {
+  width: max-content;
+}
+
 #vysl-table th {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
