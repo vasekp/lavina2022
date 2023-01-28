@@ -108,7 +108,7 @@ button {
 
 #akce-list {
   display: grid;
-  grid-template-columns: repeat(4, max-content);
+  grid-template-columns: repeat(5, max-content);
   grid-column-gap: 1em;
   max-height: 10em;
   overflow: scroll;

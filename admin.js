@@ -130,6 +130,7 @@ function update() {
   for(const action of actions) {
     actDiv.appendChild(newSpan(timeFormatExport.format(action.time)));
     actDiv.appendChild(newSpan(action.team));
+    actDiv.appendChild(newSpan(action.stan));
     const type = action.type;
     actDiv.appendChild(newSpan(type));
     actDiv.appendChild(newSpan(type === 'sol' || type === 'error' ? action.text : ''));
