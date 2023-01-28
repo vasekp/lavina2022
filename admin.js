@@ -324,7 +324,7 @@ function statAkce() {
       teamTotal[team.name] = total;
       return [
         team.name,
-        timeFormatExport.format(new Date(action.time)),
+        new Date(action.time),
         action.stan,
         action.type,
         action.type === 'sol' || action.type === 'error' ? action.text : '',
@@ -332,6 +332,8 @@ function statAkce() {
       ];
     });
   });
+  main.sort((a, b) => (a[1] < b[1] ? -1 : 1));
+  main.forEach(row => row[1] = timeFormatExport.format(row[1]));
   const teamList = Object.entries(teamTotal).map(x => x[0]);
   return [
     ...teamList.map(name => [name, timeFormatExport.format(dates.gameStart), '', 'start', '', 0]),
