@@ -478,7 +478,7 @@ label[for="historie-ck"]::after {
   text-align: center;
 }
 
-.solved {
+.solved, .c1 {
   background: #0f08;
 }
 
@@ -488,11 +488,11 @@ label[for="historie-ck"]::after {
   line-height: 2em;
 }
 
-.penalty {
+.penalty, .c3 {
   background: #fc08;
 }
 
-.penalty.solved {
+.penalty.solved, .c2 {
   background: #cf08;
 }
 
@@ -655,6 +655,6 @@ hr {
 
 #vysl-table .skipped::after {
   content: '»';
-  color: var(--c-inv);
+  /*color: var(--c-inv);*/
   font-weight: bold;
 }

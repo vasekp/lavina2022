@@ -264,10 +264,14 @@ function update() {
     for(const stan of stList) {
       const rec = team.game.summary[stan];
       const td = document.createElement('td');
-      if(+rec?.sol)
-        td.classList.add('solved');
-      if(+rec?.hint || +rec?.wt || +rec?.loc)
-        td.classList.add('penalty');
+      if(rec?.sol) {
+        if(rec.wt)
+          td.classList.add('c3');
+        else if(rec.hint)
+          td.classList.add('c2');
+        else
+          td.classList.add('c1');
+      }
       if(+rec?.loc)
         td.classList.add('skipped');
       tr.appendChild(td);
