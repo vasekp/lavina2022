@@ -367,6 +367,18 @@ function statStanVyvoj() {
       rec.error
     ]);
   });
+  Object.entries(stMap).map(x => x[0]).forEach(stan => {
+    const rec = stMap[stan];
+    ret.push([
+      stan,
+      timeFormatExport.format(new Date(dates.gameEnd)),
+      rec.hint,
+      rec.wt,
+      rec.loc,
+      rec.sol,
+      rec.error
+    ]);
+  });
   return ret;
 }
 
