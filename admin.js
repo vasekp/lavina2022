@@ -121,6 +121,7 @@ function update() {
   actions.forEach(action => action.time = new Date(action.time));
   actions.sort((a, b) => (a.time < b.time ? 1 : -1));
   const actDiv = document.getElementById('akce-list');
+  actDiv.replaceChildren();
   const newSpan = text => {
     const span = document.createElement('span');
     span.textContent = text;
