@@ -105,3 +105,12 @@ button {
   width: 100%;
   justify-content: center;
 }
+
+#akce-list {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-column-gap: 1em;
+  max-height: 10em;
+  overflow-y: scroll;
+  margin-bottom: 1em;
+}

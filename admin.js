@@ -116,6 +116,23 @@ function update() {
     frag.querySelector('[data-id="pay-amount"]').value = amountDue(team);
     list.append(frag);
   });
+  /* Poslední akce */
+  const actions = teams.filter(team => !team.hidden).flatMap(team => team.game.actions.map(action => ({ team: team.name, ...action })));
+  actions.forEach(action => action.time = new Date(action.time));
+  actions.sort((a, b) => (a.time < b.time ? 1 : -1));
+  const actDiv = document.getElementById('akce-list');
+  const newSpan = text => {
+    const span = document.createElement('span');
+    span.textContent = text;
+    return span;
+  };
+  for(const action of actions) {
+    actDiv.appendChild(newSpan(timeFormatExport.format(action.time)));
+    actDiv.appendChild(newSpan(action.team));
+    const type = action.type;
+    actDiv.appendChild(newSpan(type));
+    actDiv.appendChild(newSpan(type === 'sol' || type === 'error' ? action.text : ''));
+  }
   /* Statistiky */
   const krit = {};
   for(const elm of document.getElementById('kriteria').querySelectorAll('input'))
