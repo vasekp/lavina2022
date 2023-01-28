@@ -18,7 +18,7 @@ window.addEventListener('DOMContentLoaded', () => {
     tymy.addEventListener('click', ev => doAdmin(ev.target));
   }
   document.getElementById('refresh').addEventListener('click', loadTeams);
-  document.getElementById('reloadFile').addEventListener('click', doReload);
+  //document.getElementById('reloadFile').addEventListener('click', doReload);
   document.getElementById('tab-stat').addEventListener('click', doExport);
   useCachedLogin();
 });
@@ -116,6 +116,25 @@ function update() {
     frag.querySelector('[data-id="pay-amount"]').value = amountDue(team);
     list.append(frag);
   });
+  /* Poslední akce */
+  const actions = teams.filter(team => !team.hidden).flatMap(team => team.game.actions.map(action => ({ team: team.name, ...action })));
+  actions.forEach(action => action.time = new Date(action.time));
+  actions.sort((a, b) => (a.time < b.time ? 1 : -1));
+  const actDiv = document.getElementById('akce-list');
+  actDiv.replaceChildren();
+  const newSpan = text => {
+    const span = document.createElement('span');
+    span.textContent = text;
+    return span;
+  };
+  for(const action of actions) {
+    actDiv.appendChild(newSpan(timeFormatExport.format(action.time)));
+    actDiv.appendChild(newSpan(action.team));
+    actDiv.appendChild(newSpan(action.stan));
+    const type = action.type;
+    actDiv.appendChild(newSpan(type));
+    actDiv.appendChild(newSpan(type === 'sol' || type === 'error' ? action.text : ''));
+  }
   /* Statistiky */
   const krit = {};
   for(const elm of document.getElementById('kriteria').querySelectorAll('input'))
@@ -161,7 +180,7 @@ function update() {
       resty.append(newLI(`Tým ${team.name} (${status}): vybrat jídlo`));
   }
   /* Hra */
-  const teams2 = [...teams.filter(team => team.amountPaid || team.countIn)];
+  const teams2 = teams.filter(team => !team.hidden);// [...teams.filter(team => team.amountPaid || team.countIn)];
   const now = new Date();
   for(const team of teams2) {
     if(team.game) {
@@ -293,7 +312,8 @@ function formatCSV(data) {
 }
 
 function statAkce() {
-  return teams.flatMap(team => {
+  const teamTotal = {};
+  const main = teams.flatMap(team => {
     let total = 0;
     if(!team.game)
       return [];
@@ -301,9 +321,10 @@ function statAkce() {
       total += +action.pts;
       if(action.inval)
         total -= +team.game.actions[action.inval - 1].pts;
+      teamTotal[team.name] = total;
       return [
         team.name,
-        timeFormatExport.format(new Date(action.time)),
+        new Date(action.time),
         action.stan,
         action.type,
         action.type === 'sol' || action.type === 'error' ? action.text : '',
@@ -311,6 +332,14 @@ function statAkce() {
       ];
     });
   });
+  main.sort((a, b) => (a[1] < b[1] ? -1 : 1));
+  main.forEach(row => row[1] = timeFormatExport.format(row[1]));
+  const teamList = Object.entries(teamTotal).map(x => x[0]);
+  return [
+    ...teamList.map(name => [name, timeFormatExport.format(dates.gameStart), '', 'start', '', 0]),
+    ...main,
+    ...teamList.map(name => [name, timeFormatExport.format(dates.gameEnd), '', 'end', '', teamTotal[name]])
+  ];
 }
 
 function statTymy() {
@@ -342,7 +371,7 @@ function statStanVyvoj() {
   actions.sort((a, b) => a.time < b.time ? -1 : 1);
   const ret = [];
   actions.forEach(action => {
-    const stan = action.stan;
+    const stan = action.stan.replace(/ \d\/\d/, '');
     if(!stMap[stan]) {
       stMap[stan] = {hint: 0, wt: 0, loc: 0, sol: 0, error: 0};
       ret.push([stan, timeFormatExport.format(dates.gameMain), 0, 0, 0, 0, 0]);
@@ -352,6 +381,18 @@ function statStanVyvoj() {
     ret.push([
       stan,
       timeFormatExport.format(new Date(action.time)),
+      rec.hint,
+      rec.wt,
+      rec.loc,
+      rec.sol,
+      rec.error
+    ]);
+  });
+  Object.entries(stMap).map(x => x[0]).forEach(stan => {
+    const rec = stMap[stan];
+    ret.push([
+      stan,
+      timeFormatExport.format(new Date(dates.gameEnd)),
       rec.hint,
       rec.wt,
       rec.loc,
