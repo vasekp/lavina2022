@@ -18,7 +18,7 @@ window.addEventListener('DOMContentLoaded', () => {
     tymy.addEventListener('click', ev => doAdmin(ev.target));
   }
   document.getElementById('refresh').addEventListener('click', loadTeams);
-  document.getElementById('reloadFile').addEventListener('click', doReload);
+  //document.getElementById('reloadFile').addEventListener('click', doReload);
   document.getElementById('tab-stat').addEventListener('click', doExport);
   useCachedLogin();
 });
@@ -161,7 +161,7 @@ function update() {
       resty.append(newLI(`Tým ${team.name} (${status}): vybrat jídlo`));
   }
   /* Hra */
-  const teams2 = [...teams.filter(team => team.amountPaid || team.countIn)];
+  const teams2 = teams.filter(team => !team.hidden);// [...teams.filter(team => team.amountPaid || team.countIn)];
   const now = new Date();
   for(const team of teams2) {
     if(team.game) {
