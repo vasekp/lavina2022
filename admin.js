@@ -226,6 +226,57 @@ function update() {
       }
     list2.append(frag);
   });
+  /* Výsledková tabulka */
+  const table = document.getElementById('vysl-table');
+  const thead = table.querySelector('thead');
+  const tbody = table.querySelector('tbody');
+  thead.replaceChildren();
+  tbody.replaceChildren();
+  const thr = document.createElement('tr');
+  const stList = [
+    'Prolog',
+    'Bajkonur',
+    'Canaveral',
+    'Oběžná dráha 1/2',
+    'Merkur',
+    'Venuše',
+    'Mars',
+    'Jupiter',
+    'Saturn',
+    'Uran',
+    'Neptun',
+    'Návrat'
+  ];
+  thr.appendChild(document.createElement('th'));
+  stList.forEach((stan, index) => {
+    const td = document.createElement('th');
+    td.textContent = stan.replace(/ \d\/\d/, '');
+    thr.appendChild(td);
+  });
+  thead.appendChild(thr);
+  for(const team of teams2) {
+    if(!team.game)
+      continue;
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.textContent = team.name;
+    tr.appendChild(td);
+    for(const stan of stList) {
+      const rec = team.game.summary[stan];
+      const td = document.createElement('td');
+      if(+rec?.sol)
+        td.classList.add('solved');
+      if(+rec?.hint || +rec?.wt || +rec?.loc)
+        td.classList.add('penalty');
+      if(+rec?.loc)
+        td.classList.add('skipped');
+      tr.appendChild(td);
+    };
+    const tdt = document.createElement('td');
+    tdt.textContent = `${team.pts} b.`;
+    tr.appendChild(tdt);
+    tbody.appendChild(tr);
+  }
 }
 
 async function doAdmin(tgt) {
@@ -325,7 +376,7 @@ function statAkce() {
       return [
         team.name,
         new Date(action.time),
-        action.stan,
+        action.stan.replace(/ \d\/\d/, ''),
         action.type,
         action.type === 'sol' || action.type === 'error' ? action.text : '',
         total
