@@ -1,5 +1,3 @@
-import { dates } from './config.js';
-
 window.addEventListener('DOMContentLoaded', () => {
   {
     const chkbox = document.getElementById('nav-unfold');
@@ -11,21 +9,6 @@ window.addEventListener('DOMContentLoaded', () => {
     if(ev.target.id.substring(0, 4) === 'sel-')
       localStorage['lastTab'] = ev.target.id.substring(4);
   });
-  const now = Date.now();
-  for(const elm of document.querySelectorAll('date-alt')) {
-    const open = dates[elm.dataset.open];
-    const close = dates[elm.dataset.close];
-    elm.dataset.alt = open && open > now ? 'pre' :
-      close && close < now ? 'post' :
-        'within';
-  }
-  for(const elm of document.querySelectorAll('[data-visible-from], [data-visible-until]')) {
-    const open = dates[elm.dataset.visibleFrom];
-    const close = dates[elm.dataset.visibleUntil];
-    elm.hidden = open && open > now ? true :
-      close && close < now ? true :
-        false;
-  }
   showTab(localStorage['lastTab']);
 });
 
