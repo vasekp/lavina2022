@@ -28,6 +28,22 @@ window.addEventListener('DOMContentLoaded', () => {
     span.classList.add('spoiler2');
     td.replaceChildren(span);
   }
+  const tooltips = {
+    "": "Nevyřešeno",
+    "c1": "Vyřešeno",
+    "c2": "Vyřešeno s nápovědou",
+    "c3": "Vyřešeno s postupem",
+    "skipped": "Přeskočeno",
+    "c1 skipped": "Přeskočeno, následně vyřešeno",
+    "c2 skipped": "Přeskočeno, následně vyřešeno s nápovědou",
+    "c3 skipped": "Přeskočeno, následně vyřešeno s postupem"
+  };
+  for(const td of document.querySelectorAll('#vysl-table td')) {
+    console.log(td.className);
+    const tip = tooltips[td.className];
+    if(tip)
+      td.title = tip;
+  }
   document.getElementById('sifry-table').addEventListener('click', ev => {
     const tgt = ev.target;
     if(tgt.classList.contains('spoiler2'))
