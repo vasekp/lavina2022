@@ -10,21 +10,15 @@
   </head>
   <body>
     <input hidden type="radio" name="tab" id="sel-uvod" checked/>
-    <input hidden type="radio" name="tab" id="sel-reg"/>
     <input hidden type="radio" name="tab" id="sel-tymy"/>
     <input hidden type="radio" name="tab" id="sel-pravidla"/>
-    <input hidden type="radio" name="tab" id="sel-auth"/>
-    <input hidden type="radio" name="tab" id="sel-hra"/>
     <input hidden type="radio" name="tab" id="sel-vysl"/>
     <header><a href="#nav" tabindex="-1"><img src="images/lavina-hlavicka.jpg"/></a></header>
     <nav id="nav">
       <input hidden type="checkbox" id="nav-unfold"/>
       <label for="sel-uvod"><div>Úvod</div></label>
-      <label for="sel-reg" data-visible-from="regOpen" data-visible-until="regClose"><div>Registrace</div></label>
       <label for="sel-tymy" data-visible-from="regOpen"><div>Přihlášené týmy</div></label>
       <label for="sel-pravidla"><div>Pravidla</div></label>
-      <label for="sel-auth" data-visible-from="regOpen"><div>Můj tým</div></label>
-      <label for="sel-hra" class="auth" data-visible-from="gameOpen" data-visible-until="gameClose"><div>Hra</div></label>
       <label for="sel-vysl"><div>Celkové výsledky</div></label>
       <span id="sipka">▼</span>
     </nav>
@@ -42,44 +36,6 @@
 
         <h2>Organizační tým:</h2>
         <p>Hru pro vás připravil tým Múzy.</p>
-      </article>
-      <article id="tab-reg">
-        <date-alt data-open="regOpen" data-close="regClose">
-          <alt-pre><p>Registrace týmů bude přístupná od úterý <b>27.12.2022, 12:00</b> do neděle 15.1.2023.</p></alt-pre>
-          <alt-within>
-            <form class="tform" id="register">
-              <label>
-                <span>Název týmu:</span>
-                <input type="text" name="nazev" required maxlength="50"/>
-              </label>
-              <label>
-                <span>E-mail:</span>
-                <input type="email" name="email" required type="email"/>
-              </label>
-              <label>
-                <span>Heslo:</span>
-                <input type="password" name="heslo1" required maxlength="32"/>
-              </label>
-              <label>
-                <span>Heslo znovu:</span>
-                <input type="password" name="heslo2" required/>
-              </label>
-              <label>
-                <span>Telefon:</span>
-                <input type="tel" name="telefon" required pattern="\+?[0-9 -]{9,}"/>
-              </label>
-              <template data-per="player">
-                <label>
-                  <span class="clen-ctr">člen:</span>
-                  <input type="text" name="clen" maxlength="30"/>
-                </label>
-              </template>
-              <button type="submit">Registrovat</button>
-            </form>
-            <!--small>*) V případě méně než čtyř členů nechte podle potřeby prázdné.</small-->
-          </alt-within>
-          <alt-post><p>Registrace na hru byly již uzavřeny.</p></alt-post>
-        </date-alt>
       </article>
       <article id="tab-tymy">
         <table id="tymy">
@@ -171,200 +127,6 @@
         <p>Pořadí se určí z týmů, které nebyly diskvalifikovány, primárně podle celkového počtu bodů a sekundárně podle času posledního bodového zisku.</p>
         <p>Tým, který je organizátorem některé z šifrovacích her Lhota, Muhu nebo Labyrint v roce 2023, může požádat o <b>imunitu</b>, a to nejpozději při registraci na místě konání. Pozdější žádosti nebudou brány v potaz. Získáním imunity se pořadí týmu posune o jedno místo vzad. Tato informace bude do vyhlášení výsledků neveřejná.</p>
         <p>Čestnou povinnost organizovat další ročník získává nejvýše postavený tým v takto utvořeném konečném pořadí.</p>
-      </article>
-      <article id="tab-auth">
-        <form class="tform" id="login">
-          <label>Název týmu:
-            <input type="text" name="nazev" required data-keep="1"/>
-          </label>
-          <label>Heslo:
-            <input type="password" name="heslo" required/>
-          </label>
-          <button type="submit">Přihlásit</button>
-        </form>
-        <div id="auth-section" class="auth">
-          <h1 id="teamName"></h1>
-          <p>Změny v týmu jsou povoleny nejpozději do pátku <b>20.1.2023</b>. Naléhavé případy nastalé po tomto datu řešte s organizátory po e-mailu.</p>
-          <p>Zájem o trička je nutno potvrdit nejpozději do <b>8.1.2023</b>, poté bude nabídka uzamčena.</p>
-          <p>Pokoje jsou převážně tří- a čtyřlůžkové. Některé členy početnějších týmů proto ubytujeme do dalšího pokoje se členy jiného takového týmu. Můžete nám vyplnit preferenci, s kým byste pokoj raději sdíleli nebo naopak nesdíleli. Pokusíme se vyhovět všem co nejlépe, nicméně efektivní využití ubytovací kapacity je priorita.</p>
-          <form class="tform" id="details">
-            <input type="hidden" name="teamSalt" data-keep="1"/>
-            <label>Telefon:
-              <input type="tel" name="telefon" required pattern="\+?[0-9 -]{9,}" data-keep="1"/>
-            </label>
-            <label>E-mail:
-              <input type="email" name="email" required data-keep="1"/>
-            </label>
-            <template id="details-tmpl" data-per="player">
-              <div class="trans" id="data">
-                <label>
-                  <span class="clen-ctr">člen:</span>
-                  <input type="text" name="clen" data-keep="1"/>
-                </label>
-                <label>
-                  <span class="indent">Jídlo pá:</span>
-                  <select name="jidloPa" data-keep="1">
-                    <option value="pa-maso" selected>Krkovice, bramborový knedlík a zelí</option>
-                    <option value="pa-vege">Čočka, sázené vejce, okurka</option>
-                  </select>
-                </label>
-                <label>
-                  <span class="indent">Jídlo so:</span>
-                  <select name="jidloSo" data-keep="1">
-                    <option value="so-maso" selected>Pečené kuře, brambor, zelný salát</option>
-                    <option value="so-vege">Dušená bretaňská zelenina, brambor</option>
-                  </select>
-                </label>
-                <label>
-                  <span class="indent">Tričko:</span>
-                  <select name="tricko" data-keep="1">
-                    <option value="">Žádné tričko</option>
-                    <option value="PS">Pánské S</option>
-                    <option value="PM">Pánské M</option>
-                    <option value="PL">Pánské L</option>
-                    <option value="PXL">Pánské XL</option>
-                    <option value="PXXL">Pánské XXL</option>
-                    <option value="DS">Dámské S</option>
-                    <option value="DM">Dámské M</option>
-                    <option value="DL">Dámské L</option>
-                    <option value="DXL">Dámské XL</option>
-                    <option value="DXXL">Dámské XXL</option>
-                  </select>
-                </label>
-              </div>
-            </template>
-            <label><span class="break">Poznámky ke sdílení pokoje:</span>
-              <textarea name="sdileni" data-keep="1"></textarea>
-            </label>
-            <label>Změnit heslo *:
-              <input type="password" name="heslo1"/>
-            </label>
-            <label>Heslo znovu *:
-              <input type="password" name="heslo2"/>
-            </label>
-            <button id="saveDetails" type="submit"></button>
-          </form>
-          <div class="sep"></div>
-          <small>*) Pokud nechcete heslo měnit, obě pole nechte prázdná.</small>
-          <small>**) <a href="#" id="navrh">Návrh trička</a></small>
-          <h2>Platební údaje</h2>
-          <div class="trans" id="platba">
-            <p id="cena-p">Vaše startovné činí <span id="cena"></span>.</p>
-            <div class="trans" id="udaje">
-              <p>Zaplaťte prosím do <b id="termin"></b> (včetně), jinak účast může být nabídnuta náhradníkům.</p>
-              <p>Startovné pošlete na účet <b>2100255640/2010</b> (Technická přestávka, z.s.). Do <b>zprávy pro příjemce</b> nezapomeňte uvést název hry a vašeho týmu.</p>
-              <p>Poznámka: platby se párují ručně, neobjeví se tedy v seznamu hned.</p>
-            </div>
-            <div class="trans" id="hotovo">
-              <p>Platbu od vašeho týmu jsme již přijali.</p>
-              <p>Pokud dojde ke změnám, které by cenu ovlivnily, domluvte se s organizátory e-mailem nebo na hře.</p>
-            </div>
-            <div class="trans" id="nahradnici">
-              <p>Váš tým je nyní veden jako náhradníci, zatím, prosíme, neplaťte.</p>
-              <p>Jestli vás budeme moci na hru přijmout, platební údaje zašleme na váš e-mail.</p>
-            </div>
-          </div>
-          <a href="#" id="logout">Odhlásit</a>
-        </div>
-      </article>
-      <article id="tab-hra" class="auth">
-        <input hidden type="checkbox" id="historie-ck"/>
-        <h1>
-          <label for="historie-ck">Aktuální stav: <span id="hra-body">0</span> bodů</label>
-        </h1>
-        <template id="historie-tmpl">
-          <label for="stanoviste">
-            <span class="h-cas"></span>
-            <span class="h-akce"></span>
-            <span class="h-body"></span>
-          </label>
-        </template>
-        <div id="historie-div">
-        </div>
-        <div id="ctverecky">
-          <template data-per="stan">
-            <input hidden type="radio" name="st-radio" id="st-"/>
-            <label for="st-"></label>
-          </template>
-        </div>
-        <div id="st-section">
-          <h1>Stanoviště <span id="stanName" class="stanName"></span></h1>
-          <div id="st-info">
-            <div id="st-poloha">
-              <b>Poloha:</b>
-              <div id="st-poloha-cell">
-                <p id="st-pol-text"></p>
-                <p>
-                  <a id="st-pol-link" target="_blank">Ukázat na mapě</a>
-                  <a id="copy-emoji"><span id="copied">Zkopírováno</span></a>
-                </p>
-              </div>
-            </div>
-            <div id="st-napoveda">
-              <b>Nápověda:</b>
-              <span id="st-napoveda-text"></span>
-            </div>
-            <div id="st-postup">
-              <b>Postup řešení:</b>
-              <span id="st-postup-text"></span>
-            </div>
-            <div id="st-reseni">
-              <b>Řešení:</b>
-              <span id="st-reseni-text"></span>
-            </div>
-          </div>
-          <input hidden type="radio" name="st-akce-detail" id="sad-menu" checked/>
-          <div class="akce-menu">
-            <label class="button positive" for="sad-reseni">Zadat ŘEŠENÍ</label>
-            <label class="button" for="sad-napoveda">Zažádat o NÁPOVĚDU</label>
-            <label class="button" for="sad-poloha">Zažádat o POLOHU další šifry</label>
-            <label class="button" for="sad-postup">Zažádat o POSTUP řešení</label>
-            <!--button id="ak-refresh" class="noop">Synchronizovat data</button-->
-          </div>
-          <input hidden type="radio" name="st-akce-detail" id="sad-reseni"/>
-          <div>
-            <form id="f-reseni" target="a.html">
-              <p>Řešení stanoviště <b class="stanName"></b>:</p>
-              <input id="in-reseni"/>
-              <div class="sep"></div>
-              <small>Na diakritice ani velikosti písmen nezáleží.</small>
-              <div class="akce-menu">
-                <button id="b-reseni" type="submit" class="positive">Odeslat</button>
-                <label class="button noop" for="sad-menu">Zpět</label>
-              </div>
-            </form>
-          </div>
-          <input hidden type="radio" name="st-akce-detail" id="sad-napoveda"/>
-          <div>
-            <hr/>
-            <p>Žádáte o <b>NÁPOVĚDU</b> ke stanovišti <b class="stanName"></b>.</p>
-            <p>Tato akce vás bude stát <b>2 trestné body</b>.</p>
-            <div class="akce-menu">
-              <button class="negative" id="b-napoveda">Potvrdit</button>
-              <label class="button noop" for="sad-menu">Zpět</label>
-            </div>
-          </div>
-          <input hidden type="radio" name="st-akce-detail" id="sad-poloha"/>
-          <div>
-            <hr/>
-            <p>Žádáte o <b>POLOHU STANOVIŠTĚ</b> následujícího za <b class="stanName"></b>.</p>
-            <p>Tato akce vás bude stát <b>3 trestné body</b>.</p>
-            <div class="akce-menu">
-              <button class="negative" id="b-poloha">Potvrdit</button>
-              <label class="button noop" for="sad-menu">Zpět</label>
-            </div>
-          </div>
-          <input hidden type="radio" name="st-akce-detail" id="sad-postup"/>
-          <div>
-            <hr/>
-            <p>Žádáte o <b>POSTUP ŘEŠENÍ</b> ke stanovišti <b class="stanName"></b>.</p>
-            <p>Tato akce vás bude stát <b>5 trestných bodů</b>.</p>
-            <div class="akce-menu">
-              <button class="negative" id="b-postup">Potvrdit</button>
-              <label class="button noop" for="sad-menu">Zpět</label>
-            </div>
-          </div>
-        </div>
       </article>
       <article id="tab-vysl">
         <table id="vysl-table">
