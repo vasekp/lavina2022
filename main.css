@@ -668,3 +668,20 @@ hr {
   /*color: var(--c-inv);*/
   font-weight: bold;
 }
+
+#sifry-table {
+  table-layout: fixed;
+}
+
+#sifry-table th {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spoiler + span::after {
+  content: 'Ukaž';
+}
+
+.spoiler:checked + span::after {
+  content: attr(data-text);
+}
