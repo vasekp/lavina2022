@@ -17,7 +17,7 @@
     <nav id="nav">
       <input hidden type="checkbox" id="nav-unfold"/>
       <label for="sel-uvod"><div>Úvod</div></label>
-      <label for="sel-tymy"><div>Přihlášené týmy</div></label>
+      <label for="sel-tymy"><div>Seznam týmů</div></label>
       <label for="sel-pravidla"><div>Pravidla</div></label>
       <label for="sel-vysl"><div>Celkové výsledky</div></label>
       <span id="sipka">▼</span>
@@ -30,24 +30,22 @@
         <h2>O hře:</h2>
         <p><b>Termín konání:</b> 27.1. – 29.1. 2023</p>
         <p><b>Kapacita hry:</b> 18 pětičlenných týmů</p>
-        <p><b>Místo startu:</b> <a href="https://youtu.be/qfvMMs5QaUA" target="_blank">viz zde</a></p>
+        <p><b>Místo konání:</b> Horský hotel KODREA, Nové Hutě, Šumava. <a href="https://youtu.be/qfvMMs5QaUA" target="_blank">Lokační šifra zde</a></p>
         <p><b>Cena:</b> 1500 Kč/tým + 1500 Kč/člen (ubytování s polopenzí) + 250 Kč/tričko (volitelné)</p>
         <p><b>Kontaktní e-mail:</b> info<span id="obfs">domof</span></p>
 
         <h2>Organizační tým:</h2>
-        <p>Hru pro vás připravil tým Múzy.</p>
+        <p>Hru pro vás připravil tým Múzy s velkou pomocí Něžných květinek.</p>
       </article>
       <article id="tab-tymy">
         <table id="tymy">
           <thead>
             <tr>
-              <th>Pořadí</th>
               <th>Název týmu</th>
               <th>Členové</th>
-              <th>Zaplaceno</th>
             </tr>
           </thead>
-          <tbody id="tymy-content"><tr><td>1</td><td>Ledový shake</td><td>Terka, Marťa, Pavel, Martin, Ondra</td><td>ANO</td></tr><tr><td>2</td><td>Spařený nudle</td><td>Dušan, Čáp, Ondra, Jakub, Jana</td><td>ANO</td></tr><tr><td>3</td><td>Pípy z Lípy</td><td>Anna, Vendula, Hanka K., Káťa, Káďa</td><td>ANO</td></tr><tr><td>4</td><td>Pelášící prkýnka</td><td>Klára, Honza, Lukáš, Lenka, Veronika</td><td>ANO</td></tr><tr><td>5</td><td>Degen | Brod</td><td>Honza, Marty, Libor, Miri, Honza</td><td>ANO</td></tr><tr><td>6</td><td>aurora</td><td>david, halik, váva, jindřich, helena</td><td>ANO</td></tr><tr><td>7</td><td>Chlapský klub a alkoholičky</td><td>Peťa, Pája, Májí, Aleš, Mike</td><td>ANO</td></tr><tr><td>8</td><td>Pivni lezci</td><td>Verca, Ramon, Terka, Lukas</td><td>ANO</td></tr><tr><td>9</td><td>Až zejtra</td><td>Kuči, Víťa, Sárič, Mirka, Tomáš H.</td><td>ANO</td></tr><tr><td>10</td><td>Leklý Ryby</td><td>Kačí, Ondra, Ondra, Máťa</td><td>ANO</td></tr><tr><td>11</td><td>Nostromo</td><td>Wája, Kačka, Jana, Jirka, Hlína</td><td>ANO</td></tr><tr><td>12</td><td>Ledový OUKROP</td><td>Jimmy, Pavlík, Ivet, Kačka, Antonio</td><td>ANO</td></tr><tr><td>13</td><td>Bumbálci</td><td>Klára, Alča, Ondra, Mára, Bumbálek 5</td><td>ANO</td></tr><tr><td>14</td><td>Ledoborci</td><td>Filip, Jirka, Ondrej, Honza</td><td>ANO</td></tr><tr><td>15</td><td>REDWOOL</td><td>Láďa, Kupsáč, Klára</td><td>ANO</td></tr></tbody>
+          <tbody id="tymy-content"><tr><td>Ledový shake</td><td>Terka, Marťa, Pavel, Martin, Ondra</td></tr><tr><td>Spařený nudle</td><td>Dušan, Čáp, Ondra, Jakub, Jana</td></tr><tr><td>Pípy z Lípy</td><td>Anna, Vendula, Hanka K., Káťa, Káďa</td></tr><tr><td>Pelášící prkýnka</td><td>Klára, Honza, Lukáš, Lenka, Veronika</td></tr><tr><td>Degen | Brod</td><td>Honza, Marty, Libor, Miri, Honza</td></tr><tr><td>aurora</td><td>david, halik, váva, jindřich, helena</td></tr><tr><td>Chlapský klub a alkoholičky</td><td>Peťa, Pája, Májí, Aleš, Mike</td></tr><tr><td>Pivni lezci</td><td>Verca, Ramon, Terka, Lukas</td></tr><tr><td>Až zejtra</td><td>Kuči, Víťa, Sárič, Mirka, Tomáš H.</td></tr><tr><td>Leklý Ryby</td><td>Kačí, Ondra, Ondra, Máťa</td></tr><tr><td>Nostromo</td><td>Wája, Kačka, Jana, Jirka, Hlína</td></tr><tr><td>Ledový OUKROP</td><td>Jimmy, Pavlík, Ivet, Kačka, Antonio</td></tr><tr><td>Bumbálci</td><td>Klára, Alča, Ondra, Mára, Bumbálek 5</td></tr><tr><td>Ledoborci</td><td>Filip, Jirka, Ondrej, Honza</td></tr><tr><td>REDWOOL</td><td>Láďa, Kupsáč, Klára</td></tr></tbody>
           <tbody id="tymy-empty">
             <tr>
               <td colspan="4">
@@ -63,7 +61,6 @@
 
         <h2>Obecné:</h2>
 
-        <p>Pravidla mohou být upravována až do začátku akce, toto je <b>verze 3 (19.1.2023)</b>.</p>
         <p>Hry se účastní tří- až pětičlenné týmy. Pokud není uvedeno jinak, je zakázáno spolupracovat s jinými týmy.</p>
         <p>Každý hráč zodpovídá sám za sebe, hry se účastní dobrovolně a na vlastní nebezpečí. Hráči mladší 18 let se mohou účastnit pouze s dospělým doprovodem.</p>
         <p>Hra se koná za každého počasí. Povolené možnosti přesunu jsou na běžkách nebo pěšky.</p>
@@ -103,18 +100,14 @@
 
         <h2>Šifry:</h2>
 
-        <p>Hra bude spravována pomocí websystému. Šifry si týmy nesou s sebou v zapečetěných obálkách. Na stanovišti pak otevírají příslušnou obálku podle fotky s detailem z daného místa. Řešením každé šifry je heslo (podstatné jméno v 1. pádě jednotného čísla). Po zadání hesla do websystému se tým dozví polohu dalšího stanoviště. Polohu dalšího stanoviště je možné získat i bez vyluštění hesla šifry, ale za bodovou ztrátu (viz sekce <a href="#sec-bodovani">Bodování</a>). Body za „přeskočenou“ šifru je potom stále možné získat při zadání správného hesla do websystému. Na každou šifru je také možné vzít si nápovědu a postup za bodovou penalizaci (viz sekce <a href="#sec-bodovani">Bodování</a>). Mezi obálkami mohou být i obálky diskvalifikační, jejichž odevzdání v neporušené podobě může vyžadovat organizátor v cíli.</p>
+        <p>Hra bude spravována pomocí websystému. Šifry si týmy nesou s sebou v zapečetěných obálkách. Na stanovišti pak otevírají příslušnou obálku podle fotky s detailem z daného místa. Každá obálka obsahuje zadání ve dvou identických kopiích. Řešením každé šifry je heslo (podstatné jméno v 1. pádě jednotného čísla). Po zadání hesla do websystému se tým dozví polohu dalšího stanoviště. Polohu dalšího stanoviště je možné získat i bez vyluštění hesla šifry, ale za bodovou ztrátu (viz sekce <a href="#sec-bodovani">Bodování</a>). Body za „přeskočenou“ šifru je potom stále možné získat při zadání správného hesla do websystému. Na každou šifru je také možné vzít si nápovědu a postup za bodovou penalizaci (viz sekce <a href="#sec-bodovani">Bodování</a>). Mezi obálkami mohou být i obálky diskvalifikační, jejichž odevzdání v neporušené podobě může vyžadovat organizátor v cíli.</p>
         <p>V šifrách se používá anglická abeceda – tedy 26 písmen bez CH.</p>
-        <!--p>Jakýkoli text psaný kurzívou není součástí řešení šifer. Stejně tak nejsou pro řešení šifer relevantní překlepy, gramatické chyby, chyby v interpunkci, diakritice apod.</p-->
-        <!--p>Pro plnění úkolu je právě jeden pokus, pokud není výslovně řečeno jinak. Splněním úkolu na stanovišti získá tým B kód, který zapíše do websystému.</p-->
-        <!--p>Pro úspěšné vyřešení šifer a bonusových úkolů může být zapotřebí použít informace a materiály, které tým získal v dosavadním průběhu hry, případně materiály, které budou uvedeny v doporučené výbavě.</p-->
         <p>V zájmu hry i sebe samotných se zdržujte v okolí stanovišť pouze nezbytně dlouhou dobu. Zejména je zakázáno zhoršovat viditelnost vyfocených detailů či komplikovat k nim přístup, včetně zůstávání v jejich přílišné blízkosti.</p>
         <p>Není dovoleno sledovat jiný tým za účelem zjištění polohy dalšího stanoviště.</p>
         <p>Záměrné vyhledávání stanoviště v terénu nebo online službách bez vyluštění příslušné šifry (haluzení) je zakázáno.</p>
         <p>V průběhu hry <!--(zejména během plnění úkolů)--> je každý hráč povinen chovat se jako zodpovědný člověk. Dbejte své osobní bezpečnosti a chovejte se slušně k ostatním týmům. Pokud hra probíhá na území CHKO, NP apod., je každý hráč povinen řídit se pravidly této chráněné oblasti. Zejména je zakázáno odhazování odpadků, rozdělávání ohňů, nadměrně hlučné chování či ničení rostlinstva.</p>
 
         <h2 id="sec-bodovani">Bodování:</h2>
-        <!--p>Bonifikace a penalizace jsou:</p-->
         <ul>
           <li>Vyluštění prologu: +50 bodů</li>
           <li>Vyluštění šifry = zadání hesla do websystému: +100 bodů</li>
