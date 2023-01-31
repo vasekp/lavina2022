@@ -14,6 +14,7 @@
     <input hidden type="radio" name="tab" id="sel-tymy"/>
     <input hidden type="radio" name="tab" id="sel-hra"/>
     <input hidden type="radio" name="tab" id="sel-stat"/>
+    <input hidden type="radio" name="tab" id="sel-vysl"/>
     <header><a href="#main" tabindex="-1"><img src="images/lavina-hlavicka.jpg"/></a></header>
     <nav>
       <input hidden type="checkbox" id="nav-unfold"/>
@@ -21,6 +22,7 @@
       <label for="sel-tymy" class="auth"><div>Týmy</div></label>
       <label for="sel-hra" class="auth"><div>Hra</div></label>
       <label for="sel-stat" class="auth"><div>Export</div></label>
+      <label for="sel-vysl" class="auth"><div>Výsledky</div></label>
       <span id="sipka">▼</span>
     </nav>
     <main id="main">
@@ -131,6 +133,12 @@
         <p>Sloupce: stanoviště, počty: nic, náp, post, lokace, L+N, L+P, řešení, Ř+N, Ř+P, lokace+řešení, L+Ř+N, L+Ř+P</p>
         <button id="szn-lidi">Seznam lidí</button>
         <p>Sloupce: tým, jméno, jídlo pátek, jídlo sobota, tričko</p>
+      </article>
+      <article id="tab-vysl">
+        <table id="vysl-table">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
       </article>
     </main>
   </body>

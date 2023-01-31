@@ -226,6 +226,63 @@ function update() {
       }
     list2.append(frag);
   });
+  /* Výsledková tabulka */
+  const table = document.getElementById('vysl-table');
+  const thead = table.querySelector('thead');
+  const tbody = table.querySelector('tbody');
+  thead.replaceChildren();
+  tbody.replaceChildren();
+  const thr = document.createElement('tr');
+  const stList = [
+    'Prolog',
+    'Bajkonur',
+    'Canaveral',
+    'Oběžná dráha 1/2',
+    'Merkur',
+    'Venuše',
+    'Mars',
+    'Jupiter',
+    'Saturn',
+    'Uran',
+    'Neptun',
+    'Návrat'
+  ];
+  thr.appendChild(document.createElement('th'));
+  stList.forEach((stan, index) => {
+    const th = document.createElement('th');
+    const span = document.createElement('span');
+    span.textContent = stan.replace(/ \d\/\d/, '');
+    th.appendChild(span);
+    thr.appendChild(th);
+  });
+  thead.appendChild(thr);
+  for(const team of teams2) {
+    if(!team.game)
+      continue;
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.textContent = team.name;
+    tr.appendChild(td);
+    for(const stan of stList) {
+      const rec = team.game.summary[stan];
+      const td = document.createElement('td');
+      if(rec?.sol) {
+        if(rec.wt)
+          td.classList.add('c3');
+        else if(rec.hint)
+          td.classList.add('c2');
+        else
+          td.classList.add('c1');
+      }
+      if(+rec?.loc)
+        td.classList.add('skipped');
+      tr.appendChild(td);
+    };
+    const tdt = document.createElement('td');
+    tdt.textContent = `${team.pts} b.`;
+    tr.appendChild(tdt);
+    tbody.appendChild(tr);
+  }
 }
 
 async function doAdmin(tgt) {
@@ -324,14 +381,16 @@ function statAkce() {
       teamTotal[team.name] = total;
       return [
         team.name,
-        timeFormatExport.format(new Date(action.time)),
-        action.stan,
+        new Date(action.time),
+        action.stan.replace(/ \d\/\d/, ''),
         action.type,
         action.type === 'sol' || action.type === 'error' ? action.text : '',
         total
       ];
     });
   });
+  main.sort((a, b) => (a[1] < b[1] ? -1 : 1));
+  main.forEach(row => row[1] = timeFormatExport.format(row[1]));
   const teamList = Object.entries(teamTotal).map(x => x[0]);
   return [
     ...teamList.map(name => [name, timeFormatExport.format(dates.gameStart), '', 'start', '', 0]),
