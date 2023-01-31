@@ -76,6 +76,7 @@ nav label div {
 #sel-reg:checked ~ nav label[for="sel-reg"],
 #sel-tymy:checked ~ nav label[for="sel-tymy"],
 #sel-pravidla:checked ~ nav label[for="sel-pravidla"],
+#sel-sifry:checked ~ nav label[for="sel-sifry"],
 #sel-auth:checked ~ nav label[for="sel-auth"],
 #sel-hra:checked ~ nav label[for="sel-hra"],
 #sel-vysl:checked ~ nav label[for="sel-vysl"],
@@ -120,6 +121,7 @@ button, .button {
   #sel-reg:checked ~ nav label[for="sel-reg"],
   #sel-tymy:checked ~ nav label[for="sel-tymy"],
   #sel-pravidla:checked ~ nav label[for="sel-pravidla"],
+  #sel-sifry:checked ~ nav label[for="sel-sifry"],
   #sel-auth:checked ~ nav label[for="sel-auth"],
   #sel-hra:checked ~ nav label[for="sel-hra"],
   #sel-vysl:checked ~ nav label[for="sel-vysl"],
@@ -147,6 +149,7 @@ main {
 #sel-reg:not(:checked) ~ main #tab-reg,
 #sel-tymy:not(:checked) ~ main #tab-tymy,
 #sel-pravidla:not(:checked) ~ main #tab-pravidla,
+#sel-sifry:not(:checked) ~ main #tab-sifry,
 #sel-auth:not(:checked) ~ main #tab-auth,
 #sel-hra:not(:checked) ~ main #tab-hra,
 #sel-vysl:not(:checked) ~ main #tab-vysl,
@@ -253,18 +256,18 @@ table {
   border-collapse: collapse;
 }
 
-#tymy {
+.seznam {
   width: 100%;
   border: var(--b-table);
 }
 
-#tymy thead {
+.seznam thead {
   background: var(--c-thead);
   font-weight: bold;
   text-align: left;
 }
 
-#tymy thead th {
+.seznam thead th {
   border-bottom: var(--b-table); /* Firefox bug 217769: empty #tymy-content kills border below thead */
 }
 
@@ -272,11 +275,11 @@ th, td {
   padding: 3px;
 }
 
-#tymy tbody tr:nth-of-type(even) {
+.seznam tbody tr:nth-of-type(even) {
   background: var(--c-alt-even);
 }
 
-#tymy tbody tr:nth-of-type(odd) {
+.seznam tbody tr:nth-of-type(odd) {
   background: var(--c-alt-odd);
 }
 
@@ -615,7 +618,7 @@ hr {
   opacity: 100%;
 }
 
-#tab-vysl {
+#tab-vysl, #tab-sifry {
   overflow-x: scroll;
 }
 

@@ -12,6 +12,7 @@
     <input hidden type="radio" name="tab" id="sel-uvod" checked/>
     <input hidden type="radio" name="tab" id="sel-tymy"/>
     <input hidden type="radio" name="tab" id="sel-pravidla"/>
+    <input hidden type="radio" name="tab" id="sel-sifry"/>
     <input hidden type="radio" name="tab" id="sel-vysl"/>
     <header><a href="#nav" tabindex="-1"><img src="images/lavina-hlavicka.jpg"/></a></header>
     <nav id="nav">
@@ -19,6 +20,7 @@
       <label for="sel-uvod"><div>Úvod</div></label>
       <label for="sel-tymy"><div>Seznam týmů</div></label>
       <label for="sel-pravidla"><div>Pravidla</div></label>
+      <label for="sel-sifry"><div>Šifry</div></label>
       <label for="sel-vysl"><div>Celkové výsledky</div></label>
       <span id="sipka">▼</span>
     </nav>
@@ -30,7 +32,7 @@
         <h2>O hře:</h2>
         <p><b>Termín konání:</b> 27.1. – 29.1. 2023</p>
         <p><b>Kapacita hry:</b> 18 pětičlenných týmů</p>
-        <p><b>Místo konání:</b> Horský hotel KODREA, Nové Hutě, Šumava. <a href="https://youtu.be/qfvMMs5QaUA" target="_blank">Lokační šifra zde</a></p>
+        <p><b>Místo konání:</b> Horský hotel KODREA, Nové Hutě, Šumava</p>
         <p><b>Cena:</b> 1500 Kč/tým + 1500 Kč/člen (ubytování s polopenzí) + 250 Kč/tričko (volitelné)</p>
         <p><b>Kontaktní e-mail:</b> info<span id="obfs">domof</span></p>
 
@@ -38,7 +40,7 @@
         <p>Hru pro vás připravil tým Múzy s velkou pomocí Něžných květinek.</p>
       </article>
       <article id="tab-tymy">
-        <table id="tymy">
+        <table id="tymy" class="seznam">
           <thead>
             <tr>
               <th>Název týmu</th>
@@ -121,11 +123,121 @@
         <p>Tým, který je organizátorem některé z šifrovacích her Lhota, Muhu nebo Labyrint v roce 2023, může požádat o <b>imunitu</b>, a to nejpozději při registraci na místě konání. Pozdější žádosti nebudou brány v potaz. Získáním imunity se pořadí týmu posune o jedno místo vzad. Tato informace bude do vyhlášení výsledků neveřejná.</p>
         <p>Čestnou povinnost organizovat další ročník získává nejvýše postavený tým v takto utvořeném konečném pořadí.</p>
       </article>
+      <article id="tab-sifry">
+        <table id="sifry-table" class="seznam">
+          <thead>
+            <tr>
+              <th>Stanoviště</th>
+              <th>Zadání</th>
+              <th>Nápověda</th>
+              <th>Postup</th>
+              <th>Řešení</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Lokační šifra</td>
+              <td><a href="https://youtu.be/qfvMMs5QaUA" target="_blank">zde</a></td>
+              <td>není</td>
+              <td>není</td>
+              <td>ŠUMAVA, KODREA</td>
+            </tr>
+            <tr>
+              <td>Prolog</td>
+              <td><a href="satelity/satelity.html" target="_blank">zde</a></td>
+              <td>Satelit M je Zemi nejblíže, takže také obíhá nejrychleji.</td>
+              <td>Po nebi kromě hvězd krouží 6 různých satelitů po pevných drahách (pokud se vám zdá, že méně, počkejte; pokud že více, pozor na rotaci Země). Každý bliká jedno morseovkové písmenko. Poznejte je a seřaďte od nejbližšího (je také největší a nejrychlejší) k nejvzdálenějšímu. Oběžné dráhy jsou zhruba mezi jednou a pěti minutami.</td>
+              <td>METEOR</td>
+            </tr>
+            <tr>
+              <td>Canaveral</td>
+              <td>(není ke stažení)</td>
+              <td>Černý predátorský trpaslík bleskově navštívil futuristickou bránou mezní matrix. Válečná světluška na treku po vysočině zkrotila akta armageddonu.</td>
+              <td>U každé skladby zjistěte, ze kterého sci-fi filmu nebo seriálu znělka pochází a zapište si jeho oficiální český název (pozor, nemusí být vždy česky). V každé znělce je ukryté číslo, které ukazuje na to, kolikáté písmeno z názvu je potřeba vzít.</td>
+              <td>TAKTOVKA</td>
+            </tr>
+            <tr>
+              <td>Bajkonur</td>
+              <td>(není ke stažení)</td>
+              <td>Jak dlouho to trvá? A kdy k tomu došlo?</td>
+              <td>Identifikujte historické události a seřaďte je od nejstarší k nejnovější. Spočítejte, kolik vteřin trvá každá ukázka, tato čísla vám určí písmena abecedy.</td>
+              <td>LUNOCHOD</td>
+            </tr>
+            <tr>
+              <td>Oběžná dráha</td>
+              <td><a href="pdf/Obezna.pdf">zde</a></td>
+              <td>Co najdeme v černé díře a kolikáté to je?</td>
+              <td>V obou černých kolečkách si vyřízněte díru a hledejte postupně pro každou barvu duhy umístění kolečka na nějaké hvězdě tak, aby stejně barevné čáry navazovaly na souhvězdí v okolí. Na obou polovinách mapy je dohromady 26 nejzářivějších hvězd, tajenku čtěte jako součet písmen (v pořadí anglické abecedy) přiřazených hvězdám ve středu jednoho a druhého kolečka pro každou barvu zvlášť.</td>
+              <td>HVEZDAR</td>
+            </tr>
+            <tr>
+              <td>Merkur</td>
+              <td><a href="pdf/Merkur.pdf">zde</a></td>
+              <td>Prvočinitele? Ano=1, ne=0.</td>
+              <td>Uvažujte prvních pět sestupně zapsaných prvočísel. Rozložte registrační číslo každé lodi na prvočinitele a zkoumejte, která z prvočísel jsou použita (1) a která ne (0). Odsud přečtěte tajenku v binárním kódu.</td>
+              <td>SUPERNOVA</td>
+            </tr>
+            <tr>
+              <td>Venuše</td>
+              <td><a href="pdf/Venuse.pdf">zde</a></td>
+              <td>Pán s buřinkou = tau (τ) = T</td>
+              <td>V příběhu hledejte fyzikální veličiny, značky a další koncepty, které se značí nebo nazývají řeckými písmeny. Tajenku přečtěte po převedení řeckých písmenek na jejich ekvivalenty v latince.</td>
+              <td>LEPORELO</td>
+            </tr>
+            <tr>
+              <td>Mars</td>
+              <td><a href="pdf/Mars.pdf">zde</a></td>
+              <td><a href="images/napoveda-obrazky.png" target="_blank">zde</a></td>
+              <td>Každý z obrázků pojmenujte názvem některé planety (českým nebo anglickým). Planet je 8, dvojice pak označují znak ze semaforové abecedy, v očíslování z šifrovací pomůcky (1 = Merkur).</td>
+              <td>KOMETA</td>
+            </tr>
+            <tr>
+              <td>Jupiter</td>
+              <td><a href="pdf/Jupiter.pdf">zde</a></td>
+              <td>Binární rozklad vám pomůže najít souhvězdí.</td>
+              <td>Počet cípů každé hvězdy převeďte na pětimístné binární číslo. Vyberte ty hvězdy, které mají na první pozici binárního čísla jedničku a určete název souhvězdí, které tyto hvězdy vykreslí. Opakujte stejně pro 2.-5. pozici. Získáte názvy pěti souhvězdí, první písmena z nich dají heslo.</td>
+              <td>SOKOL</td>
+            </tr>
+            <tr>
+              <td>Saturn</td>
+              <td><a href="pdf/Saturn.pdf">zde</a></td>
+              <td>Hvězdné výlety, války, nebo brány? Nějak se nám to zamíchalo.</td>
+              <td>Roztřiďte ikony podle toho, ke které sci-fi franšíze se vztahují (Star Trek, Star Wars, Stargate). Každá množina opticky představuje jedno písmenko. Tajenku čtěte podle roku vzniku.</td>
+              <td>ESO</td>
+            </tr>
+            <tr>
+              <td>Uran</td>
+              <td><a href="pdf/Uran.pdf">zde</a></td>
+              <td>Co složíte z částí obrázků oblohy?</td>
+              <td>Každý tvar odpovídá na mapě některému červenému ohraničení souhvězdí (může být zdeformováno vlivem projekce na polokoule). Souhvězdí najděte a určete, co vyznačená elipsa označuje v namalované podkladové ilustraci. Z pěti částí těla zkuste určit tvora.</td>
+              <td>ČERT</td>
+            </tr>
+            <tr>
+              <td>Neptun</td>
+              <td><a href="pdf/Neptun.pdf">zde</a></td>
+              <td>Výsledky volby nejlepšího kandidáta nám dnes prozradí Marcela Augustová. P.P. + A.B. = Q.R.</td>
+              <td>Přiřaď každému kandidátovi jednoho prezidentského kandidáta z letošních voleb. Posuň v abecedě každou iniciálu jména a příjmení o tutéž iniciálu prezidentského kandidáta.</td>
+              <td>HRAD</td>
+            </tr>
+            <tr>
+              <td>Návrat</td>
+              <td><a href="pdf/Navrat.pdf">zde</a></td>
+              <td>Obvod = π * průměr</td>
+              <td>Obě kolečka mapy oblohy můžeme položit vedle sebe tak, že navazují v jednom bodě. Odvalujeme společně podél linky tak, aby se návaznost neporušila, krátké úsečky v šifře odpovídají místům, kde okraj mapy protíná některé souhvězdí, a slouží pro ujištění a doladění nepřesností. V každém bodě dotyku, kde vede některá příčná linka, její zakončení padá na název jednoho souhvězdí. Čtěte tolikáté písmenko z názvu, jaké číslo je vyznačeno.</td>
+              <td>KOSMODROM</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2>Artefakt</h2>
+        Mapu oblohy s upravenými šifrovacími pomůckami si můžete stáhnout <a href="pdf/mapa+pomucky.pdf">zde</a>.
+      </article>
       <article id="tab-vysl">
         <table id="vysl-table">
           <thead><tr><th></th><th><span>Prolog</span></th><th><span>Bajkonur</span></th><th><span>Canaveral</span></th><th><span>Oběžná dráha</span></th><th><span>Merkur</span></th><th><span>Venuše</span></th><th><span>Mars</span></th><th><span>Jupiter</span></th><th><span>Saturn</span></th><th><span>Uran</span></th><th><span>Neptun</span></th><th><span>Návrat</span></th></tr></thead>
           <tbody><tr><td>Bumbálci</td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c3 skipped"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td>1140 b.</td></tr><tr><td>Nostromo <b>(imunita)</b></td><td class="c1"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c1 skipped"></td><td class="c1"></td><td>1143 b.</td></tr><tr><td>Ledový OUKROP</td><td class="c1"></td><td class="c2"></td><td class="c1"></td><td class="c3"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c3"></td><td>1138 b.</td></tr><tr><td>Leklý Ryby</td><td class="c1"></td><td class="c1"></td><td class="c1 skipped"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c3 skipped"></td><td class="c1 skipped"></td><td class="c1 skipped"></td><td class="c3 skipped"></td><td class="c2"></td><td>1103 b.</td></tr><tr><td>Degen | Brod</td><td></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c3"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td>1093 b.</td></tr><tr><td>Pípy z Lípy</td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c3"></td><td class="c2"></td><td class="c1"></td><td class="c2"></td><td></td><td>1037 b.</td></tr><tr><td>Až zejtra</td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1 skipped"></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td></td><td>1036 b.</td></tr><tr><td>aurora</td><td class="c1"></td><td class="c2"></td><td class="c3"></td><td class="skipped"></td><td class="c1 skipped"></td><td class="c1 skipped"></td><td class="c1 skipped"></td><td class="c2 skipped"></td><td class="c1"></td><td class="c1"></td><td class="c2 skipped"></td><td class="c1"></td><td>1016 b.</td></tr><tr><td>Chlapský klub a alkoholičky</td><td class="c1"></td><td class="c3"></td><td class="c3"></td><td class="c2"></td><td class="c3 skipped"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c3"></td><td class="c3 skipped"></td><td class="c1 skipped"></td><td class="c3 skipped"></td><td></td><td>991 b.</td></tr><tr><td>Ledový shake</td><td class="c1"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="skipped"></td><td class="c3 skipped"></td><td class="c1"></td><td class="c1"></td><td class="c3 skipped"></td><td class="c2"></td><td class="c2 skipped"></td><td class="c3 skipped"></td><td></td><td>896 b.</td></tr><tr><td>Spařený nudle</td><td class="c1"></td><td class="c3"></td><td class="c3"></td><td class="skipped"></td><td class="c2 skipped"></td><td class="c2"></td><td class="c1"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c3 skipped"></td><td class="c3 skipped"></td><td></td><td>894 b.</td></tr><tr><td>Ledoborci</td><td class="c1"></td><td class="c3 skipped"></td><td class="c1"></td><td class="skipped"></td><td class="c3 skipped"></td><td class="c3 skipped"></td><td class="c1 skipped"></td><td class="c3 skipped"></td><td class="c2 skipped"></td><td class="c1 skipped"></td><td class="c3 skipped"></td><td></td><td>886 b.</td></tr><tr><td>REDWOOL</td><td class="c1"></td><td class="c1"></td><td class="c3"></td><td class="c1"></td><td class="c1 skipped"></td><td class="c1 skipped"></td><td class="c1"></td><td class="skipped"></td><td class="c1 skipped"></td><td class="c1"></td><td class="skipped"></td><td></td><td>830 b.</td></tr><tr><td>Pelášící prkýnka</td><td class="c1"></td><td class="skipped"></td><td class="c1"></td><td class="skipped"></td><td class="c2 skipped"></td><td class="c1"></td><td class="c1"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c1"></td><td class="c1"></td><td></td><td>814 b.</td></tr><tr><td>Pivni lezci</td><td class="c1"></td><td class="c3"></td><td class="c3"></td><td class="c1"></td><td class="c3"></td><td class="c1"></td><td class="c1"></td><td class="skipped"></td><td></td><td></td><td></td><td></td><td>627 b.</td></tr></tbody>
         </table>
+        <h2>Poherní prezentace</h2>
+        <p>Detailní průběh hry, řešení šifer a výsledky týmů najdete v <a href="pdf/prezentace.pdf">této prezentaci</a>.</p>
       </article>
     </main>
     <div id="navrh-div" hidden>
