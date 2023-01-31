@@ -633,6 +633,7 @@ hr {
 
 #vysl-table {
   width: max-content;
+  counter-set: poradi 0;
 }
 
 #vysl-table th {
@@ -652,8 +653,12 @@ hr {
 
 #vysl-table td:first-child {
   white-space: nowrap;
-  text-align: right;
   padding-right: .5em;
+}
+
+#vysl-table td:first-child::before {
+  content: counter(poradi) '. ';
+  counter-increment: poradi;
 }
 
 #vysl-table td:not(:first-child):not(:last-child) {

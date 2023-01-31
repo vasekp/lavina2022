@@ -5,7 +5,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, minimum-scale=1.0"/>
     <meta name="theme-color" content="#081333">
-    <link rel="stylesheet" type="text/css" href="main.css"/>
+    <link rel="stylesheet" type="text/css" href="main-230131.css"/>
     <script src="main.js" type="module"></script>
   </head>
   <body>
@@ -15,6 +15,7 @@
     <input hidden type="radio" name="tab" id="sel-pravidla"/>
     <input hidden type="radio" name="tab" id="sel-auth"/>
     <input hidden type="radio" name="tab" id="sel-hra"/>
+    <input hidden type="radio" name="tab" id="sel-vysl"/>
     <header><a href="#nav" tabindex="-1"><img src="images/lavina-hlavicka.jpg"/></a></header>
     <nav id="nav">
       <input hidden type="checkbox" id="nav-unfold"/>
@@ -24,6 +25,7 @@
       <label for="sel-pravidla"><div>Pravidla</div></label>
       <label for="sel-auth" data-visible-from="regOpen"><div>Můj tým</div></label>
       <label for="sel-hra" class="auth" data-visible-from="gameOpen" data-visible-until="gameClose"><div>Hra</div></label>
+      <label for="sel-vysl"><div>Celkové výsledky</div></label>
       <span id="sipka">▼</span>
     </nav>
     <main>
@@ -363,6 +365,12 @@
             </div>
           </div>
         </div>
+      </article>
+      <article id="tab-vysl">
+        <table id="vysl-table">
+          <thead><tr><th></th><th><span>Prolog</span></th><th><span>Bajkonur</span></th><th><span>Canaveral</span></th><th><span>Oběžná dráha</span></th><th><span>Merkur</span></th><th><span>Venuše</span></th><th><span>Mars</span></th><th><span>Jupiter</span></th><th><span>Saturn</span></th><th><span>Uran</span></th><th><span>Neptun</span></th><th><span>Návrat</span></th></tr></thead>
+          <tbody><tr><td>Bumbálci</td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c3 skipped"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td>1140 b.</td></tr><tr><td>Nostromo <b>(imunita)</b></td><td class="c1"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c1 skipped"></td><td class="c1"></td><td>1143 b.</td></tr><tr><td>Ledový OUKROP</td><td class="c1"></td><td class="c2"></td><td class="c1"></td><td class="c3"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c3"></td><td>1138 b.</td></tr><tr><td>Leklý Ryby</td><td class="c1"></td><td class="c1"></td><td class="c1 skipped"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c3 skipped"></td><td class="c1 skipped"></td><td class="c1 skipped"></td><td class="c3 skipped"></td><td class="c2"></td><td>1103 b.</td></tr><tr><td>Degen | Brod</td><td></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c3"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td>1093 b.</td></tr><tr><td>Pípy z Lípy</td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c3"></td><td class="c2"></td><td class="c1"></td><td class="c2"></td><td></td><td>1037 b.</td></tr><tr><td>Až zejtra</td><td class="c1"></td><td class="c1"></td><td class="c1"></td><td class="c1 skipped"></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td class="c2"></td><td class="c1"></td><td class="c1"></td><td class="c2"></td><td></td><td>1036 b.</td></tr><tr><td>aurora</td><td class="c1"></td><td class="c2"></td><td class="c3"></td><td class="skipped"></td><td class="c1 skipped"></td><td class="c1 skipped"></td><td class="c1 skipped"></td><td class="c2 skipped"></td><td class="c1"></td><td class="c1"></td><td class="c2 skipped"></td><td class="c1"></td><td>1016 b.</td></tr><tr><td>Chlapský klub a alkoholičky</td><td class="c1"></td><td class="c3"></td><td class="c3"></td><td class="c2"></td><td class="c3 skipped"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c3"></td><td class="c3 skipped"></td><td class="c1 skipped"></td><td class="c3 skipped"></td><td></td><td>991 b.</td></tr><tr><td>Ledový shake</td><td class="c1"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="skipped"></td><td class="c3 skipped"></td><td class="c1"></td><td class="c1"></td><td class="c3 skipped"></td><td class="c2"></td><td class="c2 skipped"></td><td class="c3 skipped"></td><td></td><td>896 b.</td></tr><tr><td>Spařený nudle</td><td class="c1"></td><td class="c3"></td><td class="c3"></td><td class="skipped"></td><td class="c2 skipped"></td><td class="c2"></td><td class="c1"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c3 skipped"></td><td class="c3 skipped"></td><td></td><td>894 b.</td></tr><tr><td>Ledoborci</td><td class="c1"></td><td class="c3 skipped"></td><td class="c1"></td><td class="skipped"></td><td class="c3 skipped"></td><td class="c3 skipped"></td><td class="c1 skipped"></td><td class="c3 skipped"></td><td class="c2 skipped"></td><td class="c1 skipped"></td><td class="c3 skipped"></td><td></td><td>886 b.</td></tr><tr><td>REDWOOL</td><td class="c1"></td><td class="c1"></td><td class="c3"></td><td class="c1"></td><td class="c1 skipped"></td><td class="c1 skipped"></td><td class="c1"></td><td class="skipped"></td><td class="c1 skipped"></td><td class="c1"></td><td class="skipped"></td><td></td><td>830 b.</td></tr><tr><td>Pelášící prkýnka</td><td class="c1"></td><td class="skipped"></td><td class="c1"></td><td class="skipped"></td><td class="c2 skipped"></td><td class="c1"></td><td class="c1"></td><td class="c2 skipped"></td><td class="c2 skipped"></td><td class="c1"></td><td class="c1"></td><td></td><td>814 b.</td></tr><tr><td>Pivni lezci</td><td class="c1"></td><td class="c3"></td><td class="c3"></td><td class="c1"></td><td class="c3"></td><td class="c1"></td><td class="c1"></td><td class="skipped"></td><td></td><td></td><td></td><td></td><td>627 b.</td></tr></tbody>
+        </table>
       </article>
     </main>
     <div id="navrh-div" hidden>
