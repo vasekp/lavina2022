@@ -1,22 +1,29 @@
-[
-  {
-    "name": "admin",
-    "hidden": true,
-    "email": "vasek.potocek@post.cz",
-    "password": "admin0",
-    "authKey": "e66d34ce-354a-4b14-bc95-66ce92a1c01d",
-    "phone": "607659467",
-    "members": [
-      {
-        "name": "Vašek",
-        "meal1": "",
-        "meal2": "",
-        "tshirt": ""
+{
+  "capacity": 18,
+  "teams": [
+    {
+      "name": "admin",
+      "hidden": true,
+      "email": "vasek.potocek@post.cz",
+      "salt": "3c2255393e623942",
+      "passwordHash": "77c5444ff37210540c63e8bf8b53a85bb2c720732ae6dfc3f6728629a37fcd3d",
+      "phone": "607659467",
+      "members": [
+        {
+          "name": "admin",
+          "meal1": "pa-maso",
+          "meal2": "so-maso",
+          "tshirt": ""
+        }
+      ],
+      "dateReg": "2022-11-18T21:58:43.990Z",
+      "countIn": false,
+      "amountPaid": 0,
+      "sharingPreferences": "",
+      "game": {
+        "summary": {},
+        "actions": []
       }
-    ],
-    "dateReg": "2022-11-18T21:58:43.990Z",
-    "countIn": false,
-    "amountPaid": "-1",
-    "datePaid": "2022-11-19T12:16:03.833Z"
-  }
-]
+    }
+  ]
+}

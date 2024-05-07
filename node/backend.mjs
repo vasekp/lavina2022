@@ -260,6 +260,8 @@ async function handleObj(request) {
       return;
     }
     case 'a:reload': {
+      if(saveDebounce !== null)
+        throw 'Neuložené změny!';
       if(request.data.passwordHash !== teams[0].passwordHash)
         throw 'Neautorizovaný požadavek.';
       ({ capacity, teams, numTeams } = await loadTeams());
@@ -311,6 +313,7 @@ function saveTeams_() {
   log('INFO', 'saveTeams');
   fs.writeFile('teams.json', JSON.stringify({capacity, teams}, null, 2));
   numTeams = teams.filter(team => !team.hidden).length;
+  saveDebounce = null;
 }
 
 function saveTeams() {
